@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/llevame/shared-server.svg?branch=master)](https://travis-ci.org/llevame/shared-server)
+
 # shared-server
 
 Shared Server para la aplicación Llevame  
