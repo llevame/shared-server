@@ -12,11 +12,15 @@
     "url": "git+https://github.com/llevame/shared-server.git"
   },
   "dependencies": {
-    "chai": "^4.1.1",
     "create-react-app": "^1.4.0",
     "express": "^4.15.3",
-    "mocha": "^3.5.0",
     "request": "^2.81.0"
+  },
+  "devDependencies": { 
+    "mocha": "^3.5.0",
+    "chai": "^4.1.1",
+    "istanbul": "0.4.5",
+    "coveralls": "~2.7.1"
   },
   "keywords": [],
   "author": "llevame",
