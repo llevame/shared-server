@@ -1,0 +1,25 @@
+{
+  "name": "shared-server",
+  "version": "1.0.0",
+  "description": "Shared Server para la aplicación Llevame",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llevame/shared-server.git"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "create-react-app": "^1.4.0"
+  },
+  "keywords": [],
+  "author": "llevame",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llevame/shared-server/issues"
+  },
+  "homepage": "https://github.com/llevame/shared-server#readme"
+}
