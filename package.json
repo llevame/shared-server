@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "test": "./node_modules/mocha/bin/mocha src/test/*",
-    "coverage": "istanbul cover _mocha src/test/*",
+    "cover": "istanbul cover _mocha src/test/*",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
