@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/llevame/shared-server.svg?branch=master)](https://travis-ci.org/llevame/shared-server)
+[![Build Status](https://travis-ci.org/llevame/shared-server.svg?branch=master)](https://travis-ci.org/llevame/shared-server) [![codecov](https://codecov.io/gh/llevame/shared-server/branch/master/graph/badge.svg)](https://codecov.io/gh/llevame/shared-server)
 
 # shared-server
 
