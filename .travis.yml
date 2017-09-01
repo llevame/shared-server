@@ -4,5 +4,4 @@ node_js:
 
 before_install: sudo apt-get install -qq
 install: npm install
-after_success:
-- npm run coveralls
+after_success: npm run coverage
