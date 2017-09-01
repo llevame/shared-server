@@ -10,13 +10,24 @@ Desarrollado con **NodeJS**, **ExpressJs** como back-end y **ReactJs** como fron
 
 Para ejecutar el servidor y el cliente de **ReactJS** de forma local se necesitan dos terminales y ejecutar los siguientes comandos:
 
-> $ npm install (para descargar todas las dependencias)
+```bash
+$ npm install
+```
+- (para descargar todas las dependencias)
 
-> $ npm start (para iniciar el shared-server)
+```bash
+$ npm start
+```
+- (para iniciar el shared-server)
 
- (en otro terminal, y haciendo *cd client*)
+**(en otro terminal, y haciendo *cd client*)**
 
-> $ npm install (para bajar dependencias de *ReactJS*)
+```bash
+$ npm install
+```
+- (para bajar dependencias de *ReactJS*)
 
-> $ npm start (para iniciar el cliente de *ReactJS*)
-
+```bash
+$ npm start
+```
+- (para iniciar el cliente de *ReactJS*)
