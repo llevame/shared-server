@@ -9,29 +9,28 @@ app.set('port', process.env.PORT || 5000);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Put all API endpoints under '/api'
-app.get('/api', (req, res) => {
-	console.log('GET at /api');
-	res.send('Hello World!')
-});
+var basePath = '/api';
 
-// GET method route
-app.get('/', (req, res) => {
-	res.send('GET request to the homepage')
-});
+// /users endpoint
+var users = require('./routes/users');
+app.use(basePath + '/users', users);
 
-// POST method route
-app.post('/', (req, res) => {
-	res.send('POST request to the homepage')
-});
+// /paymethods endpoint
+var paymethods = require('./routes/paymethods');
+app.use(basePath + '/paymethods', paymethods);
 
-// The 'catchall' handler: for any request that doesn´t match
-// one above, send back React´s index.html file
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/client/build/index.html'))
-});
+// /trips endpoint
+var trips = require('./routes/trips');
+app.use(basePath + '/trips', trips);
 
-app.listen(app.get('port'), () => {
+// /servers endpoint
+var servers = require('./routes/servers');
+app.use(basePath + '/servers', servers);
+
+app.listen(app.get('port'));
+
+if (process.env.NODE_ENV !== 'test') {
 	console.log("App listening on port %s: ", app.get('port'));
-});
+}
 
+module.exports = app;
