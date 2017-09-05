@@ -4,11 +4,11 @@
 
 Shared Server para la aplicación Llevame  
 
-Desarrollado con **NodeJS**, **ExpressJs** como back-end y **ReactJs** como front-end.   
+Desarrollado con **NodeJs**, **ExpressJs** como back-end y **ReactJs** como front-end.   
 
 ### Correr Servidor
 
-Para ejecutar el servidor y el cliente de **ReactJS** de forma local se necesitan dos terminales y ejecutar los siguientes comandos:
+Para ejecutar el servidor y el cliente de **ReactJs** de forma local se necesitan dos terminales y ejecutar los siguientes comandos:
 
 ```bash
 $ npm install
@@ -31,3 +31,9 @@ $ npm install
 $ npm start
 ```
 - (para iniciar el cliente de *ReactJS*)
+
+#### Correr Tests
+
+```bash
+$ npm test
+```
