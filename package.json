@@ -25,6 +25,13 @@
     "mocha": "^3.5.0",
     "nyc": "^11.1.0"
   },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "build",
+      "src/test/*"
+    ]
+  },
   "keywords": [],
   "author": "llevame",
   "license": "ISC",
