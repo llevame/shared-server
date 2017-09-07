@@ -1,0 +1,6 @@
+{
+  "name": "Llevame shared-server",
+  "description": "A NodeJs + ExpressJs + ReactJs server Llevame application",
+  "repository": "https://github.com/llevame/shared-server",
+  "keywords": ["node", "express", "react"]
+}
