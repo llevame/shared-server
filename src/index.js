@@ -11,6 +11,10 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 var basePath = '/api';
 
+// default endpoint
+var defapi = require('./routes/default');
+app.use(basePath, defapi);
+
 // /users endpoint
 var users = require('./routes/users');
 app.use(basePath + '/users', users);
