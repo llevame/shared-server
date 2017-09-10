@@ -1,0 +1,14 @@
+  app:
+    build: .
+    ports:
+    - "5000:5000"
+    links:
+      - "db:llevame"
+  db:
+    image: postgres
+    ports:
+    - "8080:5432"
+    volumes:
+       - "./init_scripts:/docker-entrypoint-initdb.d/"
+    environment:
+    - POSTGRES_DB:llevame
