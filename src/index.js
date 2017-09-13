@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+
 var bodyParser = require('body-parser');
 var cors = require('cors'); 
 var log4js = require('log4js');
@@ -7,15 +8,11 @@ log4js.configure(path.join(__dirname, './config/log4js.json'));
 
 const app = express();
 
-//set body parser limits
-app.use(
-bodyParser.urlencoded({
-    limit: '500mb',
-    extended: true
-  })
-);
+// set body parser limits and type for application/json
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
 app.use(bodyParser.json({limit: '500mb'}));
-
+app.use(bodyParser.json({type: 'application/json'}));
 
 // Sets the port for the app to listen for
 app.set('port', process.env.PORT || 5000);
@@ -45,14 +42,18 @@ app.use(basePath + '/trips', trips);
 var servers = require('./routes/servers');
 app.use(basePath + '/servers', servers);
 
-//Log folder
+// /token endpoint
+var token = require('./routes/token');
+app.use(basePath + '/token', token);
+
+// Log folder
 try {
-  require('fs').mkdirSync('./log');
+	require('fs').mkdirSync('./log');
 } catch (e) {
-  if (e.code != 'EEXIST') {
-    console.error("No se puede crear el directorio para logs: ", e);
-    process.exit(1);
-  }
+	if (e.code != 'EEXIST') {
+		console.error("No se puede crear el directorio para logs: ", e);
+		process.exit(1);
+	}
 }
 
 app.listen(app.get('port'));
