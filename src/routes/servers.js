@@ -16,8 +16,8 @@ router.get('/', (req, res) => {
 	   .json(
 		{
 			metadata: {
-				count: 2,
-				total: 4,
+				count: 1,
+				total: 3,
 				next: "",
 				prev: "",
 				first: "",
@@ -33,15 +33,6 @@ router.get('/', (req, res) => {
 					name: "server0",
 					lastConnection: "0"
 				},
-				{
-					id: "1",
-					_ref: "0",
-					createdBy: "admin",
-					createdTime: 0,
-					name: "server1",
-					lastConnection: "0"
-
-				}
 			]
 		}
 		);
@@ -49,16 +40,6 @@ router.get('/', (req, res) => {
 
 // POST /
 router.post('/', (req, res) => {
-	if (!req.body) {
-		res.status(500)
-		   .json(
-			{
-				code: 500,
-				message: "json faltante"
-			}
-			);
-		return;
-	}
 	if (!req.body.createdBy || !req.body.createdTime || !req.body.name) {
 		res.status(400)
 		   .json(
@@ -89,7 +70,7 @@ router.post('/', (req, res) => {
 					token: "appserv1"
 				}
 			}
-		}
+		 }
 		);
 });
 

@@ -12,7 +12,7 @@ router.use((req, res, next) => {
 
 // POST /
 router.post('/', (req, res) => {
-	if (!req.body) {
+	if (!req.body.username || !req.body.password) {
 		res.status(400)
 		   .json(
 			{
