@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("info");
+let token = require('../models/token');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,29 +12,6 @@ router.use((req, res, next) => {
 });
 
 // POST /
-router.post('/', (req, res) => {
-	if (!req.body.username || !req.body.password) {
-		res.status(400)
-		   .json(
-			{
-				code: 400,
-				message: "Parámetros faltantes"
-			}
-			);
-		return;
-	}
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				version: "1.0"
-			},
-			token: {
-				expiresAt: 0,
-				token: "token"
-			}
-		}
-		);
-});
+router.post('/', token.getToken);
 
 module.exports = router;
