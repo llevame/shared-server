@@ -46,6 +46,10 @@ app.use(basePath + '/servers', servers);
 var token = require('./routes/token');
 app.use(basePath + '/token', token);
 
+// /business-users endpoint
+var business_users = require('./routes/business_users');
+app.use(basePath + '/business-users', business_users);
+
 // Log folder
 try {
 	require('fs').mkdirSync('./log');
