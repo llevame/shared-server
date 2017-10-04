@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("info");
+let business = require('../models/business');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -10,20 +11,12 @@ router.use((req, res, next) => {
 	next();
 });
 
-router.get('/', (req, res) => {
-	res.send('GET response on /business-users');
-});
+router.get('/', business.getBusinessUsers);
 
-router.post('/', (req, res) => {
-	res.send('POST response on /business-users');
-});
+router.post('/', business.postBusinessUser);
 
-router.put('/:userId', (req, res) => {
-	res.send('PUT response on /business-users/' + req.params.userId);
-});
+router.put('/:userId', business.updateBusinessUser);
 
-router.delete('/:userId', (req, res) => {
-	res.send('DELETE response on /business-users/' + req.params.userId);
-});
+router.delete('/:userId', business.deleteBusinessUser);
 
 module.exports = router;
