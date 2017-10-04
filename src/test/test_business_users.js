@@ -137,3 +137,39 @@ describe('/business-users tests', () => {
 			});
 	});
 });
+
+describe('/business-users/:userId tests', () => {
+
+	it('PUT action', () => {
+		let bu = {
+			username: "admin0",
+			password: "1234",
+			name: "admin",
+			surname: "adminsurname",
+			roles: ["admin"]
+		};
+		chai.request(server)
+			.put('/api/business-users/1')
+			.send(bu)
+			.end((err, res) => {
+				res.should.have.status(201);
+				res.body.should.be.a('object');
+				res.body.businessUser.should.have.property('id').eql("1");
+				res.body.businessUser.should.have.property('_ref');
+				res.body.businessUser.should.have.property('username').eql(bu.username);
+				res.body.businessUser.should.have.property('password').eql(bu.password);
+				res.body.businessUser.should.have.property('name').eql(bu.name);
+				res.body.businessUser.should.have.property('surname').eql(bu.surname);
+				res.body.businessUser.roles.should.be.a('array');
+				res.body.businessUser.should.have.property('roles').eql(bu.roles);
+			});
+	});
+
+	it('DELETE action', () => {
+		chai.request(server)
+			.delete('/api/business-users/1')
+			.end((err, res) => {
+				res.should.have.status(204);
+			});
+	})
+});
