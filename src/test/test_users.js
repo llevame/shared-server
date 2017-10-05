@@ -65,6 +65,17 @@ describe('/users/{userId} tests', () => {
 
 });
 
+describe('/users/{userId}/trips', () => {
+
+	it('GET action', () => {
+		chai.request(server)
+			.get('/api/users/1/trips')
+			.end((err, res) => {
+				res.body.should.be.eql('GET request on /users/1/trips');
+			});
+	});
+});
+
 describe('/users/{userId}/cars tests', () => {
 
 	it('GET action', () => {
