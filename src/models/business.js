@@ -1,4 +1,5 @@
 let authorization = require('./authorization');
+let businessUserQ = require('../../db/business_queries');
 
 function businessUserExists(userId) {
 	return true;
@@ -47,7 +48,7 @@ function getBusinessUsers(req, res) {
 
 // post a new business users
 function postBusinessUser(req, res) {
-	
+
 	if (!checkParameters(req.body)) {
 		
 		res.status(400)
@@ -59,23 +60,23 @@ function postBusinessUser(req, res) {
 			);
 		return;
 	}
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				version: "1.0"
-			},
-			businessUser: {
-				id: "0",
-				_ref: "0",
-				username: req.body.username,
-				password: req.body.password,
-				name: req.body.name,
-				surname: req.body.surname,
-				roles: req.body.roles
-			}
-		}
-		);
+
+	businessUserQ.addBusinessUser(req.body)
+		.then((userId) => {
+			return businessUserQ.getBusinessUser(userId);
+		})
+		.then((bu) => {
+			res.status(201).json(bu);
+		})
+		.catch((error) => {
+			res.status(500)
+				.json(
+				     {
+				     	code: error,
+					message: error.message
+				     }
+				     );
+		});
 }
 
 // updates a business user

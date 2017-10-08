@@ -13,14 +13,15 @@
     "url": "git+https://github.com/llevame/shared-server.git"
   },
   "dependencies": {
+    "body-parser": "~1.10.1",
+    "cors": "^2.8.4",
     "create-react-app": "^1.4.0",
     "express": "^4.15.3",
-    "request": "^2.81.0",
+    "knex": "^0.13.0",
     "log4js": "^1.1.1",
     "pg": "6.1.5",
-    "satellizer": "^0.15.5",
-    "body-parser": "~1.10.1",
-    "cors":"^2.8.4"
+    "request": "^2.81.0",
+    "satellizer": "^0.15.5"
   },
   "devDependencies": {
     "chai": "^4.1.1",
