@@ -21,7 +21,8 @@
     "log4js": "^1.1.1",
     "pg": "6.1.5",
     "request": "^2.81.0",
-    "satellizer": "^0.15.5"
+    "satellizer": "^0.15.5",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.1",

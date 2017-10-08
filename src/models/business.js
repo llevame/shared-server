@@ -1,5 +1,6 @@
 let authorization = require('./authorization');
 let businessUserQ = require('../../db/business_queries');
+var v = require('../../package.json').version;
 
 function businessUserExists(userId) {
 	return true;
@@ -66,7 +67,15 @@ function postBusinessUser(req, res) {
 			return businessUserQ.getBusinessUser(userId);
 		})
 		.then((bu) => {
-			res.status(201).json(bu);
+
+			let buser = {
+				metadata: {
+					version: v
+				},
+				businessUser: bu
+			};
+
+			res.status(201).json(buser);
 		})
 		.catch((error) => {
 			res.status(500)
