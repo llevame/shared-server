@@ -9,7 +9,7 @@ var knex = require('../../db/knex');
 chai.use(chaiHttp);
 
 describe('/business-users tests', () => {
-
+/*
 	beforeEach(function(done) {
 		knex.migrate.rollback()
 		.then(function() {
@@ -54,7 +54,7 @@ describe('/business-users tests', () => {
 				done();
 			});
 	});
-/*
+
 	it('POST action with good parameters', () => {
 		let bu = {
 			username: "admin0",
