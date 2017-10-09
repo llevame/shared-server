@@ -12,10 +12,10 @@ function getAll() {
 	return BusinessUsers().select();
 }
 
-function get(userId) {
+function get(id) {
 
 	return BusinessUsers()
-		.where('id', parseInt(userId))
+		.where('id', parseInt(id))
 		.first();
 }
 
