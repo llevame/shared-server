@@ -19,6 +19,13 @@ function getBusinessUser(userId) {
 		.first();
 }
 
+function deleteBusinessUser(id) {
+
+	return BusinessUsers()
+		.where('id', parseInt(id))
+		.del();
+}
+
 function updateBusinessUser(id, updates) {
 
 	let buaux = {
@@ -47,8 +54,9 @@ function addBusinessUser(bu) {
 		roles: bu.roles
 	};
 
-	return BusinessUsers().insert(buaux, 'id');
+	return BusinessUsers()
+		.insert(buaux, 'id');
 }
 
-module.exports = {getAll, getBusinessUser, addBusinessUser, updateBusinessUser};
+module.exports = {getAll, getBusinessUser, addBusinessUser, updateBusinessUser, deleteBusinessUser};
 

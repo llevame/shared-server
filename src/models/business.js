@@ -2,14 +2,6 @@ let authorization = require('./authorization');
 let businessUserQ = require('../../db/queries-wrapper/business_queries');
 var v = require('../../package.json').version;
 
-function businessUserExists(userId) {
-	return true;
-}
-
-function existsUpdateConflict(userId) {
-	return false;
-}
-
 function checkParameters(body) {
 	return (body.username && body.password &&
 		body.name && body.surname &&
@@ -126,6 +118,12 @@ function updateBusinessUser(req, res) {
 						message: error.message
 					});
 				});
+		})
+		.catch((error) => {
+			res.status(500).json({
+				code: 500,
+				message: error.message
+			});
 		});
 }
 
@@ -133,27 +131,38 @@ function updateBusinessUser(req, res) {
 function deleteBusinessUser(req, res) {
 	
 	if (!authorization.authorizeUser(req.body)) {
-		res.status(401)
-		   .json(
-			{
-				code: 401,
-				message: "Acceso no autorizado"
-			}
-			);
-		return;
+		return res.status(401).json({
+			code: 401,
+			message: "Acceso no autorizado"
+		});
 	}
-	if (!businessUserExists(req.params.userId)) {
-		res.status(404)
-		   .json(
-			{
-				code: 404,
-				message: "No existe el recurso solicitado"
+
+	businessUserQ.getBusinessUser(req.params.userId)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({
+					code: 404,
+					message: "No existe el recurso solicitado"
+				});
 			}
-			);
-		return;
-	}
-	res.status(204)
-	   .send("Baja exitosa");
+
+			businessUserQ.deleteBusinessUser(req.params.userId)
+				.then(() => {
+					res.sendStatus(204);
+				})
+				.catch((error) => {
+					res.status(500).json({
+						code:500,
+						message: error.message
+					});
+				});
+		})
+		.catch((error) => {
+			res.status(500).json({
+				code: 500,
+				message: error.message
+			});
+		});
 }
 
 module.exports = {getBusinessUsers, postBusinessUser, updateBusinessUser, deleteBusinessUser};
