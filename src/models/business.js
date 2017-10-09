@@ -18,33 +18,31 @@ function checkParameters(body) {
 
 // returns all the available business users in the system
 function getBusinessUsers(req, res) {
-	res.status(200)
-	   .json(
-		{
-			metadata: {
-				count: 1,
-				total: 3,
-				next: "",
-				prev: "",
-				first: "",
-				last: "",
-				version: "1.0"
-			},
-			businessUser: [
-				{
-					id: "0",
-					_ref: "0",
-					username: "bussuser",
-					password: "password",
-					name: "businessUser",
-					surname: "surname",
-					roles: [
-						"admin"
-					]
-				}
-			]
-		}
-		);
+	
+	businessUserQ.getAll()
+		.then((users) => {
+
+			let busers = {
+			
+				metadata: {
+					count: users.length,
+					total: users.length,
+					version: v
+				},
+				businessUser: users
+			};
+
+			res.status(200).json(busers);
+		})
+		.catch((error) => {
+			res.status(500)
+				.json(
+				     {
+				     	code: error,
+					message: error.message
+				     }
+				     );
+		});
 }
 
 // post a new business users
