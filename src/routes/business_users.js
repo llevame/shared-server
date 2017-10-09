@@ -15,6 +15,8 @@ router.get('/', business.getBusinessUsers);
 
 router.post('/', business.postBusinessUser);
 
+router.get('/:userId', business.getBusinessUser);
+
 router.put('/:userId', business.updateBusinessUser);
 
 router.delete('/:userId', business.deleteBusinessUser);

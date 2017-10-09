@@ -32,6 +32,34 @@ function getBusinessUsers(req, res) {
 		});
 }
 
+// get a single business-user information
+function getBusinessUser(req, res) {
+
+	if (!authorization.authorizeUser(req.body)) {
+		return res.status(401).json(error.unathoAccess());
+	}
+
+	businessUserQ.getBusinessUser(req.params.userId)
+		.then((bu) => {
+			if (!user) {
+				return res.status(404).json(error.noResource());
+			}
+
+			let buser = {
+				metadata: {
+					version: v
+				},
+				businessUser: bu
+			};
+
+			res.status(200).json(buser);
+
+		})
+		.catch((err) => {
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
 // post a new business users
 function postBusinessUser(req, res) {
 
@@ -127,4 +155,4 @@ function deleteBusinessUser(req, res) {
 		});
 }
 
-module.exports = {getBusinessUsers, postBusinessUser, updateBusinessUser, deleteBusinessUser};
+module.exports = {getBusinessUsers, getBusinessUser, postBusinessUser, updateBusinessUser, deleteBusinessUser};

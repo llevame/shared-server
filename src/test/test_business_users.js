@@ -4,10 +4,18 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var should = require('chai').should;
 var server = require('../index');
+var knex = require('../../db/knex');
 
 chai.use(chaiHttp);
 
 describe('/business-users tests', () => {
+
+	beforeEach(() => knex.migrate.rollback()
+		.then(() => knex.migrate.latest())
+		.then(() => knex.seed.run())
+	);
+
+	afterEach(() => knex.migrate.rollback());
 	
 	it('GET action', () => {
 		chai.request(server)
@@ -17,8 +25,19 @@ describe('/business-users tests', () => {
 				res.body.should.be.a('object');
 				res.body.should.have.property('metadata');
 				res.body.metadata.should.have.property('count');
+				res.body.metadata.should.have.property('total');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('businessUser');
 				res.body.businessUser.should.be.a('array');
-				res.body.servers.length.should.be.eql(res.body.metadata.count);
+				res.body.businessUser.length.should.be.eql(res.body.metadata.count);
+				res.body.businessUser[0].should.have.property('id').eql(1);
+				res.body.businessUser[0].should.have.property('_ref');
+				res.body.businessUser[0].should.have.property('username').eql('juan123');
+				res.body.businessUser[0].should.have.property('password').eql('123');
+				res.body.businessUser[0].should.have.property('name').eql('juan');
+				res.body.businessUser[0].should.have.property('surname').eql('lopez');
+				res.body.businessUser[0].should.have.property('roles').eql(["admin"]);
+				res.body.businessUser[0].roles.should.be.a('array');
 			});
 	});
 
@@ -138,38 +157,3 @@ describe('/business-users tests', () => {
 	});
 });
 
-describe('/business-users/:userId tests', () => {
-
-	it('PUT action', () => {
-		let bu = {
-			username: "admin0",
-			password: "1234",
-			name: "admin",
-			surname: "adminsurname",
-			roles: ["admin"]
-		};
-		chai.request(server)
-			.put('/api/business-users/1')
-			.send(bu)
-			.end((err, res) => {
-				res.should.have.status(201);
-				res.body.should.be.a('object');
-				res.body.businessUser.should.have.property('id').eql("1");
-				res.body.businessUser.should.have.property('_ref');
-				res.body.businessUser.should.have.property('username').eql(bu.username);
-				res.body.businessUser.should.have.property('password').eql(bu.password);
-				res.body.businessUser.should.have.property('name').eql(bu.name);
-				res.body.businessUser.should.have.property('surname').eql(bu.surname);
-				res.body.businessUser.roles.should.be.a('array');
-				res.body.businessUser.should.have.property('roles').eql(bu.roles);
-			});
-	});
-
-	it('DELETE action', () => {
-		chai.request(server)
-			.delete('/api/business-users/1')
-			.end((err, res) => {
-				res.should.have.status(204);
-			});
-	})
-});
