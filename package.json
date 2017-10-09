@@ -36,7 +36,8 @@
     "exclude": [
       "**/*.spec.js",
       "build",
-      "src/test/*"
+      "src/test/*",
+      "db/*"
     ]
   },
   "keywords": [],
