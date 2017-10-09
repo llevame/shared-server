@@ -41,7 +41,7 @@ function getBusinessUser(req, res) {
 		return res.status(401).json(error.unathoAccess());
 	}
 
-	businessUserQ.getBusinessUser(req.params.userId)
+	businessUserQ.get(req.params.userId)
 		.then((bu) => {
 			if (!bu) {
 				return res.status(404).json(error.noResource());
@@ -70,9 +70,9 @@ function postBusinessUser(req, res) {
 		return res.status(400).json(error.missingParameters());
 	}
 
-	businessUserQ.addBusinessUser(req.body)
+	businessUserQ.add(req.body)
 		.then((userId) => {
-			return businessUserQ.getBusinessUser(userId);
+			return businessUserQ.get(userId);
 		})
 		.then((bu) => {
 
@@ -102,7 +102,7 @@ function updateBusinessUser(req, res) {
 		return res.status(500).json(error.idFieldModification());
 	}
 
-	businessUserQ.getBusinessUser(req.params.userId)
+	businessUserQ.get(req.params.userId)
 		.then((user) => {
 			if (!user) {
 				return res.status(404).json(error.noResource());
@@ -112,7 +112,7 @@ function updateBusinessUser(req, res) {
 				return res.status(409).json(error.updateConflict());
 			}
 
-			businessUserQ.updateBusinessUser(req.params.userId, req.body)
+			businessUserQ.update(req.params.userId, req.body)
 				.then((updatedUser) => {
 
 					let update = {
@@ -142,13 +142,13 @@ function deleteBusinessUser(req, res) {
 		return res.status(401).json(error.unathoAccess());
 	}
 
-	businessUserQ.getBusinessUser(req.params.userId)
+	businessUserQ.get(req.params.userId)
 		.then((user) => {
 			if (!user) {
 				return res.status(404).json(error.noResource());
 			}
 
-			businessUserQ.deleteBusinessUser(req.params.userId)
+			businessUserQ.del(req.params.userId)
 				.then(() => {
 					res.sendStatus(204);
 				})

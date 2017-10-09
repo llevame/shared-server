@@ -12,21 +12,21 @@ function getAll() {
 	return BusinessUsers().select();
 }
 
-function getBusinessUser(userId) {
+function get(userId) {
 
 	return BusinessUsers()
 		.where('id', parseInt(userId))
 		.first();
 }
 
-function deleteBusinessUser(id) {
+function del(id) {
 
 	return BusinessUsers()
 		.where('id', parseInt(id))
 		.del();
 }
 
-function updateBusinessUser(id, updates) {
+function update(id, updates) {
 
 	let buaux = {
 		_ref: uuid(),
@@ -43,7 +43,7 @@ function updateBusinessUser(id, updates) {
 		.returning('*');
 }
 
-function addBusinessUser(bu) {
+function add(bu) {
 	
 	let buaux = {
 		_ref: uuid(),
@@ -58,5 +58,5 @@ function addBusinessUser(bu) {
 		.insert(buaux, 'id');
 }
 
-module.exports = {getAll, getBusinessUser, addBusinessUser, updateBusinessUser, deleteBusinessUser};
+module.exports = {getAll, get, add, update, del};
 
