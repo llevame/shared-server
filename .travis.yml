@@ -4,5 +4,5 @@ node_js:
 services: postgresql
 before_install: sudo apt-get install -qq
 install: npm install
-before_script: psql -c 'CREATE DATABASE llevame-shared-test;' -U postgres
+before_script: psql -c 'CREATE DATABASE "llevame-shared-test";' -U postgres
 after_success: npm run coverage
