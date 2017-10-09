@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4');
 
 exports.seed = function(knex, Promise) {
 	
@@ -5,31 +6,39 @@ exports.seed = function(knex, Promise) {
 	return knex('business_users').del()
 		.then(() => {
 			return knex('business_users').insert({
+				_ref: uuid(),
 				username: 'juan123',
 				password: '123',
 				name: 'juan',
-				surname: 'lopez'
+				surname: 'lopez',
+				roles: ["admin"]
 			});
 		}).then(() => {
 			return knex('business_users').insert({
+				_ref: uuid(),
 				username: 'eduardo123',
 				password: '456',
 				name: 'eduardo',
-				surname: 'garcia'
+				surname: 'garcia',
+				roles: ["admin", "manager"]
 			});
 		}).then(() => {
 			return knex('business_users').insert({
+				_ref: uuid(),
 				username: 'gerardo123',
 				password: '789',
 				name: 'gerardo',
-				surname: 'lopez'
+				surname: 'lopez',
+				roles: ["user"]
 			});
 		}).then(() => {
 			return knex('business_users').insert({
+				_ref: uuid(),
 				username: 'federico123',
 				password: '345',
 				name: 'federico',
-				surname: 'garcia'
+				surname: 'garcia',
+				roles: ["manager"]
 			});
 		});
 };
