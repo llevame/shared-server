@@ -1,4 +1,5 @@
-let authorization = require('./authorization');
+let authorization = require('../handlers/auth-handler');
+let error = require('../handlers/error-handler');
 let businessUserQ = require('../../db/queries-wrapper/business_queries');
 var v = require('../../package.json').version;
 
@@ -26,11 +27,8 @@ function getBusinessUsers(req, res) {
 
 			res.status(200).json(busers);
 		})
-		.catch((error) => {
-			res.status(500).json({
-				code: error.status,
-				message: error.message
-			});
+		.catch((err) => {
+			res.status(500).json(error.unexpected(err));
 		});
 }
 
@@ -38,10 +36,7 @@ function getBusinessUsers(req, res) {
 function postBusinessUser(req, res) {
 
 	if (!checkParameters(req.body)) {
-		return res.status(400).json({
-			code: 400,
-			message: "Parámetros faltantes"
-		});
+		return res.status(400).json(error.missingParameters());
 	}
 
 	businessUserQ.addBusinessUser(req.body)
@@ -59,11 +54,8 @@ function postBusinessUser(req, res) {
 
 			res.status(201).json(buser);
 		})
-		.catch((error) => {
-			res.status(500).json({
-				code: error.status,
-				message: error.message
-			});
+		.catch((err) => {
+			res.status(500).json(error.unexpected(err));
 		});
 }
 
@@ -71,33 +63,21 @@ function postBusinessUser(req, res) {
 function updateBusinessUser(req, res) {
 	
 	if (!checkParameters(req.body)) {
-		return res.status(400).json({
-			code: 400,
-			message: "Parámetros faltantes"
-		});
+		return res.status(400).json(error.missingParameters());
 	}
 
 	if (req.body.hasOwnProperty('id')) {
-		return res.status(500).json({
-			code: 500,
-			message: "No se puede actualizar el campo id"
-		});
+		return res.status(500).json(error.idFieldModification());
 	}
 
 	businessUserQ.getBusinessUser(req.params.userId)
 		.then((user) => {
 			if (!user) {
-				return res.status(404).json({
-					code: 404,
-					message: "No existe el recurso solicitado"
-				});
+				return res.status(404).json(error.noResource());
 			}
 
 			if (user._ref !== req.body._ref) {
-				return res.status(409).json({
-					code: 409,
-					message: "Conflicto en el update"
-				});
+				return res.status(409).json(error.updateConflict());
 			}
 
 			businessUserQ.updateBusinessUser(req.params.userId, req.body)
@@ -112,18 +92,12 @@ function updateBusinessUser(req, res) {
 
 					res.status(200).json(update);
 				})
-				.catch((error) => {
-					res.status(500).json({
-						code: 500,
-						message: error.message
-					});
+				.catch((err) => {
+					res.status(500).json(error.unexpected(err));
 				});
 		})
-		.catch((error) => {
-			res.status(500).json({
-				code: 500,
-				message: error.message
-			});
+		.catch((err) => {
+			res.status(500).json(error.unexpected(err));
 		});
 }
 
@@ -131,37 +105,25 @@ function updateBusinessUser(req, res) {
 function deleteBusinessUser(req, res) {
 	
 	if (!authorization.authorizeUser(req.body)) {
-		return res.status(401).json({
-			code: 401,
-			message: "Acceso no autorizado"
-		});
+		return res.status(401).json(error.unathoAccess());
 	}
 
 	businessUserQ.getBusinessUser(req.params.userId)
 		.then((user) => {
 			if (!user) {
-				return res.status(404).json({
-					code: 404,
-					message: "No existe el recurso solicitado"
-				});
+				return res.status(404).json(error.noResource());
 			}
 
 			businessUserQ.deleteBusinessUser(req.params.userId)
 				.then(() => {
 					res.sendStatus(204);
 				})
-				.catch((error) => {
-					res.status(500).json({
-						code:500,
-						message: error.message
-					});
+				.catch((err) => {
+					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((error) => {
-			res.status(500).json({
-				code: 500,
-				message: error.message
-			});
+			res.status(500).json(error.unexpected(err));
 		});
 }
 

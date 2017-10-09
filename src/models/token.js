@@ -1,4 +1,4 @@
-let authorization = require('./authorization');
+let authorization = require('../handlers/auth-handler');
 
 // returns a new token for an app-server
 function getToken(req, res) {
