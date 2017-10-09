@@ -9,14 +9,58 @@ function Users() {
 
 function getAll() {
 
-	return Users().select();
+	return Users()
+		.select('id',
+			'_ref',
+			'applicationOwner',
+			'type',
+			'cars',
+			'username',
+			'name',
+			'surname',
+			'country',
+			'email',
+			'birthdate',
+			'images',
+			'balance');
 }
 
 function get(id) {
 	
 	return Users()
 		.where('id', parseInt(id))
-		.first();
+		.first('id',
+			'_ref',
+			'applicationOwner',
+			'type',
+			'cars',
+			'username',
+			'name',
+			'surname',
+			'country',
+			'email',
+			'birthdate',
+			'images',
+			'balance');
+}
+
+function getByUsername(username) {
+
+	return Users()
+		.where('username', username)
+		.first('id',
+			'_ref',
+			'applicationOwner',
+			'type',
+			'cars',
+			'username',
+			'name',
+			'surname',
+			'country',
+			'email',
+			'birthdate',
+			'images',
+			'balance');
 }
 
 function del(id) {
@@ -67,3 +111,5 @@ function add(u) {
 	return Users()
 		.insert(uaux, 'id');
 }
+
+module.exports = {getAll, get, add, update, del, getByUsername};

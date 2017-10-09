@@ -48,4 +48,12 @@ function unathoAccess() {
 	};
 }
 
-module.exports = {unexpected, unathoAccess, updateConflict, noResource, idFieldModification, missingParameters};
+function faillingValidation() {
+
+	return {
+		code: 400,
+		message: "Validación fallida"
+	};
+}
+
+module.exports = {unexpected, unathoAccess, updateConflict, noResource, idFieldModification, missingParameters, faillingValidation};
