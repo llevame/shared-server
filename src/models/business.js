@@ -41,7 +41,7 @@ function getBusinessUser(req, res) {
 
 	businessUserQ.getBusinessUser(req.params.userId)
 		.then((bu) => {
-			if (!user) {
+			if (!bu) {
 				return res.status(404).json(error.noResource());
 			}
 
