@@ -30,7 +30,7 @@ describe('/business-users tests', () => {
 		});
 	});
 	
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/business-users')
 			.end((err, res) => {
@@ -51,6 +51,7 @@ describe('/business-users tests', () => {
 				res.body.businessUser[0].should.have.property('surname').eql('lopez');
 				res.body.businessUser[0].should.have.property('roles').eql(["admin"]);
 				res.body.businessUser[0].roles.should.be.a('array');
+				done();
 			});
 	});
 /*
