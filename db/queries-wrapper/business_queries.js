@@ -1,4 +1,4 @@
-var knex = require('./knex.js');
+var knex = require('../knex.js');
 var uuid = require('uuid/v4');
 
 function BusinessUsers() {

@@ -1,5 +1,5 @@
 let authorization = require('./authorization');
-let businessUserQ = require('../../db/business_queries');
+let businessUserQ = require('../../db/queries-wrapper/business_queries');
 var v = require('../../package.json').version;
 
 function businessUserExists(userId) {
