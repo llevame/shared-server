@@ -1,6 +1,7 @@
 let authorization = require('../handlers/auth-handler');
 let error = require('../handlers/error-handler');
 let businessUserQ = require('../../db/queries-wrapper/business_queries');
+var log = require('log4js').getLogger("error");
 var v = require('../../package.json').version;
 
 function checkParameters(body) {
@@ -28,6 +29,7 @@ function getBusinessUsers(req, res) {
 			res.status(200).json(busers);
 		})
 		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -56,6 +58,7 @@ function getBusinessUser(req, res) {
 
 		})
 		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -83,6 +86,7 @@ function postBusinessUser(req, res) {
 			res.status(201).json(buser);
 		})
 		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -121,10 +125,12 @@ function updateBusinessUser(req, res) {
 					res.status(200).json(update);
 				})
 				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -147,10 +153,12 @@ function deleteBusinessUser(req, res) {
 					res.sendStatus(204);
 				})
 				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((error) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
