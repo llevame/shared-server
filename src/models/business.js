@@ -35,13 +35,10 @@ function getBusinessUsers(req, res) {
 			res.status(200).json(busers);
 		})
 		.catch((error) => {
-			res.status(500)
-				.json(
-				     {
-				     	code: error,
-					message: error.message
-				     }
-				     );
+			res.status(500).json({
+				code: error.status,
+				message: error.message
+			});
 		});
 }
 
@@ -49,15 +46,10 @@ function getBusinessUsers(req, res) {
 function postBusinessUser(req, res) {
 
 	if (!checkParameters(req.body)) {
-		
-		res.status(400)
-		   .json(
-			{
-				code: 400,
-				message: "Parámetros faltantes"
-			}
-			);
-		return;
+		return res.status(400).json({
+			code: 400,
+			message: "Parámetros faltantes"
+		});
 	}
 
 	businessUserQ.addBusinessUser(req.body)
@@ -76,13 +68,10 @@ function postBusinessUser(req, res) {
 			res.status(201).json(buser);
 		})
 		.catch((error) => {
-			res.status(500)
-				.json(
-				     {
-				     	code: error,
-					message: error.message
-				     }
-				     );
+			res.status(500).json({
+				code: error.status,
+				message: error.message
+			});
 		});
 }
 
@@ -90,53 +79,54 @@ function postBusinessUser(req, res) {
 function updateBusinessUser(req, res) {
 	
 	if (!checkParameters(req.body)) {
-		
-		res.status(400)
-		   .json(
-			{
-				code: 400,
-				message: "Parámetros faltantes"
-			}
-			);
-		return;
+		return res.status(400).json({
+			code: 400,
+			message: "Parámetros faltantes"
+		});
 	}
-	if (!businessUserExists(req.params.userId)) {
-		res.status(404)
-		   .json(
-			{
-				code: 404,
-				message: "No existe el recurso solicitado"
-			}
-			);
-		return;
+
+	if (req.body.hasOwnProperty('id')) {
+		return res.status(500).json({
+			code: 500,
+			message: "No se puede actualizar el campo id"
+		});
 	}
-	if (existsUpdateConflict(req.params.userId)) {
-		res.status(409)
-		   .json(
-			{
-				code: 409,
-				message: "Conflicto en el update"
+
+	businessUserQ.getBusinessUser(req.params.userId)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({
+					code: 404,
+					message: "No existe el recurso solicitado"
+				});
 			}
-			);
-		return;
-	}
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				version: "1.0"
-			},
-			businessUser: {
-				id: "" + req.params.userId,
-				_ref: "0",
-				username: req.body.username,
-				password: req.body.password,
-				name: req.body.name,
-				surname: req.body.surname,
-				roles: req.body.roles
+
+			if (user._ref !== req.body._ref) {
+				return res.status(409).json({
+					code: 409,
+					message: "Conflicto en el update"
+				});
 			}
-		}
-		);
+
+			businessUserQ.updateBusinessUser(req.params.userId, req.body)
+				.then((updatedUser) => {
+
+					let update = {
+						metadata: {
+							version: v
+						},
+						businessUser: updatedUser
+					};
+
+					res.status(200).json(update);
+				})
+				.catch((error) => {
+					res.status(500).json({
+						code: 500,
+						message: error.message
+					});
+				});
+		});
 }
 
 // deletes a business user
