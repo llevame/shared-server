@@ -154,7 +154,6 @@ function updateUser(req, res) {
 				.then((updatedUser) => {
 					
 					let update = {
-						
 						metadata: {
 							version: v
 						},

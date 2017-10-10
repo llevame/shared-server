@@ -56,4 +56,12 @@ function faillingValidation() {
 	};
 }
 
-module.exports = {unexpected, unathoAccess, updateConflict, noResource, idFieldModification, missingParameters, faillingValidation};
+function noCar() {
+
+	return {
+		code:404,
+		message: "Auto inexistente"
+	};
+}
+
+module.exports = {unexpected, unathoAccess, updateConflict, noResource, idFieldModification, missingParameters, faillingValidation, noCar};
