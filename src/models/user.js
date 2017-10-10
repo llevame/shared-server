@@ -24,9 +24,9 @@ function checkParametersUpdate(body) {
 
 function credentialsAreValid(user, credentials) {
 
-	return (user.username === credentials.username &&
-		user.password === credentials.password &&
-		user.fb.authToken === credentials.facebookAuthToken);
+	return ((user.username == credentials.username) &&
+		(user.password == credentials.password) &&
+		(user.fb.authToken == credentials.facebookAuthToken));
 }
 
 // returns all the available users
@@ -191,15 +191,24 @@ function validateUser(req, res) {
 				return res.status(400).json(error.faillingValidation());
 			}
 
-			let r = {
+			userQ.get(u.id)
+				.then((usr) => {
+				
+					let r = {
 			
-				metadata: {
-					version: v
-				},
-				user: u
-			};
+						metadata: {
+							version: v
+						},
+						user: usr
+					};
 
-			res.status(200).json(r);
+					res.status(200).json(r);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);

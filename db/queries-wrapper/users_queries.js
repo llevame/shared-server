@@ -49,18 +49,9 @@ function getByUsername(username) {
 	return Users()
 		.where('username', username)
 		.first('id',
-			'_ref',
-			'applicationOwner',
-			'type',
-			'cars',
 			'username',
-			'name',
-			'surname',
-			'country',
-			'email',
-			'birthdate',
-			'images',
-			'balance');
+			'password',
+			'fb');
 }
 
 function del(id) {
