@@ -1,5 +1,6 @@
 let error = require('../handlers/error-handler');
 let userQ = require('../../db/queries-wrapper/users_queries');
+let carQ = require('../../db/queries-wrapper/cars_queries');
 var log = require('log4js').getLogger("error");
 var v = require('../../package.json').version;
 
@@ -35,6 +36,13 @@ function getUsers(req, res) {
 	userQ.getAll()
 		.then((app_users) => {
 			
+			for (u in app_users) {
+				carQ.getAllOfUser(app_users[u].id)
+					.then((userCars) => {
+						app_users[u].cars = userCars;
+					});
+			}
+
 			let usrs = {
 				
 				metadata: {
