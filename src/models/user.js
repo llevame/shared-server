@@ -54,8 +54,19 @@ function getUsers(req, res) {
 		.then((app_users) => {
 			carQ.getAll()
 				.then((userCars) => {
+
 					let r = mergeCarsWithUsers(app_users, userCars);
-					res.status(200).json(r);
+
+					let usrs = {
+						metadata: {
+							count: r.length,
+							total: r.length,
+							version: v
+						},
+						users: r
+					};
+
+					res.status(200).json(usrs);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + "on: " + req.originalUrl);
