@@ -55,5 +55,12 @@ function del(userId, carId) {
 		.del();
 }
 
-module.exports = {getAll, getAllOfUser, get, add, update, del};
+function delAllOfUser(userId) {
+
+	return Cars()
+		.where('owner', userId.toString())
+		.del()
+}
+
+module.exports = {getAll, getAllOfUser, get, add, update, del, delAllOfUser};
 

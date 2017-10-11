@@ -139,15 +139,22 @@ function deleteUser(req, res) {
 				return res.status(404).json(error.noResource());
 			}
 
-			userQ.del(req.params.userId)
+			carQ.delAllOfUser(req.params.userId)
 				.then(() => {
-					res.sendStatus(204);
+					userQ.del(req.params.userId)
+						.then(() => {
+							res.sendStatus(204);
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + "on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + "on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
-		})
+			})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
