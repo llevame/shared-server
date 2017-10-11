@@ -2,23 +2,25 @@ let authorization = require('./authorization');
 
 // returns a new token for an app-server
 function getToken(req, res) {
-	
-	if (!authorization.authorizeUser(req.body)) {
-		res.status(401)
-		   .json(
-			{
-				code: 401,
-				message: "Acceso no autorizado"
-			}
-			);
-		return;
-	}
+	var service = require('../libs/service');
+	var log = require('log4js').getLogger("consola");
 	if (!req.body.username || !req.body.password) {
 		res.status(400)
 		   .json(
 			{
 				code: 400,
 				message: "Parámetros faltantes"
+			}
+			);
+		return;
+	}
+	var result= authorization.authorizeUser(req.body);
+	if (typeof result == 'string') {
+		res.status(401)
+		   .json(
+			{
+				code: 401,
+				message: "Acceso no autorizado: " + result
 			}
 			);
 		return;
@@ -30,8 +32,8 @@ function getToken(req, res) {
 				version: "1.0"
 			},
 			token: {
-				expiresAt: 0,
-				token: "token"
+				expiresAt: 2,
+				token: service.createToken(req.body.username)
 			}
 		}
 		);
