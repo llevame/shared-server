@@ -77,14 +77,24 @@ function getUser(req, res) {
 				return res.status(404).json(error.noResource());
 			}
 
-			let usr = {
-				metadata: {
-					version: v
-				},
-				user: u
-			};
+			carQ.getAllOfUser(req.params.userId)
+				.then((userCars) => {
 
-			res.status(200).json(usr);
+					u.cars = userCars;
+
+					let usr = {
+						metadata: {
+							version: v
+						},
+						user: u
+					};
+
+					res.status(200).json(usr);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
