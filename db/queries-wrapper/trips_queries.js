@@ -6,7 +6,18 @@ function Trips() {
 
 function getAll() {
 	
-	return Trips().select();
+	return Trips()
+		.select('id',
+			'applicationOwner',
+			'driver',
+			'passenger',
+			'start',
+			'end',
+			'waitTime',
+			'travelTime',
+			'distance',
+			'route',
+			'cost');
 }
 
 function get(id) {
