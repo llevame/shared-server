@@ -16,7 +16,7 @@ function checkParametersUpdate(body) {
 // returns all the cars of a specific user
 function getCars(req, res) {
 
-	carQ.getAll()
+	carQ.getAllOfUser(req.params.userId)
 		.then((retCars) => {
 			
 			let c = {	
