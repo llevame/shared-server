@@ -5,6 +5,11 @@ function Cars() {
 	return knex('cars');
 }
 
+function getAll() {
+
+	return Cars().select();
+}
+
 function getAllOfUser(userId) {
 
 	return Cars().select().where('owner', userId.toString());
@@ -22,5 +27,5 @@ function update(userId, carId, updates) {
 function del(userId, carId) {
 }
 
-module.exports = {getAllOfUser, get, add, update, del};
+module.exports = {getAll, getAllOfUser, get, add, update, del};
 

@@ -4,6 +4,23 @@ let carQ = require('../../db/queries-wrapper/cars_queries');
 var log = require('log4js').getLogger("error");
 var v = require('../../package.json').version;
 
+function mergeCarsWithUsers(users, cars) {
+
+	let r = [];
+
+	for (u in users) {
+		users[u].cars = [];
+		for (c in cars) {
+			if (cars[c].owner == ((users[u].id).toString())) {
+				users[u].cars.push(cars[c]);
+			}
+		}
+		r.push(users[u]);
+	}
+
+	return r;
+}
+
 function checkParametersValidate(body) {
 
 	return (body.username && body.password &&
@@ -35,25 +52,15 @@ function getUsers(req, res) {
 
 	userQ.getAll()
 		.then((app_users) => {
-			
-			for (u in app_users) {
-				carQ.getAllOfUser(app_users[u].id)
-					.then((userCars) => {
-						app_users[u].cars = userCars;
-					});
-			}
-
-			let usrs = {
-				
-				metadata: {
-					count: app_users.length,
-					total: app_users.length,
-					version: v
-				},
-				users: app_users
-			};
-
-			res.status(200).json(usrs);
+			carQ.getAll()
+				.then((userCars) => {
+					let r = mergeCarsWithUsers(app_users, userCars);
+					res.status(200).json(r);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
