@@ -33,11 +33,21 @@ function add(t) {
 		.insert(t, 'id');
 }
 
-function getAllByUser(id) {
+function getAllByUser(username) {
 
 	return Trips()
-		.where('user_id', id)
-		.select();
+		.where('passenger', username)
+		.select('id',
+			'applicationOwner',
+			'driver',
+			'passenger',
+			'start',
+			'end',
+			'waitTime',
+			'travelTime',
+			'distance',
+			'route',
+			'cost');
 }
 
 module.exports = {getAll, getAllByUser, add, get};
