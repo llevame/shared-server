@@ -1,26 +1,157 @@
-// returns all the cars of a specific user
-function getCars(req, res) {
-	res.send('GET request on /users/' + req.params.userId + '/cars');
+let error = require('../handlers/error-handler');
+let carQ = require('../../db/queries-wrapper/cars_queries');
+var log = require('log4js').getLogger("error");
+var v = require('../../package.json').version;
+
+function checkParameters(body) {
+	return (body.properties);
 }
 
-// post a new car of a specific user
-function postCar(req, res) {
-	res.send('POST request on /users/' + req.params.userId + '/cars');
+function checkParametersUpdate(body) {
+	
+	return (checkParameters(body) &&
+		body.owner && body._ref);
+}
+
+// returns all the cars of a specific user
+function getCars(req, res) {
+
+	carQ.getAllOfUser(req.params.userId)
+		.then((retCars) => {
+			
+			let c = {	
+				metadata: {
+					count: retCars.length,
+					total: retCars.length,
+					version: v
+				},
+				cars: retCars
+			};
+
+			res.status(200).json(c);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // returns information about a specif car of a user
 function getCar(req, res) {
-	res.send('GET request on /users/' + req.params.userId + '/cars/' + req.params.carId);
+
+	carQ.get(req.params.userId, req.params.carId)
+		.then((c) => {
+			
+			if (!c) {
+				return res.status(404).json(error.noCar());
+			}
+
+			let r = {
+				metadata: {
+					version: v
+				},
+				car: c
+			};
+
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
+// post a new car of a specific user
+function postCar(req, res) {
+
+	if (!checkParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	carQ.add(req.params.userId, req.body)
+		.then((carId) => {
+			return carQ.get(req.params.userId, carId);
+		})
+		.then((c) => {
+			
+			let r = {
+				metadata: {
+					version: v
+				},
+				car: c
+			};
+
+			res.status(201).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // updates the information of a specific car of a user
 function updateCar(req, res) {
-	res.send('PUT request on /users/' + req.params.userId + '/cars/' + req.params.carId);
+
+	if (!checkParametersUpdate(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	carQ.get(req.params.userId, req.params.carId)
+		.then((c) => {
+			if (!c) {
+				return res.status(404).json(error.noCar());
+			}
+
+			if (c._ref !== req.body._ref) {
+				return res.status(409).json(error.updateConflict());
+			}
+
+			carQ.update(req.params.userId, req.params.carId, req.body)
+				.then((updatedCar) => {
+					
+					let update = {
+						metadata: {
+							version: v 
+						},
+						car: updatedCar
+					};
+
+					res.status(200).json(update);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // delete a car of a specific user
 function deleteCar(req, res) {
-	res.send('DELETE request on /users/' + req.params.userId + '/cars/' + req.params.carId);
+
+	carQ.get(req.params.userId, req.params.carId)
+		.then((c) => {
+			
+			if (!c) {
+				return res.status(404).json(error.noCar());
+			}
+				
+			carQ.del(req.params.userId, req.params.carId)
+				.then(() => {
+					res.sendStatus(204);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {getCars, postCar, getCar, updateCar, deleteCar};

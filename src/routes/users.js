@@ -20,8 +20,8 @@ router.get('/', user.getUsers);
 // POST /
 router.post('/', user.postUser);
 
-// GET /validate
-router.get('/validate', user.validateUser);
+// POST /validate
+router.post('/validate', user.validateUser);
 
 // DELETE /{userId}
 router.delete('/:userId', user.deleteUser);

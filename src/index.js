@@ -8,6 +8,7 @@ var log4js = require('log4js');
 log4js.configure(path.join(__dirname, './config/log4js.json'));
 
 var app = express();
+
 // set body parser limits and type for application/json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
@@ -39,7 +40,6 @@ app.use('/', routes);
 var log = log4js.getLogger("consola");
 
 app.listen(app.get('port'));
-
 
 if (process.env.NODE_ENV !== 'test') {
 	log.info('App listening on port %s: ', app.get('port'));

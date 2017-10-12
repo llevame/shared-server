@@ -1,11 +1,52 @@
+let error = require('../handlers/error-handler');
+let transactionQ = require('../../db/queries-wrapper/transaction_queries');
+var log = require('log4js').getLogger("error");
+var v = require('../../package.json').version;
+
 // returns all the transactions made by a user
 function getTransactions(req, res) {
-	res.send('GET request on /users/' + req.params.userId + '/transactions');
-}
 
+	transactionQ.getAllOfUser(req.params.userId)
+		.then((trans) => {
+			
+			let ts = {
+				metadata: {
+					count: trans.length,
+					total: trans.length,
+					version: v
+				},
+				transactions: trans
+			};
+
+			res.status(200).json(ts);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
 // post a new transaction into a specific user
 function postTransaction(req, res) {
-	res.send('POST request on /users/' + req.params.userId + '/transactions');
+
+	transactionQ.add(req.params.userId)
+		.then((transId) => {
+			return transactionQ.get(transId);
+		})
+		.then((trans) => {
+			
+			let t = {
+				metadata: {
+					version: v
+				},
+				transaction: trans
+			};
+
+			res.status(200).json(t);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {getTransactions, postTransaction};
