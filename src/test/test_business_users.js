@@ -10,14 +10,17 @@ chai.use(chaiHttp);
 
 describe('/business-users tests', () => {
 
-	beforeEach(function() {
-	  return knex.migrate.rollback()
+	beforeEach(function(done) {
+	knex.migrate.rollback()
+	.then(function() {
+	  knex.migrate.latest()
+	  .then(function() {
+	    return knex.seed.run()
 	    .then(function() {
-	      return knex.migrate.latest();
-	    })
-	    .then(function() {
-	      return knex.seed.run();
+	      done();
 	    });
+	  });
+	});
 	});
 
 	afterEach(function(done) {

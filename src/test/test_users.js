@@ -10,14 +10,17 @@ chai.use(chaiHttp);
 
 describe('/users tests', () => {
 
-	beforeEach(function() {
-	  return knex.migrate.rollback()
+	beforeEach(function(done) {
+	knex.migrate.rollback()
+	.then(function() {
+	  knex.migrate.latest()
+	  .then(function() {
+	    return knex.seed.run()
 	    .then(function() {
-	      return knex.migrate.latest();
-	    })
-	    .then(function() {
-	      return knex.seed.run();
+	      done();
 	    });
+	  });
+	});
 	});
 
 	afterEach(function(done) {
@@ -51,22 +54,51 @@ describe('/users tests', () => {
 				res.body.users[0].should.have.property('email').eql('juan@gmail.com');
 				res.body.users[0].should.have.property('birthdate').eql('13/1/1990');
 				res.body.users[0].should.have.property('images');
-				res.body.users[0].images.should.be.a('array');
 				res.body.users[0].should.have.property('balance');
 				res.body.users[0].should.have.property('cars');
-				res.body.users[0].should.be.a('array');
+				res.body.users[0].cars.should.be.a('array');
 				done();
 			});
 	});
-/*
+
+
 	it('POST action', () => {
+		let user = {
+			type: "passenger",
+			username: "user123",
+			password: "45678",
+			fb: {
+				userId: "2",
+				authToken: "ffegg5443r"
+			},
+			firstName: "user",
+			lastName: "userlastname",
+			country: "Argentina",
+			email: "user@gmail.com",
+			birthdate: "23/2/1999",
+			images: ["i1", "i2"]
+		};
 		chai.request(server)
 			.post('/api/users')
+			.send(user)
 			.end((err, res) => {
-				res.body.should.be.eql('POST request on /users');
+				res.should.have.status(201);
+				res.body.should.be.a('object');
+				res.body.user.should.have.property('id');
+				res.body.user.should.have.property('_ref');
+				res.body.user.should.have.property('applicationOwner');
+				res.body.user.should.have.property('type').eql("passenger");
+				res.body.user.should.have.property('username').eql("user123");
+				res.body.user.should.have.property('name').eql("user");
+				res.body.user.should.have.property('surname').eql("userlastname");
+				res.body.user.should.have.property('country').eql("Argentina");
+				res.body.user.should.have.property('email').eql("user@gmail.com");
+				res.body.user.should.have.property('birthdate').eql("23/2/1999");
+				res.body.user.should.have.property('images').eql(["i1", "i2"]);
+				res.body.user.should.have.property('balance');
 			});
 	})
-*/
+
 });
 /*
 describe('/users/validate tests', () => {
