@@ -7,7 +7,7 @@ var log4js = require('log4js');
 
 log4js.configure(path.join(__dirname, './config/log4js.json'));
 
-const app = express();
+var app = express();
 
 // set body parser limits and type for application/json
 app.use(bodyParser.json());
@@ -31,37 +31,13 @@ try {
 	}
 }
 
+// *** routes *** //
+var routes = require('./routes/index.js');
+
+// *** main routes *** //
+app.use('/', routes);
+
 var log = log4js.getLogger("consola");
-
-var basePath = '/api';
-
-// default endpoint
-var defapi = require('./routes/default');
-app.use(basePath, defapi);
-
-// /users endpoint
-var users = require('./routes/users');
-app.use(basePath + '/users', users);
-
-// /paymethods endpoint
-var paymethods = require('./routes/paymethods');
-app.use(basePath + '/paymethods', paymethods);
-
-// /trips endpoint
-var trips = require('./routes/trips');
-app.use(basePath + '/trips', trips);
-
-// /servers endpoint
-var servers = require('./routes/servers');
-app.use(basePath + '/servers', servers);
-
-// /token endpoint
-var token = require('./routes/token');
-app.use(basePath + '/token', token);
-
-// /business-users endpoint
-var business_users = require('./routes/business_users');
-app.use(basePath + '/business-users', business_users);
 
 app.listen(app.get('port'));
 
