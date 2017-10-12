@@ -11,9 +11,9 @@ var knex = require('knex')(config);
 
 module.exports = knex;
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV != 'test') {
 	log.info("Start migration");
-	knex.migrate.latest(config);
+	knex.migrate.latest([config]);
 	log.info("End migration");
 }
 

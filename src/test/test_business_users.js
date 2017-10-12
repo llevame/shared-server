@@ -2,25 +2,22 @@ process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var should = require('chai').should;
+var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
 
 chai.use(chaiHttp);
 
 describe('/business-users tests', () => {
-/*
-	beforeEach(function(done) {
-		knex.migrate.rollback()
-		.then(function() {
-			knex.migrate.latest()
-	  		.then(function() {
-				return knex.seed.run()
-				.then(function() {
-					done();
-				});
-			});
-		});
+
+	beforeEach(function() {
+	  return knex.migrate.rollback()
+	    .then(function() {
+	      return knex.migrate.latest();
+	    })
+	    .then(function() {
+	      return knex.seed.run();
+	    });
 	});
 
 	afterEach(function(done) {
@@ -164,11 +161,8 @@ describe('/business-users tests', () => {
 			.post('/api/business-users')
 			.send(bu)
 			.end((err, res) => {
-				res.should.have.status(400);
-				res.body.should.have.property('code');
-				res.body.should.have.property('message').eql('Parámetros faltantes');
+				res.should.have.status(201);
 			});
 	});
-*/
 });
 

@@ -12,10 +12,9 @@ function checkParameters(body) {
 
 // returns all the available business users in the system
 function getBusinessUsers(req, res) {
-	
 	businessUserQ.getAll()
 		.then((users) => {
-
+			
 			let busers = {
 			
 				metadata: {
@@ -25,7 +24,6 @@ function getBusinessUsers(req, res) {
 				},
 				businessUser: users
 			};
-
 			res.status(200).json(busers);
 		})
 		.catch((err) => {
