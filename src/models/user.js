@@ -126,6 +126,8 @@ function postUser(req, res) {
 		})
 		.then((u) => {
 			
+			u.cars = [];
+
 			let usr = {
 				metadata: {
 					version: v
