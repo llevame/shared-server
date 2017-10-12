@@ -62,7 +62,7 @@ describe('/users tests', () => {
 	});
 
 
-	it('POST action', () => {
+	it('POST action', (done) => {
 		let user = {
 			type: "passenger",
 			username: "user123",
@@ -96,9 +96,37 @@ describe('/users tests', () => {
 				res.body.user.should.have.property('birthdate').eql("23/2/1999");
 				res.body.user.should.have.property('images').eql(["i1", "i2"]);
 				res.body.user.should.have.property('balance');
+				done();
 			});
-	})
+	});
 
+	it('POST action with no type parameter', (done) => {
+		let user = {
+			type: "",
+			username: "user123",
+			password: "45678",
+			fb: {
+				userId: "2",
+				authToken: "ffegg5443r"
+			},
+			firstName: "user",
+			lastName: "userlastname",
+			country: "Argentina",
+			email: "user@gmail.com",
+			birthdate: "23/2/1999",
+			images: ["i1", "i2"]
+		};
+		chai.request(server)
+			.post('/api/users')
+			.send(user)
+			.end((err, res) => {
+				res.should.have.status(400);
+				res.body.should.be.a('object');
+				res.body.should.have.property('code');
+				res.body.should.have.property('message');
+				done();
+			});
+	});
 });
 
 describe('/users/validate tests', () => {
@@ -262,7 +290,7 @@ describe('/users/{userId}/transactions tests', () => {
 				res.body.should.be.a('object');
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('transactions');
-				res.body.trips.should.be.a('array');
+				res.body.transactions.should.be.a('array');
 			});
 	});
 
