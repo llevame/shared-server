@@ -20,7 +20,7 @@ function get(id) {
 
 	return Transacions()
 		.where('id', parseInt(id))
-		fisrt('id',
+		.first('id',
 			'trip',
 			'timestamp',
 			'cost',
