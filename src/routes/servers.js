@@ -17,9 +17,19 @@ router.get('/', server.getServers);
 // POST /
 router.post('/', server.postServer);
 
+// GET /:serverId
+router.get('/:serverId', server.getServer);
+
+// POST /:serverId
+router.post('/:serverId', server.resetServerToken);
+
+// PUT /:serverId
+router.put('/:serverId', server.updateServer);
+
+// DELETE /:serverId
+router.delete('/:serverId', server.deleteServer);
+
 // POST /ping
-router.post('/ping', (req, res) => {
-	res.send('POST request on /servers/ping');
-});
+router.post('/ping', server.pingServer);
 
 module.exports = router;

@@ -1,66 +1,51 @@
+let error = require('../handlers/error-handler');
+let serverQ = require('../../db/queries-wrapper/server-queries');
+let log = require('log4js').getLogger("error");
+var v = require('../../package.json');
+
+function checkParameters(body) {
+	return (body.createdBy && body.createdTime && body.name);
+}
+
 // returns all the available app-servers
 function getServers(req, res) {
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				count: 1,
-				total: 3,
-				next: "",
-				prev: "",
-				first: "",
-				last: "",
-				version: "1.0"
-			},
-			servers: [
-				{
-					id: "0",
-					_ref: "0",
-					createdBy: "admin",
-					createdTime: 0,
-					name: "server0",
-					lastConnection: "0"
-				},
-			]
-		}
-		);
+	res.status(201).json();
 }
 
 // post a new app-server
 function postServer(req, res) {
 	
-	if (!req.body.createdBy || !req.body.createdTime || !req.body.name) {
-		res.status(400)
-		   .json(
-			{
-				code: 400,
-				message: "Parámetros faltantes"
-		   	}
-			);
-		return;
+	if (!checkParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
 	}
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				version: "1.0"
-			},
-			server: {
-				server: {
-					id: "0",
-					_ref: "",
-					createdBy: req.body.createdBy,
-					createdTime: req.body.createdTime,
-					name: req.body.name,
-					lastConnection: 0
-				},
-				token: {
-					expiresAt: 0,
-					token: "appserv1"
-				}
-			}
-		 }
-		);
+	res.status(201).json();
 }
 
-module.exports = {getServers, postServer};
+// get information about a specific app-server
+function getServer(req, res) {
+	
+}
+
+// reset an app-server token
+function resetServerToken(req, res) {
+
+}
+
+// updates information about a specific app-server
+function updateServer(req, res) {
+
+}
+
+// deletes a specific app-server
+function deleteServer(req, res) {
+
+}
+
+// used by an app-server to notify life and 
+// to reset the token if needed (In this case the previous one
+// is invalidated and can no longer be used)
+function pingServer(req, res) {
+
+}
+
+module.exports = {getServers, postServer, getServer, resetServerToken, updateServer, deleteServer, pingServer};
