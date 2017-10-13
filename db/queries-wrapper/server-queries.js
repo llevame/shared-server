@@ -10,4 +10,24 @@ function getAll() {
 	return Servers().select();
 }
 
-module.exports = {getAll};
+function get(id) {
+
+	return Servers()
+		.where('id', parseInt(id))
+		.first();
+}
+
+function add(server) {
+
+	let serveraux = {
+		_ref: uuid(),
+		createdBy: server.createdBy,
+		createdTime: server.createdTime,
+		name: server.name
+	};
+
+	return Servers()
+		.insert(serveraux, 'id');
+}
+
+module.exports = {getAll, get, add};

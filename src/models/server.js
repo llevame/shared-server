@@ -1,5 +1,6 @@
 let error = require('../handlers/error-handler');
 let serverQ = require('../../db/queries-wrapper/server-queries');
+let service = require('../libs/service');
 let log = require('log4js').getLogger("error");
 var v = require('../../package.json').version;
 
@@ -34,7 +35,32 @@ function postServer(req, res) {
 	if (!checkParameters(req.body)) {
 		return res.status(400).json(error.missingParameters());
 	}
-	res.status(201).json();
+
+	serverQ.add(req.body)
+		.then((serverId) => {
+			return serverQ.get(serverId);
+		})
+		.then((srv) => {
+			
+			let app_server = {
+				metadata: {
+					version: v
+				},
+				server: {
+					server: srv,
+					token: {
+						expiresAt: service.expiration,
+						token: service.createAppToken(srv)
+					}
+				}
+			};
+
+			res.status(201).json(app_server);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // get information about a specific app-server
