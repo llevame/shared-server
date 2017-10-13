@@ -8,6 +8,10 @@ function checkParameters(body) {
 	return (body.createdBy && body.createdTime && body.name);
 }
 
+function checkParametersUpdate(body) {
+	return (body._ref && body.name);
+}
+
 // returns all the available app-servers
 function getServers(req, res) {
 
@@ -95,6 +99,41 @@ function resetServerToken(req, res) {
 // updates information about a specific app-server
 function updateServer(req, res) {
 
+	if (!checkParametersUpdate(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	serverQ.get(req.params.serverId)
+		.then((server) => {
+			if (!server) {
+				return res.status(404).json(error.noResource());
+			}
+
+			if (server._ref !== req.body._ref) {
+				return res.status(409).json(error.updateConflict());
+			}
+
+			serverQ.update(req.params.serverId, req.body)
+				.then((updatedServer) => {
+					
+					let update = {
+						metadata: {
+							version: v
+						},
+						server: updatedServer
+					};
+
+					res.status(200).json(update);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // deletes a specific app-server

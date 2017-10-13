@@ -37,4 +37,18 @@ function del(id) {
 		.del();
 }
 
-module.exports = {getAll, get, add, del};
+function update(id, update) {
+	
+	let srvaux = {
+		_ref: uuid(),
+		name: update.name
+	};
+
+	return Servers()
+		.where('id', parseInt(id))
+		.update(srvaux)
+		.returning('*');
+}
+
+module.exports = {getAll, get, add, del, update};
+
