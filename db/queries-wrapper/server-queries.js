@@ -30,4 +30,11 @@ function add(server) {
 		.insert(serveraux, 'id');
 }
 
-module.exports = {getAll, get, add};
+function del(id) {
+
+	return Servers()
+		.where('id', parseInt(id))
+		.del();
+}
+
+module.exports = {getAll, get, add, del};

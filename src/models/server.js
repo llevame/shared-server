@@ -100,6 +100,25 @@ function updateServer(req, res) {
 // deletes a specific app-server
 function deleteServer(req, res) {
 
+	serverQ.get(req.params.serverId)
+		.then((server) => {
+			if (!server) {
+				return res.status(404).json(error.noResource());
+			}
+
+			serverQ.del(req.params.serverId)
+				.then(() => {
+					res.sendStatus(204);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // used by an app-server to notify life and 
