@@ -5,4 +5,9 @@ function Servers() {
 	return knex('app_servers');
 }
 
+function getAll() {
 
+	return Servers().select();
+}
+
+module.exports = {getAll};

@@ -1,7 +1,7 @@
 let error = require('../handlers/error-handler');
 let serverQ = require('../../db/queries-wrapper/server-queries');
 let log = require('log4js').getLogger("error");
-var v = require('../../package.json');
+var v = require('../../package.json').version;
 
 function checkParameters(body) {
 	return (body.createdBy && body.createdTime && body.name);
@@ -9,7 +9,23 @@ function checkParameters(body) {
 
 // returns all the available app-servers
 function getServers(req, res) {
-	res.status(201).json();
+
+	serverQ.getAll()
+		.then((srvs) => {
+			let app_servers = {
+				metadata: {
+					count: srvs.length,
+					total: srvs.length,
+					version: v
+				},
+				servers: srvs
+			};
+			res.status(200).json(app_servers);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // post a new app-server

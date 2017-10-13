@@ -16,7 +16,6 @@ function getBusinessUsers(req, res) {
 		.then((users) => {
 			
 			let busers = {
-			
 				metadata: {
 					count: users.length,
 					total: users.length,
