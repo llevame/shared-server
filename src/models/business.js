@@ -34,10 +34,6 @@ function getBusinessUsers(req, res) {
 // get a single business-user information
 function getBusinessUser(req, res) {
 
-	if (!authorization.authorizeUser(req.body)) {
-		return res.status(401).json(error.unathoAccess());
-	}
-
 	businessUserQ.get(req.params.userId)
 		.then((bu) => {
 			if (!bu) {

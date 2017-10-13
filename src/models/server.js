@@ -65,7 +65,26 @@ function postServer(req, res) {
 
 // get information about a specific app-server
 function getServer(req, res) {
-	
+
+	serverQ.get(req.params.serverId)
+		.then((s) => {
+			if (!s) {
+				return res.status(404).json(error.noResource());
+			}
+
+			let srv = {
+				metadata: {
+					version: v
+				},
+				server: s
+			};
+
+			res.status(200).json(srv);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // reset an app-server token
