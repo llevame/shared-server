@@ -1,5 +1,7 @@
 let error = require('../handlers/error-handler');
-let serverQ = require('../../db/queries-wrapper/server-queries');
+let serverQ = require('../../db/queries-wrapper/server_queries');
+let appTokenQ = require('../../db/queries-wrapper/app_token_queries');
+let invalidTokensQ = require('../../db/queries-wrapper/invalid_tokens_queries');
 let service = require('../libs/service');
 let log = require('log4js').getLogger("error");
 var v = require('../../package.json').version;
@@ -59,7 +61,14 @@ function postServer(req, res) {
 				}
 			};
 
-			res.status(201).json(app_server);
+			appTokenQ.add(srv.id, app_server.server.token.token)
+				.then(() => {
+					res.status(201).json(app_server);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -94,6 +103,48 @@ function getServer(req, res) {
 // reset an app-server token
 function resetServerToken(req, res) {
 
+	serverQ.get(req.params.serverId)
+		.then((srv) => {
+			if (!srv) {
+				return res.status(404).json(error.noResource());
+			}
+
+			appTokenQ.getByServer(srv.id)
+				.then((tok) => {
+					return invalidTokensQ.add(tok);
+				})
+				.then(() => {
+					let app_server = {
+						metadata: {
+							version: v
+						},
+						server: {
+							server: srv,
+							token: {
+								expiresAt: service.expiration,
+								token: service.createAppToken(srv)
+							}
+						}
+					};
+					
+					appToken.update(srv.id, app_server.server.token.token)
+						.then(() => {
+							res.status(201).json(app_server);
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + "on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 // updates information about a specific app-server
