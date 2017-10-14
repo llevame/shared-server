@@ -1,4 +1,4 @@
-var jwt = require('jwt-simple');  
+var jwt = require('jsonwebtoken');  
 var moment = require('moment');  
 var env = require('node-env-file');
 var process = env(__dirname + '/../../process.env');
@@ -12,7 +12,7 @@ function createAppToken(appUser) {
 		exp: expiration
 	};
 
-	return jwt.encode(payload, process.APP_TOKEN_SECRET_KEY);
+	return jwt.sign(payload, process.APP_TOKEN_SECRET_KEY);
 }
 
 function createBusinessToken(businessUser) {
@@ -24,7 +24,7 @@ function createBusinessToken(businessUser) {
 		exp: expiration
 	};
 
-	return jwt.encode(payload, process.BUSINESS_TOKEN_SECRET_KEY);
+	return jwt.sign(payload, process.BUSINESS_TOKEN_SECRET_KEY);
 }
 
 module.exports = {createAppToken, createBusinessToken, expiration};
