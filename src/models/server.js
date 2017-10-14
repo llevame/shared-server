@@ -4,6 +4,7 @@ let appTokenQ = require('../../db/queries-wrapper/app_token_queries');
 let invalidTokensQ = require('../../db/queries-wrapper/invalid_tokens_queries');
 let service = require('../libs/service');
 let log = require('log4js').getLogger("error");
+let cons = require('log4js').getLogger("consola");
 var v = require('../../package.json').version;
 
 function checkParameters(body) {
@@ -218,10 +219,12 @@ function deleteServer(req, res) {
 function pingServer(req, res) {
 
 	var id = req.user.id;
+	cons.info("server id: %d", id);
 	var now = moment().unix();
 	
-	serverQ.update({id: id, lastConnection: knex.fn.now()})
+	serverQ.updatePing(id, {lastConnection: knex.fn.now()})
 		.then((updatedServer) => {
+			console.log("succesful update of last connection");
 			if (req.user.exp < now) {
 				invalidTokensQ.add(req.query.token)
 					.then(() => {

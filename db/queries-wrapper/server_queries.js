@@ -50,5 +50,18 @@ function update(id, update) {
 		.returning('*');
 }
 
-module.exports = {getAll, get, add, del, update};
+function updatePing(id, update) {
+	
+	let s = {
+		_ref: uuid(),
+		lastConnection: update.lastConnection
+	};
+
+	return Servers()
+		.where('id', parseInt(id))
+		.update(s)
+		.returning('*');
+}
+
+module.exports = {getAll, get, add, del, update, updatePing};
 

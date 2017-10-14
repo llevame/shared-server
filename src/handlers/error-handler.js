@@ -4,7 +4,15 @@ function unexpected(error) {
 	
 	return {
 		code: error.status,
-		message: error.nessage
+		message: error.message
+	};
+}
+
+function invalidToken(error) {
+	
+	return {
+		code: 401,
+		message: error.message
 	};
 }
 

@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("info");
+var log = require('log4js').getLogger("http");
 let user = require('../models/user');
 let user_trips = require('../models/user_trips');
 let user_transactions = require('../models/user_transactions');
