@@ -100,7 +100,8 @@ function getServer(req, res) {
 		});
 }
 
-// reset an app-server token
+// resets an app-server token and
+// invalidates the previous one
 function resetServerToken(req, res) {
 
 	serverQ.get(req.params.serverId)
@@ -216,6 +217,61 @@ function deleteServer(req, res) {
 // is invalidated and can no longer be used)
 function pingServer(req, res) {
 
+	var id = req.user.id;
+	var now = moment().unix();
+	
+	serverQ.update({id: id, lastConnection: knex.fn.now()})
+		.then((updatedServer) => {
+			if (req.user.exp < now) {
+				invalidTokensQ.add(req.query.token)
+					.then(() => {
+						let app_server = {
+							metadata: {
+								version: v
+							},
+							ping: {
+								server: updatedServer,
+								token: {
+									expiresAt: service.expiration,
+									token: service.createAppToken(updatedServer)
+								}
+							}
+						};
+					
+						appTokenQ.update(srv.id, app_server.server.token.token)
+							.then(() => {
+								res.status(201).json(app_server);
+							})
+							.catch((err) => {
+								log.error("Error: " + err.message + " on: " + req.originalUrl);
+								res.status(500).json(error.unexpected(err));
+							});
+					})
+					.catch((err) => {
+						log.error("Error: " + err.message + " on: " + req.originalUrl);
+						res.status(500).json(error.unexpected(err));
+					});
+			} else {
+				let app_server_old_token = {
+					metadata: {
+						version: v
+					},
+					ping: {
+						server: updatedServer,
+						token: {
+							expiresAt: req.user.exp,
+							token: req.query.token
+						}
+					}
+				};
+
+				res.status(201).json(app_server_old_token);
+			}
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {getServers, postServer, getServer, resetServerToken, updateServer, deleteServer, pingServer};
