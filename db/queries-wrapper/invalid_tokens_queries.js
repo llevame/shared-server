@@ -7,7 +7,7 @@ function InvalidTokens() {
 function add(tok) {
 
 	return InvalidTokens()
-		.insert('token', tok);
+		.insert(tok, 'token');
 }
 
 module.exports = {add};

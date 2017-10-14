@@ -127,7 +127,7 @@ function resetServerToken(req, res) {
 						}
 					};
 					
-					appToken.update(srv.id, app_server.server.token.token)
+					appTokenQ.update(srv.id, app_server.server.token.token)
 						.then(() => {
 							res.status(201).json(app_server);
 						})
