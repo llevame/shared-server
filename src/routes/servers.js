@@ -31,6 +31,11 @@ router.put('/:serverId', server.updateServer);
 router.delete('/:serverId', server.deleteServer);
 
 // POST /ping
-router.post('/ping', tokenMidd.verifyPingToken, server.pingServer);
+router.post('/ping', (req, res, next) => {
+
+	console.log("Hola mundo desde el server/ping");
+	next();
+
+}, tokenMidd.verifyPingToken, server.pingServer);
 
 module.exports = router;

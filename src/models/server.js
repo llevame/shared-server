@@ -105,6 +105,7 @@ function getServer(req, res) {
 // invalidates the previous one
 function resetServerToken(req, res) {
 
+	console.log("mierda");
 	serverQ.get(req.params.serverId)
 		.then((srv) => {
 			if (!srv) {
@@ -216,12 +217,12 @@ function deleteServer(req, res) {
 // used by an app-server to notify life and 
 // to reset the token if needed (In this case the previous one
 // is invalidated and can no longer be used)
-function pingServer(req, res) {
+function pingServer(req, res, next) {
 
+	cons.info("server id is null: %d", (req.user === null));
 	var id = req.user.id;
-	cons.info("server id: %d", id);
 	var now = moment().unix();
-	
+
 	serverQ.updatePing(id, {lastConnection: knex.fn.now()})
 		.then((updatedServer) => {
 			console.log("succesful update of last connection");
