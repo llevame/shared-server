@@ -16,7 +16,6 @@ function getBusinessUsers(req, res) {
 		.then((users) => {
 			
 			let busers = {
-			
 				metadata: {
 					count: users.length,
 					total: users.length,
@@ -34,10 +33,6 @@ function getBusinessUsers(req, res) {
 
 // get a single business-user information
 function getBusinessUser(req, res) {
-
-	if (!authorization.authorizeUser(req.body)) {
-		return res.status(401).json(error.unathoAccess());
-	}
 
 	businessUserQ.get(req.params.userId)
 		.then((bu) => {
@@ -136,10 +131,6 @@ function updateBusinessUser(req, res) {
 // deletes a business user
 function deleteBusinessUser(req, res) {
 	
-	if (!authorization.authorizeUser(req.body)) {
-		return res.status(401).json(error.unathoAccess());
-	}
-
 	businessUserQ.get(req.params.userId)
 		.then((user) => {
 			if (!user) {

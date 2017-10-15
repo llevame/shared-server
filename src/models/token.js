@@ -1,42 +1,43 @@
-let authorization = require('../handlers/auth-handler');
+var service = require('../libs/service');
+let error = require('../handlers/error-handler');
+let log = require('log4js').getLogger("error");
+let v = require('../../package.json').version;
+let businessQ = require('../../db/queries-wrapper/business_queries');
 
-// returns a new token for an app-server
+// returns a new token for a busines-user (login)
 function getToken(req, res) {
-	var service = require('../libs/service');
-	var log = require('log4js').getLogger("consola");
+
 	if (!req.body.username || !req.body.password) {
-		res.status(400)
-		   .json(
-			{
-				code: 400,
-				message: "Parámetros faltantes"
-			}
-			);
-		return;
+		return res.status(400).json(error.missingParameters());
 	}
-	var result= authorization.authorizeUser(req.body);
-	if (typeof result == 'string') {
-		res.status(401)
-		   .json(
-			{
-				code: 401,
-				message: "Acceso no autorizado: " + result
+
+	businessQ.getByUsername(req.body.username)
+		.then((bu) => {
+			
+			if (!bu) {
+				return res.status(401).json(error.unathoAccess());
 			}
-			);
-		return;
-	}
-	res.status(201)
-	   .json(
-		{
-			metadata: {
-				version: "1.0"
-			},
-			token: {
-				expiresAt: 2,
-				token: service.createToken(req.body.username)
+			
+			if (bu.password != req.body.password) {
+				return res.status(401).json(error.unathoAccess());
 			}
-		}
-		);
+
+			let tok = {
+				metadata: {
+					version: v
+				},
+				token: {
+					expiresAt: service.expiration,
+					token: service.createBusinessToken(bu)
+				}
+			};
+
+			res.status(201).json(tok);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {getToken};

@@ -19,6 +19,16 @@ function get(id) {
 		.first();
 }
 
+function getByUsername(username) {
+
+	return BusinessUsers()
+		.where('username', username)
+		.first('id',
+			'username',
+			'password',
+			'roles');
+}
+
 function del(id) {
 
 	return BusinessUsers()
@@ -58,5 +68,5 @@ function add(bu) {
 		.insert(buaux, 'id');
 }
 
-module.exports = {getAll, get, add, update, del};
+module.exports = {getAll, get, getByUsername, add, update, del};
 

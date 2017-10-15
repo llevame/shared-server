@@ -1,11 +1,10 @@
-var jwt = require('jwt-simple');  
 var moment = require('moment'); 
 
 exports.authorizeUser = function(req) {  
-var env = require('node-env-file');
-var process = env('./process.env');
-var log = require('log4js').getLogger("consola");
-
+  var env = require('node-env-file');
+  var process = env('./process.env');
+  var log = require('log4js').getLogger("consola");
+/*
   if(!req.headers) {
     message = "Header section does not exists."
     return message;
@@ -21,5 +20,6 @@ var log = require('log4js').getLogger("consola");
 	message = "Token expired.";
 	return message;
   }
-	return true;
+*/
+  return true;
 }

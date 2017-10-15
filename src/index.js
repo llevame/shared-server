@@ -7,6 +7,18 @@ var log4js = require('log4js');
 
 log4js.configure(path.join(__dirname, './config/log4js.json'));
 
+var log = log4js.getLogger("consola");
+
+// Log folder
+try {
+	require('fs').mkdirSync('./log');
+} catch (e) {
+	if (e.code != 'EEXIST') {
+		console.error("No se puede crear el directorio para logs: ", e);
+		process.exit(1);
+	}
+}
+
 var app = express();
 
 // set body parser limits and type for application/json
@@ -21,23 +33,11 @@ app.set('port', process.env.PORT || 5000);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Log folder
-try {
-	require('fs').mkdirSync('./log');
-} catch (e) {
-	if (e.code != 'EEXIST') {
-		console.error("No se puede crear el directorio para logs: ", e);
-		process.exit(1);
-	}
-}
-
 // *** routes *** //
 var routes = require('./routes/index.js');
 
 // *** main routes *** //
 app.use('/', routes);
-
-var log = log4js.getLogger("consola");
 
 app.listen(app.get('port'));
 
