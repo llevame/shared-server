@@ -4,23 +4,33 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var should = require('chai').should;
 var server = require('../index');
+var knex = require('../../db/knex');
 
 chai.use(chaiHttp);
 
-describe('/servers/ping tests', () => {
-
-	it('POST action', () => {
-		chai.request(server)
-			.post('/api/servers/ping')
-			.end((err, res) => {
-				res.body.should.be.eql('POST request on /severs/ping');
-			});
-	});
-});
-
 describe('/servers tests', () => {
 
-	it('POST action with good parameters', () => {
+	beforeEach(function(done) {
+	knex.migrate.rollback()
+	.then(function() {
+	  knex.migrate.latest()
+	  .then(function() {
+	    return knex.seed.run()
+	    .then(function() {
+	      done();
+	    });
+	  });
+	});
+	});
+
+	afterEach(function(done) {
+		knex.migrate.rollback()
+		.then(function() {
+			done();
+		});
+	});
+
+	it('POST action with good parameters', (done) => {
 		let s = {
 			id: "0",
 			_ref: "0",
@@ -41,6 +51,7 @@ describe('/servers tests', () => {
 				res.body.server.server.should.have.property('createdTime').eql(s.createdTime);
 				res.body.server.server.should.have.property('name').eql(s.name);
 				res.body.server.server.should.have.property('lastConnection');
+				done();
 			});
 	});
 
@@ -105,16 +116,17 @@ describe('/servers tests', () => {
 	});
 
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/servers')
 			.end((err, res) => {
-				res.should.have.status(201);
+				res.should.have.status(200);
 				res.body.should.be.a('object');
 				res.body.should.have.property('metadata');
 				res.body.metadata.should.have.property('count');
 				res.body.servers.should.be.a('array');
 				res.body.servers.length.should.be.eql(res.body.metadata.count);
+				done();
 			});
 	});
 });
