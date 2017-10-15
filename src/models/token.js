@@ -1,8 +1,8 @@
 var service = require('../libs/service');
-let error = require('../handlers/error-handler');
-let log = require('log4js').getLogger("error");
-let v = require('../../package.json').version;
-let businessQ = require('../../db/queries-wrapper/business_queries');
+var error = require('../handlers/error-handler');
+var v = require('../../package.json').version;
+var businessQ = require('../../db/queries-wrapper/business_queries');
+var log = require('log4js').getLogger("error");
 
 // returns a new token for a busines-user (login)
 function getToken(req, res) {
