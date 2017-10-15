@@ -1,8 +1,7 @@
-let authorization = require('../handlers/auth-handler');
-let error = require('../handlers/error-handler');
-let businessUserQ = require('../../db/queries-wrapper/business_queries');
+var error = require('../handlers/error-handler');
+var businessUserQ = require('../../db/queries-wrapper/business_queries');
+var builder = require('../builders/business_builder');
 var log = require('log4js').getLogger("error");
-var v = require('../../package.json').version;
 
 function checkParameters(body) {
 	return (body.username && body.password &&
@@ -14,19 +13,11 @@ function checkParameters(body) {
 function getBusinessUsers(req, res) {
 	businessUserQ.getAll()
 		.then((users) => {
-			
-			let busers = {
-				metadata: {
-					count: users.length,
-					total: users.length,
-					version: v
-				},
-				businessUser: users
-			};
-			res.status(200).json(busers);
+			let r = builder.createGetAllResponse(users);
+			res.status(200).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -39,19 +30,13 @@ function getBusinessUser(req, res) {
 			if (!bu) {
 				return res.status(404).json(error.noResource());
 			}
-
-			let buser = {
-				metadata: {
-					version: v
-				},
-				businessUser: bu
-			};
-
-			res.status(200).json(buser);
+			
+			let r = builder.createResponse(bu);
+			res.status(200).json(r);
 
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -68,18 +53,11 @@ function postBusinessUser(req, res) {
 			return businessUserQ.get(userId);
 		})
 		.then((bu) => {
-
-			let buser = {
-				metadata: {
-					version: v
-				},
-				businessUser: bu
-			};
-
-			res.status(201).json(buser);
+			let r = builder.createResponse(bu);
+			res.status(201).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -107,23 +85,16 @@ function updateBusinessUser(req, res) {
 
 			businessUserQ.update(req.params.userId, req.body)
 				.then((updatedUser) => {
-
-					let update = {
-						metadata: {
-							version: v
-						},
-						businessUser: updatedUser
-					};
-
-					res.status(200).json(update);
+					let r = builder.createResponse(updatedUser);
+					res.status(200).json(r);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -142,12 +113,12 @@ function deleteBusinessUser(req, res) {
 					res.sendStatus(204);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((error) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
