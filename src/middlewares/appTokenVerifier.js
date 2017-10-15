@@ -1,18 +1,12 @@
 // middleware that verifies app-server tokens
+
 var error = require('../handlers/error-handler');
 var env = require('node-env-file');
 var process = env(__dirname + '/../../process.env');
 var jwt = require('jsonwebtoken');
-var log = require('log4js').getLogger("info");
+var moment = require('moment');
 
-function verifyToken(req, res, next) {
-
-	next();
-}
-
-function verifyPingToken(req, res, next) {
-
-	log.info("middleware entering");
+function verifier(req, res, next, ping) {
 
 	if (!req.query || !req.query.token) {
 		return res.status(401).json(error.unathoAccess());
@@ -24,12 +18,23 @@ function verifyPingToken(req, res, next) {
 			return res.status(401).json(error.invalidToken(err));
 		}
 		
-		log.info("valid token check");
-		log.info("id: %d, exp: %d", decoded.id, decoded.exp);
+		if (!(ping === 'ping') && (decoded.exp < moment().unix())) {
+			return res.status(401).json(error.invalidToken(err));
+		}
 
 		req.user = decoded;
 		next();
 	});
+}
+
+function verifyToken(req, res, next) {
+
+	verifier(req, res, next, 'no ping');
+}
+
+function verifyPingToken(req, res, next) {
+
+	verifier(req, res, next, 'ping');
 }
 
 module.exports = {verifyToken, verifyPingToken};
