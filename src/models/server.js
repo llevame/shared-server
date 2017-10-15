@@ -3,8 +3,9 @@ let serverQ = require('../../db/queries-wrapper/server_queries');
 let appTokenQ = require('../../db/queries-wrapper/app_token_queries');
 let invalidTokensQ = require('../../db/queries-wrapper/invalid_tokens_queries');
 let service = require('../libs/service');
+let knex = require('../../db/knex');
 let log = require('log4js').getLogger("error");
-let cons = require('log4js').getLogger("consola");
+let moment = require('moment');
 var v = require('../../package.json').version;
 
 function checkParameters(body) {
@@ -105,7 +106,6 @@ function getServer(req, res) {
 // invalidates the previous one
 function resetServerToken(req, res) {
 
-	console.log("mierda");
 	serverQ.get(req.params.serverId)
 		.then((srv) => {
 			if (!srv) {
@@ -217,15 +217,13 @@ function deleteServer(req, res) {
 // used by an app-server to notify life and 
 // to reset the token if needed (In this case the previous one
 // is invalidated and can no longer be used)
-function pingServer(req, res, next) {
+function pingServer(req, res) {
 
-	cons.info("server id is null: %d", (req.user === null));
 	var id = req.user.id;
 	var now = moment().unix();
 
 	serverQ.updatePing(id, {lastConnection: knex.fn.now()})
 		.then((updatedServer) => {
-			console.log("succesful update of last connection");
 			if (req.user.exp < now) {
 				invalidTokensQ.add(req.query.token)
 					.then(() => {
