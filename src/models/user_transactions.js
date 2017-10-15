@@ -1,7 +1,7 @@
-let error = require('../handlers/error-handler');
-let transactionQ = require('../../db/queries-wrapper/transaction_queries');
-var log = require('log4js').getLogger("error");
+var error = require('../handlers/error-handler');
+var transactionQ = require('../../db/queries-wrapper/transaction_queries');
 var v = require('../../package.json').version;
+var log = require('log4js').getLogger("error");
 
 // returns all the transactions made by a user
 function getTransactions(req, res) {

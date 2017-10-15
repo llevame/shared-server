@@ -1,8 +1,8 @@
-let error = require('../handlers/error-handler');
-let userQ = require('../../db/queries-wrapper/users_queries');
-let carQ = require('../../db/queries-wrapper/cars_queries');
+var error = require('../handlers/error-handler');
+var userQ = require('../../db/queries-wrapper/users_queries');
+var carQ = require('../../db/queries-wrapper/cars_queries');
+var builder = require('../builders/users_builder');
 var log = require('log4js').getLogger("error");
-var v = require('../../package.json').version;
 
 function mergeCarsWithUsers(users, cars) {
 
@@ -47,6 +47,7 @@ function credentialsAreValid(user, credentials) {
 		(user.fb.authToken == credentials.facebookAuthToken));
 }
 
+
 // returns all the available users
 function getUsers(req, res) {
 
@@ -54,27 +55,17 @@ function getUsers(req, res) {
 		.then((app_users) => {
 			carQ.getAll()
 				.then((userCars) => {
-
 					let r = mergeCarsWithUsers(app_users, userCars);
-
-					let usrs = {
-						metadata: {
-							count: r.length,
-							total: r.length,
-							version: v
-						},
-						users: r
-					};
-
+					let usrs = builder.createGetAllResponse(r);
 					res.status(200).json(usrs);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -90,25 +81,16 @@ function getUser(req, res) {
 
 			carQ.getAllOfUser(req.params.userId)
 				.then((userCars) => {
-
-					u.cars = userCars;
-
-					let usr = {
-						metadata: {
-							version: v
-						},
-						user: u
-					};
-
+					let usr = builder.createResponse(u, userCars);
 					res.status(200).json(usr);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -125,20 +107,11 @@ function postUser(req, res) {
 			return userQ.get(userId);
 		})
 		.then((u) => {
-			
-			u.cars = [];
-
-			let usr = {
-				metadata: {
-					version: v
-				},
-				user: u
-			};
-
+			let usr = builder.createResponse(u, []);
 			res.status(201).json(usr);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -159,17 +132,17 @@ function deleteUser(req, res) {
 							res.sendStatus(204);
 						})
 						.catch((err) => {
-							log.error("Error: " + err.message + "on: " + req.originalUrl);
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 			})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -197,23 +170,23 @@ function updateUser(req, res) {
 
 			userQ.update(req.params.userId, req.body)
 				.then((updatedUser) => {
-					
-					let update = {
-						metadata: {
-							version: v
-						},
-						user: updatedUser
-					};
-
-					res.status(200).json(update);
+					carQ.getAllOfUser(req.params.userId)
+						.then((userCars) => {
+							let usr = builder.createResponse(updatedUser, userCars);
+							res.status(200).json(usr);
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -237,25 +210,24 @@ function validateUser(req, res) {
 
 			userQ.get(u.id)
 				.then((usr) => {
-				
-					let r = {
-			
-						metadata: {
-							version: v
-						},
-						user: usr
-					};
-
-					res.status(200).json(r);
+					carQ.getAllOfUser(req.params.userId)
+						.then((userCars) => {
+							let r = builder.createResponse(usr, userCars);
+							res.status(200).json(r);
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }

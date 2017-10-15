@@ -1,8 +1,8 @@
-let error = require('../handlers/error-handler');
-let tripsQ = require('../../db/queries-wrapper/trips_queries');
-let userQ = require('../../db/queries-wrapper/users_queries');
-var log = require('log4js').getLogger("error");
+var error = require('../handlers/error-handler');
+var tripsQ = require('../../db/queries-wrapper/trips_queries');
+var userQ = require('../../db/queries-wrapper/users_queries');
 var v = require('../../package.json').version;
+var log = require('log4js').getLogger("error");
 
 // returns all the trips made by a specific user
 function getTrips(req, res) {

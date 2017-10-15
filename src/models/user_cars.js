@@ -1,7 +1,7 @@
-let error = require('../handlers/error-handler');
-let carQ = require('../../db/queries-wrapper/cars_queries');
+var error = require('../handlers/error-handler');
+var carQ = require('../../db/queries-wrapper/cars_queries');
+var builder = require('../builders/cars_builder');
 var log = require('log4js').getLogger("error");
-var v = require('../../package.json').version;
 
 function checkParameters(body) {
 	return (body.properties);
@@ -17,18 +17,9 @@ function checkParametersUpdate(body) {
 function getCars(req, res) {
 
 	carQ.getAllOfUser(req.params.userId)
-		.then((retCars) => {
-			
-			let c = {	
-				metadata: {
-					count: retCars.length,
-					total: retCars.length,
-					version: v
-				},
-				cars: retCars
-			};
-
-			res.status(200).json(c);
+		.then((cars) => {
+			let r = builder.createGetAllResponse(cars);
+			res.status(200).json(r);
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -46,13 +37,7 @@ function getCar(req, res) {
 				return res.status(404).json(error.noCar());
 			}
 
-			let r = {
-				metadata: {
-					version: v
-				},
-				car: c
-			};
-
+			let r = builder.createResponse(c);
 			res.status(200).json(r);
 		})
 		.catch((err) => {
@@ -73,14 +58,7 @@ function postCar(req, res) {
 			return carQ.get(req.params.userId, carId);
 		})
 		.then((c) => {
-			
-			let r = {
-				metadata: {
-					version: v
-				},
-				car: c
-			};
-
+			let r = builder.createResponse(c);
 			res.status(201).json(r);
 		})
 		.catch((err) => {
@@ -108,15 +86,8 @@ function updateCar(req, res) {
 
 			carQ.update(req.params.userId, req.params.carId, req.body)
 				.then((updatedCar) => {
-					
-					let update = {
-						metadata: {
-							version: v 
-						},
-						car: updatedCar
-					};
-
-					res.status(200).json(update);
+					let r = builder.createResponse(updatedCar);
+					res.status(200).json(r);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + "on: " + req.originalUrl);
