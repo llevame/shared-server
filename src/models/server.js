@@ -1,12 +1,12 @@
-let error = require('../handlers/error-handler');
-let serverQ = require('../../db/queries-wrapper/server_queries');
-let appTokenQ = require('../../db/queries-wrapper/app_token_queries');
-let invalidTokensQ = require('../../db/queries-wrapper/invalid_tokens_queries');
-let service = require('../libs/service');
-let knex = require('../../db/knex');
-let log = require('log4js').getLogger("error");
-let moment = require('moment');
-var v = require('../../package.json').version;
+var error = require('../handlers/error-handler');
+var serverQ = require('../../db/queries-wrapper/server_queries');
+var appTokenQ = require('../../db/queries-wrapper/app_token_queries');
+var invalidTokensQ = require('../../db/queries-wrapper/invalid_tokens_queries');
+var builder = require('../builders/servers_builder');
+var service = require('../libs/service');
+var knex = require('../../db/knex');
+var log = require('log4js').getLogger("error");
+var moment = require('moment');
 
 function checkParameters(body) {
 	return (body.createdBy && body.createdTime && body.name);
@@ -20,19 +20,12 @@ function checkParametersUpdate(body) {
 function getServers(req, res) {
 
 	serverQ.getAll()
-		.then((srvs) => {
-			let app_servers = {
-				metadata: {
-					count: srvs.length,
-					total: srvs.length,
-					version: v
-				},
-				servers: srvs
-			};
-			res.status(200).json(app_servers);
+		.then((servers) => {
+			let r = builder.createGetAllResponse(servers);
+			res.status(200).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -49,23 +42,12 @@ function postServer(req, res) {
 			return serverQ.get(serverId);
 		})
 		.then((srv) => {
-			
-			let app_server = {
-				metadata: {
-					version: v
-				},
-				server: {
-					server: srv,
-					token: {
-						expiresAt: service.expiration,
-						token: service.createAppToken(srv)
-					}
-				}
-			};
+			let token = service.createAppToken(srv);
+			let r = builder.createPostResponse(srv, service.expiration, token);
 
-			appTokenQ.add(srv.id, app_server.server.token.token)
+			appTokenQ.add(srv.id, token)
 				.then(() => {
-					res.status(201).json(app_server);
+					res.status(201).json(r);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -86,15 +68,8 @@ function getServer(req, res) {
 			if (!s) {
 				return res.status(404).json(error.noResource());
 			}
-
-			let srv = {
-				metadata: {
-					version: v
-				},
-				server: s
-			};
-
-			res.status(200).json(srv);
+			let r = builder.createResponse(s);
+			res.status(200).json(r);
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -117,20 +92,10 @@ function resetServerToken(req, res) {
 					return invalidTokensQ.add(tok);
 				})
 				.then(() => {
-					let app_server = {
-						metadata: {
-							version: v
-						},
-						server: {
-							server: srv,
-							token: {
-								expiresAt: service.expiration,
-								token: service.createAppToken(srv)
-							}
-						}
-					};
+					let token = service.createAppToken(srv);
+					let r = builder.createPostResponse(srv, service.expiration, token);
 					
-					appTokenQ.update(srv.id, app_server.server.token.token)
+					appTokenQ.update(srv.id, token)
 						.then(() => {
 							res.status(201).json(app_server);
 						})
@@ -169,15 +134,8 @@ function updateServer(req, res) {
 
 			serverQ.update(req.params.serverId, req.body)
 				.then((updatedServer) => {
-					
-					let update = {
-						metadata: {
-							version: v
-						},
-						server: updatedServer
-					};
-
-					res.status(200).json(update);
+					let r = builder.createResponse(updatedServer);
+					res.status(200).json(r);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -227,22 +185,11 @@ function pingServer(req, res) {
 			if (req.user.exp < now) {
 				invalidTokensQ.add(req.query.token)
 					.then(() => {
-						let app_server = {
-							metadata: {
-								version: v
-							},
-							ping: {
-								server: updatedServer,
-								token: {
-									expiresAt: service.expiration,
-									token: service.createAppToken(updatedServer)
-								}
-							}
-						};
-					
-						appTokenQ.update(srv.id, app_server.server.token.token)
+						let token = service.createAppToken(updatedServer);
+						let r = builder.createPingResponse(updatedServer, service.expiration, token);
+						appTokenQ.update(id, token)
 							.then(() => {
-								res.status(201).json(app_server);
+								res.status(201).json(r);
 							})
 							.catch((err) => {
 								log.error("Error: " + err.message + " on: " + req.originalUrl);
@@ -254,20 +201,8 @@ function pingServer(req, res) {
 						res.status(500).json(error.unexpected(err));
 					});
 			} else {
-				let app_server_old_token = {
-					metadata: {
-						version: v
-					},
-					ping: {
-						server: updatedServer,
-						token: {
-							expiresAt: req.user.exp,
-							token: req.query.token
-						}
-					}
-				};
-
-				res.status(201).json(app_server_old_token);
+				let r = builder.createPingResponse(updatedServer, req.user.exp, req.query.token);
+				res.status(201).json(r);
 			}
 		})
 		.catch((err) => {
