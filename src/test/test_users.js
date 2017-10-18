@@ -123,7 +123,7 @@ describe('/users tests', () => {
 
 describe('/users/validate tests', () => {
 
-	it('POST action', () => {
+	it('POST action', (done) => {
 		let credentials = {
 			username: "juan123",
 			password: "1234",
@@ -147,13 +147,14 @@ describe('/users/validate tests', () => {
 				res.body.user.should.have.property('birthdate').eql("13/1/1990");
 				res.body.user.should.have.property('images');
 				res.body.user.should.have.property('balance');
+				done();
 			});
 	});
 });
 
 describe('/users/{userId} tests', () => {
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users/1')
 			.end((err, res) => {
@@ -171,14 +172,16 @@ describe('/users/{userId} tests', () => {
 				res.body.user.should.have.property('birthdate').eql("13/1/1990");
 				res.body.user.should.have.property('images').eql(["i1", "i2"]);
 				res.body.user.should.have.property('balance');
+				done();
 			});
 	});
 
-	it('DELETE action', () => {
+	it('DELETE action', (done) => {
 		chai.request(server)
 			.delete('/api/users/1')
 			.end((err, res) => {
 				res.should.have.status(204);
+				done();
 			});
 	})
 
@@ -186,7 +189,7 @@ describe('/users/{userId} tests', () => {
 
 describe('/users/{userId}/trips', () => {
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users/1/trips')
 			.end((err, res) => {
@@ -195,13 +198,14 @@ describe('/users/{userId}/trips', () => {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('trips');
 				res.body.trips.should.be.a('array');
+				done();
 			});
 	});
 });
 
 describe('/users/{userId}/cars tests', () => {
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users/1/cars')
 			.end((err, res) => {
@@ -217,10 +221,11 @@ describe('/users/{userId}/cars tests', () => {
 				res.body.cars[0].properties.should.be.a('array');
 				res.body.cars[0].properties[0].should.have.property('name');
 				res.body.cars[0].properties[0].should.have.property('value');
+				done();
 			});
 	});
 
-	it('POST action', () => {
+	it('POST action', (done) => {
 		let car = {
 			properties: [
 				{
@@ -241,13 +246,14 @@ describe('/users/{userId}/cars tests', () => {
 				res.body.car.should.have.property('_ref');
 				res.body.car.should.have.property('owner').eql("1");
 				res.body.car.should.have.property('properties').eql([{name: "color", value: "rojo"}]);
+				done();
 			});
 	})
 });
 
 describe('/users/{userId}/cars/{carId} tests', () => {
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users/1/cars/1')
 			.end((err, res) => {
@@ -259,14 +265,16 @@ describe('/users/{userId}/cars/{carId} tests', () => {
 				res.body.car.should.have.property('_ref');
 				res.body.car.should.have.property('owner').eql("1");
 				res.body.car.should.have.property('properties').eql([{name: "color", value: "verde"}]);
+				done();
 			});
 	});
 
-	it('DELETE action', () => {
+	it('DELETE action', (done) => {
 		chai.request(server)
 			.delete('/api/users/1/cars/1')
 			.end((err, res) => {
 				res.should.have.status(204);
+				done();
 			});
 	})
 
@@ -274,7 +282,7 @@ describe('/users/{userId}/cars/{carId} tests', () => {
 
 describe('/users/{userId}/transactions tests', () => {
 
-	it('GET action', () => {
+	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users/1/transactions')
 			.end((err, res) => {
@@ -283,10 +291,11 @@ describe('/users/{userId}/transactions tests', () => {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('transactions');
 				res.body.transactions.should.be.a('array');
+				done();
 			});
 	});
 
-	it('POST action', () => {
+	it('POST action', (done) => {
 		chai.request(server)
 			.post('/api/users/1/transactions')
 			.end((err, res) => {
@@ -299,6 +308,7 @@ describe('/users/{userId}/transactions tests', () => {
 				res.body.transaction.should.have.property('cost');
 				res.body.transaction.should.have.property('description');
 				res.body.transaction.should.have.property('data');
+				done();
 			});
 	})
 });

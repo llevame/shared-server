@@ -47,7 +47,7 @@ describe('/business-users tests', () => {
 			});
 	});
 
-	it('POST action with good parameters', () => {
+	it('POST action with good parameters', (done) => {
 		let bu = {
 			username: "admin0",
 			password: "1234",
@@ -69,10 +69,11 @@ describe('/business-users tests', () => {
 				res.body.businessUser.should.have.property('surname').eql(bu.surname);
 				res.body.businessUser.roles.should.be.a('array');
 				res.body.businessUser.should.have.property('roles').eql(bu.roles);
+				done();
 			});
 	});
 
-	it('POST action with no parameter username', () => {
+	it('POST action with no parameter username', (done) => {
 		let bu = {
 			username: "",
 			password: "1234",
@@ -87,10 +88,11 @@ describe('/business-users tests', () => {
 				res.should.have.status(400);
 				res.body.should.have.property('code');
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter password', () => {
+	it('POST action with no parameter password', (done) => {
 		let bu = {
 			username: "admin0",
 			password: "",
@@ -105,10 +107,11 @@ describe('/business-users tests', () => {
 				res.should.have.status(400);
 				res.body.should.have.property('code');
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter name', () => {
+	it('POST action with no parameter name', (done) => {
 		let bu = {
 			username: "admin0",
 			password: "1234",
@@ -123,10 +126,11 @@ describe('/business-users tests', () => {
 				res.should.have.status(400);
 				res.body.should.have.property('code');
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter surname', () => {
+	it('POST action with no parameter surname', (done) => {
 		let bu = {
 			username: "admin0",
 			password: "1234",
@@ -141,10 +145,11 @@ describe('/business-users tests', () => {
 				res.should.have.status(400);
 				res.body.should.have.property('code');
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter roles', () => {
+	it('POST action with no parameter roles', (done) => {
 		let bu = {
 			username: "admin0",
 			password: "1234",
@@ -157,6 +162,7 @@ describe('/business-users tests', () => {
 			.send(bu)
 			.end((err, res) => {
 				res.should.have.status(201);
+				done();
 			});
 	});
 });

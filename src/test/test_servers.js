@@ -47,7 +47,7 @@ describe('/servers tests', () => {
 			});
 	});
 
-	it('POST action with no parameter createdBy', () => {
+	it('POST action with no parameter createdBy', (done) => {
 		let s = {
 			id: "0",
 			_ref: "0",
@@ -64,10 +64,11 @@ describe('/servers tests', () => {
 				res.body.should.be.a('object');
 				res.body.should.have.property('code').eql(400);
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter createdTime', () => {
+	it('POST action with no parameter createdTime', (done) => {
 		let s = {
 			id: "0",
 			_ref: "0",
@@ -84,10 +85,11 @@ describe('/servers tests', () => {
 				res.body.should.be.a('object');
 				res.body.should.have.property('code').eql(400);
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
-	it('POST action with no parameter name', () => {
+	it('POST action with no parameter name', (done) => {
 		let s = {
 			id: "0",
 			_ref: "0",
@@ -104,6 +106,7 @@ describe('/servers tests', () => {
 				res.body.should.be.a('object');
 				res.body.should.have.property('code').eql(400);
 				res.body.should.have.property('message').eql('Parámetros faltantes');
+				done();
 			});
 	});
 
