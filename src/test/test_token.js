@@ -9,24 +9,16 @@ var knex = require('../../db/knex');
 chai.use(chaiHttp);
 describe('/token tests', () => {
 
-	beforeEach(function(done) {
-	knex.migrate.rollback()
-	.then(function() {
-	  knex.migrate.latest()
-	  .then(function() {
-	    return knex.seed.run()
-	    .then(function() {
-	      done();
-	    });
-	  });
-	});
+	beforeEach(done => {
+		knex.migrate.rollback()
+		.then(() => knex.migrate.latest())
+		.then(() => knex.seed.run())
+		.then(() => done());
 	});
 
-	afterEach(function(done) {
+	afterEach((done) => {
 		knex.migrate.rollback()
-		.then(function() {
-			done();
-		});
+		.then(() => done());
 	});
 
 	it('POST action with complete parameters', (done) => {

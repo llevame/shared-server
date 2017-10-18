@@ -10,26 +10,18 @@ chai.use(chaiHttp);
 
 describe('/users tests', () => {
 
-	beforeEach(function(done) {
-	knex.migrate.rollback()
-	.then(function() {
-	  knex.migrate.latest()
-	  .then(function() {
-	    return knex.seed.run()
-	    .then(function() {
-	      done();
-	    });
-	  });
-	});
-	});
-
-	afterEach(function(done) {
+	beforeEach(done => {
 		knex.migrate.rollback()
-		.then(function() {
-			done();
-		});
+		.then(() => knex.migrate.latest())
+		.then(() => knex.seed.run())
+		.then(() => done());
 	});
 
+	afterEach((done) => {
+		knex.migrate.rollback()
+		.then(() => done());
+	});
+	
 	it('GET action', (done) => {
 		chai.request(server)
 			.get('/api/users')
