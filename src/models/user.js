@@ -210,7 +210,7 @@ function validateUser(req, res) {
 
 			userQ.get(u.id)
 				.then((usr) => {
-					carQ.getAllOfUser(req.params.userId)
+					carQ.getAllOfUser(u.id)
 						.then((userCars) => {
 							let r = builder.createResponse(usr, userCars);
 							res.status(200).json(r);

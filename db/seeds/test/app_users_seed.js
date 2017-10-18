@@ -18,7 +18,8 @@ exports.seed = function(knex, Promise) {
 				fb: {
 					userId: "juan1234",
 					authToken: "mkmcemke4322"
-				}
+				},
+				images: ["i1", "i2"]
 			});
 		}).then(() => {
 			return knex('app_users').insert({
@@ -34,7 +35,8 @@ exports.seed = function(knex, Promise) {
 				fb: {
 					userId: "edu1234",
 					authToken: "mfrere3232"
-				}
+				},
+				images: ["i1", "i2"]
 			});
 		}).then(() => {
 			return knex('app_users').insert({
@@ -50,7 +52,8 @@ exports.seed = function(knex, Promise) {
 				fb: {
 					userId: "ale1234",
 					authToken: "polkrfke9989"
-				}
+				},
+				images: ["i1", "i2"]
 			});
 		}).then(() => {
 			return knex('app_users').insert({
@@ -66,7 +69,8 @@ exports.seed = function(knex, Promise) {
 				fb: {
 					userId: "fede1234",
 					authToken: "fedekdlñakldek"
-				}
+				},
+				images: ["i1", "i2"]
 			});
 		}).then(() => {
 			return knex('app_users').insert({
@@ -82,7 +86,8 @@ exports.seed = function(knex, Promise) {
 				fb: {
 					userId: "antonio1234",
 					authToken: "mkmcverv2322"
-				}
+				},
+				images: ["i1", "i2"]
 			});
 		});
 };
