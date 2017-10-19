@@ -85,7 +85,7 @@ function updateBusinessUser(req, res) {
 
 			businessUserQ.update(req.params.userId, req.body)
 				.then((updatedUser) => {
-					let r = builder.createResponse(updatedUser);
+					let r = builder.createResponse(updatedUser[0]);
 					res.status(200).json(r);
 				})
 				.catch((err) => {
