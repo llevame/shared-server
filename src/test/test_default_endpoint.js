@@ -7,7 +7,8 @@ var server = require('../index');
 
 chai.use(chaiHttp);
 
-describe('Default endpoint /api test', () => {
+describe('api test', () => {
+
 	it('GET action', () => {
 		chai.request(server)
 			.get('/api')
