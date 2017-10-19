@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var should = require('chai').should;
+var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
 
@@ -26,12 +26,9 @@ describe('servers tests', () => {
 
 		it('POST action with good parameters', (done) => {
 			let s = {
-				id: "0",
-				_ref: "0",
 				createdBy: "admin",
 				createdTime: 1,
-				name: "appserver0",
-				lastConnection: "0"
+				name: "app_server4"
 			};
 			chai.request(server)
 				.post('/api/servers')
@@ -55,7 +52,7 @@ describe('servers tests', () => {
 				_ref: "0",
 				createdBy: "",
 				createdTime: 1,
-				name: "appserver0",
+				name: "app_server4",
 				lastConnection: "0"
 			};
 			chai.request(server)
@@ -76,7 +73,7 @@ describe('servers tests', () => {
 				_ref: "0",
 				createdBy: "admin",
 				createdTime: 0,
-				name: "appserver0",
+				name: "app_server4",
 				lastConnection: "0"
 			};
 			chai.request(server)
@@ -121,8 +118,17 @@ describe('servers tests', () => {
 					res.body.should.be.a('object');
 					res.body.should.have.property('metadata');
 					res.body.metadata.should.have.property('count');
+					res.body.metadata.should.have.property('total');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('servers');
 					res.body.servers.should.be.a('array');
 					res.body.servers.length.should.be.eql(res.body.metadata.count);
+					res.body.servers[0].should.have.property('id').eql(1);
+					res.body.servers[0].should.have.property('_ref');
+					res.body.servers[0].should.have.property('createdBy').eql('admin1');
+					res.body.servers[0].should.have.property('createdTime').eql(1);
+					res.body.servers[0].should.have.property('name').eql('app_server0');
+					res.body.servers[0].should.have.property('lastConnection');
 					done();
 				});
 		});
