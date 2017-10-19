@@ -6,7 +6,7 @@ var log = require('log4js').getLogger("error");
 function checkParameters(body) {
 	return (body.username && body.password &&
 		body.name && body.surname &&
-		body.roles);
+		body.roles && (body.roles.length > 0));
 }
 
 // returns all the available business users in the system

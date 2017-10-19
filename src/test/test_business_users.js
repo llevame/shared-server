@@ -163,7 +163,18 @@ describe('business-users tests', () => {
 				.post('/api/business-users')
 				.send(bu)
 				.end((err, res) => {
-					res.should.have.status(201);
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('DELETE action', (done) => {
+			chai.request(server)
+				.delete('/api/business-users/1')
+				.end((err, res) => {
+					res.should.have.status(204);
 					done();
 				});
 		});
