@@ -36,12 +36,19 @@ describe('servers tests', () => {
 				.end((err, res) => {
 					res.should.have.status(201);
 					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('server');
+					res.body.server.should.have.property('server');
 					res.body.server.server.should.have.property('id');
 					res.body.server.server.should.have.property('_ref');
 					res.body.server.server.should.have.property('createdBy').eql(s.createdBy);
 					res.body.server.server.should.have.property('createdTime').eql(s.createdTime);
 					res.body.server.server.should.have.property('name').eql(s.name);
 					res.body.server.server.should.have.property('lastConnection');
+					res.body.server.should.have.property('token');
+					res.body.server.token.should.have.property('expiresAt');
+					res.body.server.token.should.have.property('token');
 					done();
 				});
 		});
