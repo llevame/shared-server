@@ -138,5 +138,137 @@ describe('servers tests', () => {
 					done();
 				});
 		});
+
+		it('GET action on a single server', (done) => {
+			chai.request(server)
+				.get('/api/servers/1')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('server');
+					res.body.server.should.have.property('id').eql(1);
+					res.body.server.should.have.property('_ref');
+					res.body.server.should.have.property('createdBy').eql('admin1');
+					res.body.server.should.have.property('createdTime').eql(1);
+					res.body.server.should.have.property('name').eql('app_server0');
+					res.body.server.should.have.property('lastConnection');
+					done();
+				});
+		});
+
+		it('GET action on no resource', (done) => {
+			chai.request(server)
+				.get('/api/servers/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('DELETE action on an existing resource', (done) => {
+			chai.request(server)
+				.delete('/api/servers/1')
+				.end((err, res) => {
+					res.should.have.status(204);
+					done();
+				});
+		});
+
+		it('DELETE action on no resource', (done) => {
+			chai.request(server)
+				.delete('/api/servers/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('PUT action with good parameters', (done) => {
+			chai.request(server)
+				.get('/api/servers/1')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('server');
+					res.body.server.should.have.property('id').eql(1);
+					res.body.server.should.have.property('_ref');
+					res.body.server.should.have.property('createdBy').eql('admin1');
+					res.body.server.should.have.property('createdTime').eql(1);
+					res.body.server.should.have.property('name').eql('app_server0');
+					res.body.server.should.have.property('lastConnection');
+					chai.request(server)
+						.put('/api/servers/1')
+						.send({
+							_ref: res.body.server._ref,
+							name: "app_server0_modificado"
+						})
+						.end((e, r) => {
+							r.should.have.status(200);
+							r.body.should.be.a('object');
+							r.body.should.have.property('metadata');
+							r.body.metadata.should.have.property('version');
+							r.body.should.have.property('server');
+							r.body.server.should.have.property('id').eql(1);
+							r.body.server.should.have.property('_ref');
+							r.body.server.should.have.property('createdBy').eql('admin1');
+							r.body.server.should.have.property('createdTime').eql(1);
+							r.body.server.should.have.property('name').eql('app_server0_modificado');
+							r.body.server.should.have.property('lastConnection');
+							done();
+						});
+				});
+		});
+
+		it('PUT action with no parameter _ref', (done) => {
+			chai.request(server)
+				.put('/api/servers/1')
+				.send({
+					name: "app_server0_modificado"
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter name', (done) => {
+			chai.request(server)
+				.put('/api/servers/1')
+				.send({
+					_ref: "c3r2f43ff3f34f43f3"
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with bad _ref parameter', (done) => {
+			chai.request(server)
+				.put('/api/servers/1')
+				.send({
+					_ref: "scv43t34f43f43f432",
+					name: "app_server0_modificado"
+				})
+				.end((err, res) => {
+					res.should.have.status(409);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Conflicto en el update');
+					done();
+				});
+		});
 	});
 });

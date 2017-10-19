@@ -97,7 +97,7 @@ function resetServerToken(req, res) {
 					
 					appTokenQ.update(srv.id, token)
 						.then(() => {
-							res.status(201).json(app_server);
+							res.status(201).json(r);
 						})
 						.catch((err) => {
 							log.error("Error: " + err.message + "on: " + req.originalUrl);
@@ -134,7 +134,7 @@ function updateServer(req, res) {
 
 			serverQ.update(req.params.serverId, req.body)
 				.then((updatedServer) => {
-					let r = builder.createResponse(updatedServer);
+					let r = builder.createResponse(updatedServer[0]);
 					res.status(200).json(r);
 				})
 				.catch((err) => {
