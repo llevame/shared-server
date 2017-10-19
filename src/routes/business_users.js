@@ -11,6 +11,10 @@ router.use((req, res, next) => {
 	next();
 });
 
+router.get('/me', business.getConnectedBusinessUser);
+
+router.put('/me', business.updateConnectedBusinessUser);
+
 router.get('/', business.getBusinessUsers);
 
 router.post('/', business.postBusinessUser);

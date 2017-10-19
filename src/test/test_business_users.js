@@ -256,5 +256,123 @@ describe('business-users tests', () => {
 						});
 				});
 		});
+
+		it('PUT action with no parameter username', (done) => {
+			chai.request(server)
+				.put('/api/business-users/1')
+				.send({
+					_ref: '343242323432432423',
+					password: '23133',
+					name: 'fddaf',
+					surname: 'ada',
+					roles: ["user"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter password', (done) => {
+			chai.request(server)
+				.put('/api/business-users/1')
+				.send({
+					_ref: '343242323432432423',
+					username: 'admin',
+					name: 'fddaf',
+					surname: 'ada',
+					roles: ["user"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter _ref', (done) => {
+			chai.request(server)
+				.put('/api/business-users/1')
+				.send({
+					username: 'admin',
+					name: 'fddaf',
+					surname: 'ada',
+					roles: ["user"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with bad _ref parameter', (done) => {
+			chai.request(server)
+				.put('/api/business-users/1')
+				.send({
+					_ref: '343242323432432423',
+					username: 'juan123',
+					password: '123',
+					name: 'juan',
+					surname: 'lopez',
+					roles: ["user"]
+				})
+				.end((err, res) => {
+					res.should.have.status(409);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Conflicto en el update');
+					done();
+				});
+		});
+
+		it('PUT action on no resource', (done) => {
+			chai.request(server)
+				.put('/api/business-users/6')
+				.send({
+					_ref: '343242323432432423',
+					username: 'juan123',
+					password: '123',
+					name: 'juan',
+					surname: 'lopez',
+					roles: ["user"]
+				})
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+	});
+
+	describe('/business-users/me', () => {
+
+		it('GET action', (done) => {
+			chai.request(server)
+				.get('/api/business-users/me')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('type').eql('GET');
+					res.body.should.have.property('url').eql('/api/business-users/me');
+					done();
+				});
+		});
+
+		it('PUT action', (done) => {
+			chai.request(server)
+				.put('/api/business-users/me')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('type').eql('PUT');
+					res.body.should.have.property('url').eql('/api/business-users/me');
+					done();
+				});
+		});
 	});
 });

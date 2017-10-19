@@ -123,4 +123,23 @@ function deleteBusinessUser(req, res) {
 		});
 }
 
-module.exports = {getBusinessUsers, getBusinessUser, postBusinessUser, updateBusinessUser, deleteBusinessUser};
+function getConnectedBusinessUser(req, res) {
+	
+	res.status(200).json({
+		type:'GET',
+		url: '/api/business-users/me'
+	});
+}
+
+function updateConnectedBusinessUser(req, res) {
+
+	res.status(200).json({
+		type:'PUT',
+		url: '/api/business-users/me'
+	});
+}
+
+module.exports = {getBusinessUsers, getBusinessUser,
+	postBusinessUser, updateBusinessUser,
+	deleteBusinessUser, getConnectedBusinessUser,
+	updateConnectedBusinessUser};
