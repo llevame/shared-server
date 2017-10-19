@@ -170,11 +170,22 @@ describe('business-users tests', () => {
 				});
 		});
 
-		it('DELETE action', (done) => {
+		it('DELETE action on an existing resource', (done) => {
 			chai.request(server)
 				.delete('/api/business-users/1')
 				.end((err, res) => {
 					res.should.have.status(204);
+					done();
+				});
+		});
+
+		it('DELETE action on no resource', (done) => {
+			chai.request(server)
+				.delete('/api/business-users/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
 					done();
 				});
 		});
