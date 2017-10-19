@@ -116,7 +116,6 @@ describe('servers tests', () => {
 				});
 		});
 
-
 		it('GET action', (done) => {
 			chai.request(server)
 				.get('/api/servers')
