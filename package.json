@@ -4,8 +4,8 @@
   "description": "Shared Server para la aplicación Llevame",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf log/ && node ./src/index.js",
-    "test": "rm -rf coverage/ *.lcov && nyc node_modules/mocha/bin/_mocha src/test/*",
+    "start": "rm -rf coverage/ log/ && node ./src/index.js",
+    "test": "rm -rf coverage/ log/ *.lcov && nyc node_modules/mocha/bin/_mocha src/test/*",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
