@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
 		table.specificType('images', 'text[]');
 		table.specificType('balance', 'json[]');
 		table.string('password').notNullable();
-		table.specificType('fb', 'json').notNullable();
+		table.specificType('fb', 'json');
 	});
 };
 
