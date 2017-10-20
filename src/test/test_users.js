@@ -611,11 +611,35 @@ describe('users tests', () => {
 				});
 		});
 
+		it('GET action on no car resource', (done) => {
+			chai.request(server)
+				.get(url + '/1/cars/3')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Auto inexistente');
+					done();
+				});
+		});
+
 		it('DELETE action', (done) => {
 			chai.request(server)
 				.delete(url + '/1/cars/1')
 				.end((err, res) => {
 					res.should.have.status(204);
+					done();
+				});
+		});
+
+		it('DELETE action on no resource', (done) => {
+			chai.request(server)
+				.delete(url + '/1/cars/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Auto inexistente');
 					done();
 				});
 		});
