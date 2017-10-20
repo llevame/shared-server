@@ -56,7 +56,6 @@ describe('users tests', () => {
 				});
 		});
 
-
 		it('POST action', (done) => {
 			let user = {
 				type: "passenger",
@@ -119,6 +118,40 @@ describe('users tests', () => {
 					res.body.should.be.a('object');
 					res.body.should.have.property('code');
 					res.body.should.have.property('message');
+					done();
+				});
+		});
+
+		it('POST action with password but no fb field', (done) => {
+			let user = {
+				type: "passenger",
+				username: "user123",
+				password: "45678",
+				firstName: "user",
+				lastName: "userlastname",
+				country: "Argentina",
+				email: "user@gmail.com",
+				birthdate: "23/2/1999",
+				images: ["i1", "i2"]
+			};
+			chai.request(server)
+				.post(url)
+				.send(user)
+				.end((err, res) => {
+					res.should.have.status(201);
+					res.body.should.be.a('object');
+					res.body.user.should.have.property('id');
+					res.body.user.should.have.property('_ref');
+					res.body.user.should.have.property('applicationOwner');
+					res.body.user.should.have.property('type').eql(user.type);
+					res.body.user.should.have.property('username').eql(user.username);
+					res.body.user.should.have.property('name').eql(user.firstName);
+					res.body.user.should.have.property('surname').eql(user.lastName);
+					res.body.user.should.have.property('country').eql(user.country);
+					res.body.user.should.have.property('email').eql(user.email);
+					res.body.user.should.have.property('birthdate').eql(user.birthdate);
+					res.body.user.should.have.property('images').eql(user.images);
+					res.body.user.should.have.property('balance');
 					done();
 				});
 		});

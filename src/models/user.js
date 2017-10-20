@@ -23,14 +23,15 @@ function mergeCarsWithUsers(users, cars) {
 
 function checkParametersValidate(body) {
 
-	return (body.username && body.password &&
-		body.facebookAuthToken);
+	return (body.username &&
+		(body.password || body.facebookAuthToken));
 }
 
 function checkParameters(body) {
 
-	return (body.type && body.username && body.password &&
-		body.fb && body.firstName && body.lastName &&
+	return (body.type && body.username &&
+		(body.password || body.fb) &&
+		body.firstName && body.lastName &&
 		body.country && body.email && body.birthdate &&
 		body.images);
 }
@@ -42,11 +43,18 @@ function checkParametersUpdate(body) {
 
 function credentialsAreValid(user, credentials) {
 
-	return ((user.username == credentials.username) &&
-		(user.password == credentials.password) &&
-		(user.fb.authToken == credentials.facebookAuthToken));
-}
+	let validUsername = (user.username == credentials.username);
 
+	if (credentials.password) {
+		return (validUsername &&
+			(user.password == credentials.password));
+	}
+
+	if (credentials.facebookAuthToken) {
+		return (validUsername &&
+			(user.fb.authToken == credentials.facebookAuthToken));
+	}
+}
 
 // returns all the available users
 function getUsers(req, res) {
@@ -172,7 +180,7 @@ function updateUser(req, res) {
 				.then((updatedUser) => {
 					carQ.getAllOfUser(req.params.userId)
 						.then((userCars) => {
-							let usr = builder.createResponse(updatedUser, userCars);
+							let usr = builder.createResponse(updatedUser[0], userCars);
 							res.status(200).json(usr);
 						})
 						.catch((err) => {
