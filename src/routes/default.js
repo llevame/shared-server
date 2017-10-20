@@ -12,7 +12,10 @@ router.use((req, res, next) => {
 
 // GET /
 router.get('/', (req, res) => {
-	res.send('Default endpoint on /api');
+	res.status(200).json({
+		type: 'GET',
+		url: '/api'
+	});
 });
 
 module.exports = router;

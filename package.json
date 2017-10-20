@@ -4,8 +4,8 @@
   "description": "Shared Server para la aplicación Llevame",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
+    "start": "rm -rf coverage/ log/ && node ./src/index.js",
+    "test": "rm -rf coverage/ log/ *.lcov && nyc node_modules/mocha/bin/_mocha src/test/*",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
@@ -13,14 +13,19 @@
     "url": "git+https://github.com/llevame/shared-server.git"
   },
   "dependencies": {
+    "body-parser": "~1.10.1",
+    "cors": "^2.8.4",
     "create-react-app": "^1.4.0",
     "express": "^4.15.3",
-    "request": "^2.81.0",
+    "jsonwebtoken": "^8.1.0",
+    "knex": "^0.13.0",
     "log4js": "^1.1.1",
+    "moment": "^2.19.0",
+    "node-env-file": "^0.1.8",
     "pg": "6.1.5",
+    "request": "^2.81.0",
     "satellizer": "^0.15.5",
-    "body-parser": "~1.10.1",
-    "cors":"^2.8.4"
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.1",
@@ -34,7 +39,9 @@
     "exclude": [
       "**/*.spec.js",
       "build",
-      "src/test/*"
+      "src/test/*",
+      "db/*",
+      "knexfile.js"
     ]
   },
   "keywords": [],

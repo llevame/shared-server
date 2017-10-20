@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("info");
+var log = require('log4js').getLogger("http");
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -12,17 +12,26 @@ router.use((req, res, next) => {
 
 // POST /
 router.post('/', (req, res) => {
-	res.send('POST request on /trips');
+	res.status(200).json({
+		type: 'GET',
+		url: '/api/trips'
+	});
 });
 
 // POST /estimate
 router.post('/estimate', (req, res) => {
-	res.send('POST request on /trips/estimate');
+	res.status(200).json({
+		type: 'GET',
+		url: '/api/trips/estimate'
+	});
 });
 
 // GET /{tripId}
 router.post('/:tripId', (req, res) => {
-	res.send('GET request on /trips/' + req.params.tripId);
+	res.status(200).json({
+		type: 'GET',
+		url: '/api/trips/' + req.params.tripId
+	});
 });
 
 module.exports = router;

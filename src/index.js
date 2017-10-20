@@ -4,9 +4,22 @@ const path = require('path');
 var bodyParser = require('body-parser');
 var cors = require('cors'); 
 var log4js = require('log4js');
+
 log4js.configure(path.join(__dirname, './config/log4js.json'));
 
-const app = express();
+var log = log4js.getLogger("consola");
+
+// Log folder
+try {
+	require('fs').mkdirSync('./log');
+} catch (e) {
+	if (e.code != 'EEXIST') {
+		console.error("No se puede crear el directorio para logs: ", e);
+		process.exit(1);
+	}
+}
+
+var app = express();
 
 // set body parser limits and type for application/json
 app.use(bodyParser.json());
@@ -20,45 +33,13 @@ app.set('port', process.env.PORT || 5000);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-var basePath = '/api';
+// *** routes *** //
+var routes = require('./routes/index.js');
 
-// default endpoint
-var defapi = require('./routes/default');
-app.use(basePath, defapi);
-
-// /users endpoint
-var users = require('./routes/users');
-app.use(basePath + '/users', users);
-
-// /paymethods endpoint
-var paymethods = require('./routes/paymethods');
-app.use(basePath + '/paymethods', paymethods);
-
-// /trips endpoint
-var trips = require('./routes/trips');
-app.use(basePath + '/trips', trips);
-
-// /servers endpoint
-var servers = require('./routes/servers');
-app.use(basePath + '/servers', servers);
-
-// /token endpoint
-var token = require('./routes/token');
-app.use(basePath + '/token', token);
-
-// Log folder
-try {
-	require('fs').mkdirSync('./log');
-} catch (e) {
-	if (e.code != 'EEXIST') {
-		console.error("No se puede crear el directorio para logs: ", e);
-		process.exit(1);
-	}
-}
+// *** main routes *** //
+app.use('/', routes);
 
 app.listen(app.get('port'));
-
-var log = log4js.getLogger("consola");
 
 if (process.env.NODE_ENV !== 'test') {
 	log.info('App listening on port %s: ', app.get('port'));

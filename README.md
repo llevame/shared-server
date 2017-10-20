@@ -41,3 +41,23 @@ $ npm start
 ```bash
 $ npm test
 ```
+
+#### Docker
+
+Para ejecutar localmente el servidor **NodeJS** mediante *Docker*:
+
+- *docker-compose.yml*: Archivo para configurar el build de *Docker*
+- *Dockerfile*: Define qué hacer al momento de correr el conteiner de *Docker* con *Node*
+
+> Repositorio: https://hub.docker.com/r/nflabodocker/taller2.2017.2q/  
+> Usuario: nflabodocker
+
+```bash
+$ docker pull nflabodocker/taller2.2017.2q
+```
+
+Luego de descargarse la imagen, ejecutar:
+
+```bash
+$ docker-compose up
+```

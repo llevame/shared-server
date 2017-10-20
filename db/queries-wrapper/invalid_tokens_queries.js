@@ -1,0 +1,13 @@
+var knex = require('../knex.js');
+
+function InvalidTokens() {
+	return knex('invalid_server_tokens');
+}
+
+function add(tok) {
+
+	return InvalidTokens()
+		.insert(tok, 'token');
+}
+
+module.exports = {add};

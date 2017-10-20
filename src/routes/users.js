@@ -2,7 +2,11 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("info");
+var log = require('log4js').getLogger("http");
+let user = require('../models/user');
+let user_trips = require('../models/user_trips');
+let user_transactions = require('../models/user_transactions');
+let user_cars = require('../models/user_cars');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,68 +15,45 @@ router.use((req, res, next) => {
 });
 
 // GET /
-router.get('/', (req, res) => {
-	res.send('GET request on /users');
-});
+router.get('/', user.getUsers);
 
 // POST /
-router.post('/', (req, res) => {
-	res.send('POST request on /users');
-});
+router.post('/', user.postUser);
 
-// GET /validate
-router.get('/validate', (req, res) => {
-	res.send('POST request on /users/validate');
-});
+// POST /validate
+router.post('/validate', user.validateUser);
 
 // DELETE /{userId}
-router.delete('/:userId', (req, res) => {
-	res.send('DELETE request on /users/' + req.params.userId);
-});
+router.delete('/:userId', user.deleteUser);
 
 // GET /{userId}
-router.get('/:userId', (req, res) => {
-	res.send('GET request on /users/' + req.params.userId);
-});
+router.get('/:userId', user.getUser);
 
 // PUT /{userId}
-router.put('/:userId', (req, res) => {
-	res.send('PUT request on /users/' + req.params.userId);
-});
+router.put('/:userId', user.updateUser);
+
+// GET /{userId}/trips
+router.get('/:userId/trips', user_trips.getTrips);
 
 // GET /{userId}/cars
-router.get('/:userId/cars', (req, res) => {
-	res.send('GET request on /users/' + req.params.userId + '/cars');
-});
+router.get('/:userId/cars', user_cars.getCars);
 
 // POST /{userId}/cars
-router.post('/:userId/cars', (req, res) => {
-	res.send('POST request on /users/' + req.params.userId + '/cars');
-});
+router.post('/:userId/cars', user_cars.postCar);
 
 // GET /{userId}/cars/{carId}
-router.get('/:userId/cars/:carId', (req, res) => {
-	res.send('GET request on /users/' + req.params.userId + '/cars/' + req.params.carId);
-});
+router.get('/:userId/cars/:carId', user_cars.getCar);
 
 // PUT /{userId}/cars/{carId}
-router.put('/:userId/cars/:carId', (req, res) => {
-	res.send('PUT request on /users/' + req.params.userId + '/cars/' + req.params.carId);
-});
+router.put('/:userId/cars/:carId', user_cars.updateCar);
 
 // DELETE /{userId}/cars/{carId}
-router.delete('/:userId/cars/:carId', (req, res) => {
-	res.send('DELETE request on /users/' + req.params.userId + '/cars/' + req.params.carId);
-});
+router.delete('/:userId/cars/:carId', user_cars.deleteCar);
 
 // GET /{userId}/transactions
-router.get('/:userId/transactions', (req, res) => {
-	res.send('GET request on /users/' + req.params.userId + '/transactions');
-});
+router.get('/:userId/transactions', user_transactions.getTransactions);
 
 // POST /{userId}/transactions
-router.post('/:userId/transactions', (req, res) => {
-	res.send('POST request on /users/' + req.params.userId + '/transactions');
-});
+router.post('/:userId/transactions', user_transactions.postTransaction);
 
 module.exports = router;
