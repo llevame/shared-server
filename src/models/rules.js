@@ -37,7 +37,7 @@ function getRule(req, res) {
 	
 	res.status(200).json({
 		type: 'GET',
-		url: '/api/rules' + req.params.ruleId
+		url: '/api/rules/' + req.params.ruleId
 	});
 }
 
@@ -45,7 +45,7 @@ function updateRule(req, res) {
 	
 	res.status(200).json({
 		type: 'PUT',
-		url: '/api/rules' + req.params.ruleId
+		url: '/api/rules/' + req.params.ruleId
 	});
 }
 
@@ -53,7 +53,7 @@ function deleteRule(req, res) {
 	
 	res.status(200).json({
 		type: 'DELETE',
-		url: '/api/rules' + req.params.ruleId
+		url: '/api/rules/' + req.params.ruleId
 	});
 }
 
@@ -61,7 +61,7 @@ function getRuleCommits(req, res) {
 	
 	res.status(200).json({
 		type: 'GET',
-		url: '/api/rules' + req.params.ruleId + '/commits'
+		url: '/api/rules/' + req.params.ruleId + '/commits'
 	});
 }
 
@@ -69,7 +69,7 @@ function getRuleStateInCommit(req, res) {
 	
 	res.status(200).json({
 		type: 'GET',
-		url: '/api/rules' + req.params.ruleId + '/commits/' + req.params.commitId
+		url: '/api/rules/' + req.params.ruleId + '/commits/' + req.params.commitId
 	});
 }
 
