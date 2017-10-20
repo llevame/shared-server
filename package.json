@@ -40,7 +40,8 @@
       "**/*.spec.js",
       "build",
       "src/test/*",
-      "db/*"
+      "db/*",
+      "knexfile.js"
     ]
   },
   "keywords": [],
