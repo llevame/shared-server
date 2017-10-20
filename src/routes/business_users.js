@@ -3,7 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("http");
-let business = require('../models/business');
+var business = require('../models/business');
 
 // middleware specific to this router
 router.use((req, res, next) => {

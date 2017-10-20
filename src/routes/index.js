@@ -31,4 +31,8 @@ app.use(basePath + '/token', token);
 var business_users = require('./business_users');
 app.use(basePath + '/business-users', business_users);
 
+// /rules endpoint
+var rules = require('./rules');
+app.use(basePath + '/rules', rules);
+
 module.exports = app;
