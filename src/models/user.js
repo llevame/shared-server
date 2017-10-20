@@ -32,8 +32,8 @@ function checkParameters(body) {
 	return (body.type && body.username &&
 		(body.password || body.fb) &&
 		body.firstName && body.lastName &&
-		body.country && body.email && body.birthdate &&
-		body.images);
+		body.country && body.email &&
+		body.birthdate && body.images);
 }
 
 function checkParametersUpdate(body) {

@@ -275,6 +275,174 @@ describe('users tests', () => {
 				});
 		});
 
+		it('PUT action with good parameters', (done) => {
+			chai.request(server)
+				.get(url + '/1')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.user.should.have.property('id').eql(1);
+					res.body.user.should.have.property('_ref');
+					res.body.user.should.have.property('applicationOwner');
+					res.body.user.should.have.property('type').eql("passenger");
+					res.body.user.should.have.property('username').eql("juan123");
+					res.body.user.should.have.property('name').eql("Juan");
+					res.body.user.should.have.property('surname').eql("Lopez");
+					res.body.user.should.have.property('country').eql("Argentina");
+					res.body.user.should.have.property('email').eql("juan@gmail.com");
+					res.body.user.should.have.property('birthdate').eql("13/1/1990");
+					res.body.user.should.have.property('images').eql(["i1", "i2"]);
+					res.body.user.should.have.property('balance');
+					chai.request(server)
+						.put(url + '/1')
+						.send({
+							_ref: res.body.user._ref,
+							type: res.body.user.type,
+							username: res.body.user.username,
+							password: res.body.user.password,
+							fb: {
+								userId: "juan123",
+								authToken: "facebookAuthToken"
+							},
+							firstName: "Juan Pablo",
+							lastName: res.body.user.surname,
+							country: res.body.user.country,
+							email: res.body.user.email,
+							birthdate: res.body.user.birthdate,
+							images: res.body.user.images
+						})
+						.end((e, r) => {
+							r.should.have.status(200);
+							r.body.should.be.a('object');
+							r.body.user.should.have.property('id').eql(1);
+							r.body.user.should.have.property('_ref');
+							r.body.user.should.have.property('applicationOwner');
+							r.body.user.should.have.property('type').eql("passenger");
+							r.body.user.should.have.property('username').eql("juan123");
+							r.body.user.should.have.property('name').eql("Juan Pablo");
+							r.body.user.should.have.property('surname').eql("Lopez");
+							r.body.user.should.have.property('country').eql("Argentina");
+							r.body.user.should.have.property('email').eql("juan@gmail.com");
+							r.body.user.should.have.property('birthdate').eql("13/1/1990");
+							r.body.user.should.have.property('images').eql(["i1", "i2"]);
+							r.body.user.should.have.property('balance');
+							done();
+						});
+				});
+		});
+
+		it('PUT action with no _ref parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1')
+				.send({
+					type: "passenger",
+					username: "user123",
+					password: "45678",
+					firstName: "user",
+					lastName: "userlastname",
+					country: "Argentina",
+					email: "user@gmail.com",
+					birthdate: "23/2/1999",
+					images: ["i1", "i2"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no username parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1')
+				.send({
+					_ref: "crf43f3f3fdfweaf32",
+					type: "passenger",
+					password: "45678",
+					firstName: "user",
+					lastName: "userlastname",
+					country: "Argentina",
+					email: "user@gmail.com",
+					birthdate: "23/2/1999",
+					images: ["i1", "i2"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no type parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1')
+				.send({
+					_ref: "cf43fwefe43fwe",
+					username: "user123",
+					password: "45678",
+					firstName: "user",
+					lastName: "userlastname",
+					country: "Argentina",
+					email: "user@gmail.com",
+					birthdate: "23/2/1999",
+					images: ["i1", "i2"]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with on no resource', (done) => {
+			chai.request(server)
+				.put(url + '/7')
+				.send({
+					_ref: "cref44fwf34rf",
+					type: "passenger",
+					username: "user123",
+					password: "45678",
+					firstName: "user",
+					lastName: "userlastname",
+					country: "Argentina",
+					email: "user@gmail.com",
+					birthdate: "23/2/1999",
+					images: ["i1", "i2"]
+				})
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('PUT action with bad _ref parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1')
+				.send({
+					_ref: "cref44fwf34rf",
+					type: "passenger",
+					username: "user123",
+					password: "45678",
+					firstName: "user",
+					lastName: "userlastname",
+					country: "Argentina",
+					email: "user@gmail.com",
+					birthdate: "23/2/1999",
+					images: ["i1", "i2"]
+				})
+				.end((err, res) => {
+					res.should.have.status(409);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Conflicto en el update');
+					done();
+				});
+		});
+
 		it('DELETE action', (done) => {
 			chai.request(server)
 				.delete(url + '/1')
