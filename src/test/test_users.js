@@ -643,6 +643,119 @@ describe('users tests', () => {
 					done();
 				});
 		});
+
+		it('PUT action', (done) => {
+			chai.request(server)
+				.get(url + '/1/cars/1')
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.should.have.property('car');
+					res.body.car.should.have.property('id').eql(1);
+					res.body.car.should.have.property('_ref');
+					res.body.car.should.have.property('owner').eql("1");
+					res.body.car.should.have.property('properties').eql([{name: "color", value: "verde"}]);
+					chai.request(server)
+						.put(url + '/1/cars/1')
+						.send({
+							_ref: res.body.car._ref,
+							properties: [
+								{name: "color", value: "negro"}
+							]
+						})
+						.end((e, r) => {
+							r.should.have.status(200);
+							r.body.should.be.a('object');
+							r.body.should.have.property('metadata');
+							r.body.metadata.should.have.property('version');
+							r.body.should.have.property('car');
+							r.body.car.should.have.property('id');
+							r.body.car.should.have.property('_ref');
+							r.body.car.should.have.property('owner');
+							r.body.car.should.have.property('properties').eql([{name: "color", value: "negro"}]);
+							done();
+						});
+				});
+		});
+
+		it('PUT action with no _ref parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1/cars/1')
+				.send({
+					properties: [{name: "color", value: "negro"}]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no properties parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1/cars/1')
+				.send({
+					_ref: "f45tgh67uj"
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with empty properties parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1/cars/1')
+				.send({
+					_ref: "f45tgh67uj",
+					properties: []
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action on no resource', (done) => {
+			chai.request(server)
+				.put(url + '/1/cars/6')
+				.send({
+					_ref: "f45tgh67uj",
+					properties: [{name: "color", value: "negro"}]
+				})
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Auto inexistente');
+					done();
+				});
+		});
+
+		it('PUT action with bad _ref parameter', (done) => {
+			chai.request(server)
+				.put(url + '/1/cars/1')
+				.send({
+					_ref: "f45tgh67uj",
+					properties: [{name: "color", value: "negro"}]
+				})
+				.end((err, res) => {
+					res.should.have.status(409);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Conflicto en el update');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}/transactions', () => {

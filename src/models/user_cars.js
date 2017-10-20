@@ -9,8 +9,7 @@ function checkParameters(body) {
 
 function checkParametersUpdate(body) {
 	
-	return (checkParameters(body) &&
-		body.owner && body._ref);
+	return (checkParameters(body) && body._ref);
 }
 
 // returns all the cars of a specific user
@@ -22,7 +21,7 @@ function getCars(req, res) {
 			res.status(200).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -41,7 +40,7 @@ function getCar(req, res) {
 			res.status(200).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -62,7 +61,7 @@ function postCar(req, res) {
 			res.status(201).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -86,16 +85,16 @@ function updateCar(req, res) {
 
 			carQ.update(req.params.userId, req.params.carId, req.body)
 				.then((updatedCar) => {
-					let r = builder.createResponse(updatedCar);
+					let r = builder.createResponse(updatedCar[0]);
 					res.status(200).json(r);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -115,12 +114,12 @@ function deleteCar(req, res) {
 					res.sendStatus(204);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }

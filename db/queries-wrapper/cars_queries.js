@@ -59,7 +59,7 @@ function delAllOfUser(userId) {
 
 	return Cars()
 		.where('owner', userId.toString())
-		.del()
+		.del();
 }
 
 module.exports = {getAll, getAllOfUser, get, add, update, del, delAllOfUser};
