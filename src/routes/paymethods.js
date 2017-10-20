@@ -12,7 +12,10 @@ router.use((req, res, next) => {
 
 // GET /
 router.get('/', (req, res) => {
-	res.send('GET request on /paymethods');
+	res.status(200).json({
+		type: 'GET',
+		url: '/api/paymethods'
+	});
 });
 
 module.exports = router;
