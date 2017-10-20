@@ -4,7 +4,7 @@ var builder = require('../builders/cars_builder');
 var log = require('log4js').getLogger("error");
 
 function checkParameters(body) {
-	return (body.properties);
+	return (body.properties && (body.properties.length > 0));
 }
 
 function checkParametersUpdate(body) {

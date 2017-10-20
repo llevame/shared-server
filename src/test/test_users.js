@@ -551,6 +551,34 @@ describe('users tests', () => {
 					done();
 				});
 		});
+
+		it('POST action with no properties parameter', (done) => {
+			chai.request(server)
+				.post(url + '/1/cars')
+				.send({
+					owner: "1"
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with empty properties parameter', (done) => {
+			chai.request(server)
+				.post(url + '/1/cars')
+				.send({
+					properties: []
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}/cars/{carId}', () => {
