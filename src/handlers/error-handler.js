@@ -72,4 +72,8 @@ function noCar() {
 	};
 }
 
-module.exports = {unexpected, unathoAccess, updateConflict, noResource, idFieldModification, missingParameters, faillingValidation, noCar};
+module.exports = {unexpected, unathoAccess,
+				updateConflict, noResource,
+				idFieldModification, missingParameters,
+				faillingValidation, noCar,
+				invalidToken};

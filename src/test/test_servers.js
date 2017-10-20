@@ -294,4 +294,91 @@ describe('servers tests', () => {
 				});
 		});
 	});
+
+	describe('/servers/ping', () => {
+
+		beforeEach(done => {
+			knex.migrate.rollback()
+			.then(() => knex.migrate.latest())
+			.then(() => knex.seed.run())
+			.then(() => done());
+		});
+
+		afterEach((done) => {
+			knex.migrate.rollback()
+			.then(() => done());
+		});
+
+		it('POST action - resets the token', (done) => {
+			let s = {
+				createdBy: "admin",
+				createdTime: 1,
+				name: "app_server4"
+			};
+			chai.request(server)
+				.post('/api/servers')
+				.send(s)
+				.end((err, res) => {
+					res.should.have.status(201);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('server');
+					res.body.server.should.have.property('server');
+					res.body.server.server.should.have.property('id');
+					res.body.server.server.should.have.property('_ref');
+					res.body.server.server.should.have.property('createdBy').eql(s.createdBy);
+					res.body.server.server.should.have.property('createdTime').eql(s.createdTime);
+					res.body.server.server.should.have.property('name').eql(s.name);
+					res.body.server.server.should.have.property('lastConnection');
+					res.body.server.should.have.property('token');
+					res.body.server.token.should.have.property('expiresAt');
+					res.body.server.token.should.have.property('token');
+					chai.request(server)
+						.post('/api/servers/ping?token=' + res.body.server.token.token)
+						.end((e, r) => {
+							r.should.have.status(201);
+							r.body.should.be.a('object');
+							r.body.should.have.property('metadata');
+							r.body.metadata.should.have.property('version');
+							r.body.should.have.property('ping');
+							r.body.ping.should.have.property('server');
+							r.body.ping.server.should.have.property('id');
+							r.body.ping.server.should.have.property('_ref');
+							r.body.ping.server.should.have.property('createdBy').eql(s.createdBy);
+							r.body.ping.server.should.have.property('createdTime').eql(s.createdTime);
+							r.body.ping.server.should.have.property('name').eql(s.name);
+							r.body.ping.server.should.have.property('lastConnection');
+							r.body.ping.should.have.property('token');
+							r.body.ping.token.should.have.property('expiresAt');
+							r.body.ping.token.should.have.property('token');
+							done();
+						});
+				});
+		});
+
+		it('POST action with no token passed', (done) => {
+			chai.request(server)
+				.post('/api/servers/ping')
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});	
+		});
+
+		it('POST action with bad token passed', (done) => {
+			chai.request(server)
+				.post('/api/servers/ping?token=c4ff43fddewf43f4fdwfd32')
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});	
+		});
+	});
 });

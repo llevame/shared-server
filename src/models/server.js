@@ -50,12 +50,12 @@ function postServer(req, res) {
 					res.status(201).json(r);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -72,7 +72,7 @@ function getServer(req, res) {
 			res.status(200).json(r);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -100,17 +100,17 @@ function resetServerToken(req, res) {
 							res.status(201).json(r);
 						})
 						.catch((err) => {
-							log.error("Error: " + err.message + "on: " + req.originalUrl);
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -138,12 +138,12 @@ function updateServer(req, res) {
 					res.status(200).json(r);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -162,12 +162,12 @@ function deleteServer(req, res) {
 					res.sendStatus(204);
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message + "on: " + req.originalUrl);
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -185,8 +185,8 @@ function pingServer(req, res) {
 			if (req.user.exp < now) {
 				invalidTokensQ.add(req.query.token)
 					.then(() => {
-						let token = service.createAppToken(updatedServer);
-						let r = builder.createPingResponse(updatedServer, service.expiration, token);
+						let token = service.createAppToken(updatedServer[0]);
+						let r = builder.createPingResponse(updatedServer[0], service.expiration, token);
 						appTokenQ.update(id, token)
 							.then(() => {
 								res.status(201).json(r);
@@ -201,7 +201,7 @@ function pingServer(req, res) {
 						res.status(500).json(error.unexpected(err));
 					});
 			} else {
-				let r = builder.createPingResponse(updatedServer, req.user.exp, req.query.token);
+				let r = builder.createPingResponse(updatedServer[0], req.user.exp, req.query.token);
 				res.status(201).json(r);
 			}
 		})
