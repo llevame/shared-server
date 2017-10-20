@@ -198,6 +198,33 @@ describe('users tests', () => {
 					done(err);
 				});
 		});
+
+		it('POST action on user with no fb token but with password', (done) => {
+			let credentials = {
+				username: "edu123",
+				password: "1234fdf"
+			};
+			chai.request(server)
+				.post(url + '/validate')
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.user.should.have.property('id');
+					res.body.user.should.have.property('_ref');
+					res.body.user.should.have.property('applicationOwner');
+					res.body.user.should.have.property('type').eql("passenger");
+					res.body.user.should.have.property('username').eql("edu123");
+					res.body.user.should.have.property('name').eql("Eduardo");
+					res.body.user.should.have.property('surname').eql("Garcia");
+					res.body.user.should.have.property('country').eql("Argentina");
+					res.body.user.should.have.property('email').eql("edu@gmail.com");
+					res.body.user.should.have.property('birthdate').eql("13/1/1990");
+					res.body.user.should.have.property('images');
+					res.body.user.should.have.property('balance');
+					done(err);
+				});
+		});
 	});
 
 	describe('/users/{userId}', () => {
@@ -236,6 +263,18 @@ describe('users tests', () => {
 				});
 		});
 
+		it('GET action on no resource', (done) => {
+			chai.request(server)
+				.get(url + '/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
 		it('DELETE action', (done) => {
 			chai.request(server)
 				.delete(url + '/1')
@@ -243,8 +282,19 @@ describe('users tests', () => {
 					res.should.have.status(204);
 					done();
 				});
-		})
+		});
 
+		it('DELETE action on no resource', (done) => {
+			chai.request(server)
+				.delete(url + '/6')
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}/trips', () => {
@@ -332,7 +382,7 @@ describe('users tests', () => {
 					res.body.car.should.have.property('properties').eql([{name: "color", value: "rojo"}]);
 					done();
 				});
-		})
+		});
 	});
 
 	describe('/users/{userId}/cars/{carId}', () => {
@@ -372,8 +422,7 @@ describe('users tests', () => {
 					res.should.have.status(204);
 					done();
 				});
-		})
-
+		});
 	});
 
 	describe('/users/{userId}/transactions', () => {
@@ -418,6 +467,6 @@ describe('users tests', () => {
 					res.body.transaction.should.have.property('data');
 					done();
 				});
-		})
+		});
 	});
 });

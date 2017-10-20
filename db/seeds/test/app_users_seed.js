@@ -32,10 +32,6 @@ exports.seed = function(knex, Promise) {
 				email: 'edu@gmail.com',
 				birthdate: '13/1/1990',
 				password: '1234fdf',
-				fb: {
-					userId: "edu1234",
-					authToken: "mfrere3232"
-				},
 				images: ["i1", "i2"]
 			});
 		}).then(() => {
