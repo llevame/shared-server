@@ -2,9 +2,9 @@
 
 var error = require('../handlers/error-handler');
 
-module.exports = function(validRoles) {
+module.exports = (validRoles) => {
 
-	return function(req, res, next, validRoles) {
+	return (req, res, next, validRoles) => {
 		
 		// code to verify that the role/s given in the token
 		// are the ones that got permission in a specific
