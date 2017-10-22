@@ -25,6 +25,55 @@ function checkParametersUpdateMe(body) {
 	return (checkParametersBase(body) && body._ref);
 }
 
+function getInformation(req, res, id) {
+
+	businessUserQ.get(id)
+		.then((bu) => {
+			if (!bu) {
+				return res.status(404).json(error.noResource());
+			}
+			
+			let r = builder.createResponse(bu);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
+function updateInformation(req, res, id) {
+
+	if (req.body.hasOwnProperty('id')) {
+		return res.status(500).json(error.idFieldModification());
+	}
+
+	businessUserQ.get(id)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json(error.noResource());
+			}
+
+			if (user._ref !== req.body._ref) {
+				return res.status(409).json(error.updateConflict());
+			}
+
+			businessUserQ.update(id, req.body)
+				.then((updatedUser) => {
+					let r = builder.createResponse(updatedUser[0]);
+					res.status(200).json(r);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
 // returns all the available business users in the system
 function getBusinessUsers(req, res) {
 
@@ -42,19 +91,7 @@ function getBusinessUsers(req, res) {
 // get a single business-user information
 function getBusinessUser(req, res) {
 
-	businessUserQ.get(req.params.userId)
-		.then((bu) => {
-			if (!bu) {
-				return res.status(404).json(error.noResource());
-			}
-			
-			let r = builder.createResponse(bu);
-			res.status(200).json(r);
-		})
-		.catch((err) => {
-			log.error("Error: " + err.message + " on: " + req.originalUrl);
-			res.status(500).json(error.unexpected(err));
-		});
+	getInformation(req, res, req.params.userId);
 }
 
 // post a new business users
@@ -85,34 +122,7 @@ function updateBusinessUser(req, res) {
 		return res.status(400).json(error.missingParameters());
 	}
 
-	if (req.body.hasOwnProperty('id')) {
-		return res.status(500).json(error.idFieldModification());
-	}
-
-	businessUserQ.get(req.params.userId)
-		.then((user) => {
-			if (!user) {
-				return res.status(404).json(error.noResource());
-			}
-
-			if (user._ref !== req.body._ref) {
-				return res.status(409).json(error.updateConflict());
-			}
-
-			businessUserQ.update(req.params.userId, req.body)
-				.then((updatedUser) => {
-					let r = builder.createResponse(updatedUser[0]);
-					res.status(200).json(r);
-				})
-				.catch((err) => {
-					log.error("Error: " + err.message + " on: " + req.originalUrl);
-					res.status(500).json(error.unexpected(err));
-				});
-		})
-		.catch((err) => {
-			log.error("Error: " + err.message + " on: " + req.originalUrl);
-			res.status(500).json(error.unexpected(err));
-		});
+	updateInformation(req, res, req.params.userId);
 }
 
 // deletes a business user
@@ -139,57 +149,22 @@ function deleteBusinessUser(req, res) {
 		});
 }
 
+// gets information about the connected business-user.
+// the user is logged in via the /token endpoint
 function getConnectedBusinessUser(req, res) {
-	
-	businessUserQ.get(req.user.id)
-		.then((bu) => {
-			if (!bu) {
-				return res.status(404).json(error.noResource());
-			}
-			
-			let r = builder.createResponse(bu);
-			res.status(200).json(r);
-		})
-		.catch((err) => {
-			log.error("Error: " + err.message + " on: " + req.originalUrl);
-			res.status(500).json(error.unexpected(err));
-		});
+
+	getInformation(req, res, req.user.id);
 }
 
+// updates information about the connected business-user.
+// the user is logged in via the /token endpoint
 function updateConnectedBusinessUser(req, res) {
 
 	if (!checkParametersUpdateMe(req.body)) {
 		return res.status(400).json(error.missingParameters());
 	}
 
-	if (req.body.hasOwnProperty('id')) {
-		return res.status(500).json(error.idFieldModification());
-	}
-
-	businessUserQ.get(req.user.id)
-		.then((user) => {
-			if (!user) {
-				return res.status(404).json(error.noResource());
-			}
-
-			if (user._ref !== req.body._ref) {
-				return res.status(409).json(error.updateConflict());
-			}
-
-			businessUserQ.update(req.user.id, req.body)
-				.then((updatedUser) => {
-					let r = builder.createResponse(updatedUser[0]);
-					res.status(200).json(r);
-				})
-				.catch((err) => {
-					log.error("Error: " + err.message + " on: " + req.originalUrl);
-					res.status(500).json(error.unexpected(err));
-				});
-		})
-		.catch((err) => {
-			log.error("Error: " + err.message + " on: " + req.originalUrl);
-			res.status(500).json(error.unexpected(err));
-		});
+	updateInformation(req, res, req.user.id);
 }
 
 module.exports = {getBusinessUsers, getBusinessUser,
