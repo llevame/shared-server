@@ -13,9 +13,9 @@ router.use((req, res, next) => {
 	next();
 });
 
-router.get('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
+router.get('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
 
-router.put('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
+router.put('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
 
 router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.getBusinessUsers);
 

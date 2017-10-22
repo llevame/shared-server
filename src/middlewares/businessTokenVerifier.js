@@ -17,4 +17,27 @@ function verifyToken(req, res, next) {
 	next();
 }
 
-module.exports = {verifyToken};
+// 'verifyToken' will do exactly the same 
+// as this function does now
+function verifyTokenMe(req, res, next) {
+
+	if (!req.query || !req.query.token) {
+		return res.status(401).json(error.unathoAccess());
+	}
+
+	jwt.verify(req.query.token, process.BUSINESS_TOKEN_SECRET_KEY, (err, decoded) => {
+		
+		if (err) {
+			return res.status(401).json(error.invalidToken(err));
+		}
+		
+		if (decoded.exp < moment().unix()) {
+			return res.status(401).json(error.invalidToken(err));
+		}
+
+		req.user = decoded;
+		next();
+	});
+}
+
+module.exports = {verifyToken, verifyTokenMe};

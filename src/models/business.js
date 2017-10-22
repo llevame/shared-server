@@ -3,14 +3,31 @@ var businessUserQ = require('../../db/queries-wrapper/business_queries');
 var builder = require('../builders/business_builder');
 var log = require('log4js').getLogger("error");
 
-function checkParameters(body) {
+function checkParametersBase(body) {
+
 	return (body.username && body.password &&
-		body.name && body.surname &&
+		body.name && body.surname); 
+}
+
+function checkParameters(body) {
+
+	return (checkParametersBase(body) &&
 		body.roles && (body.roles.length > 0));
+}
+
+function checkParametersUpdate(body) {
+
+	return (checkParameters(body) && body._ref);
+}
+
+function checkParametersUpdateMe(body) {
+
+	return (checkParametersBase(body) && body._ref);
 }
 
 // returns all the available business users in the system
 function getBusinessUsers(req, res) {
+
 	businessUserQ.getAll()
 		.then((users) => {
 			let r = builder.createGetAllResponse(users);
@@ -33,7 +50,6 @@ function getBusinessUser(req, res) {
 			
 			let r = builder.createResponse(bu);
 			res.status(200).json(r);
-
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
@@ -65,7 +81,7 @@ function postBusinessUser(req, res) {
 // updates a business user
 function updateBusinessUser(req, res) {
 	
-	if (!checkParameters(req.body)) {
+	if (!checkParametersUpdate(req.body)) {
 		return res.status(400).json(error.missingParameters());
 	}
 
@@ -125,18 +141,55 @@ function deleteBusinessUser(req, res) {
 
 function getConnectedBusinessUser(req, res) {
 	
-	res.status(200).json({
-		type:'GET',
-		url: '/api/business-users/me'
-	});
+	businessUserQ.get(req.user.id)
+		.then((bu) => {
+			if (!bu) {
+				return res.status(404).json(error.noResource());
+			}
+			
+			let r = builder.createResponse(bu);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function updateConnectedBusinessUser(req, res) {
 
-	res.status(200).json({
-		type:'PUT',
-		url: '/api/business-users/me'
-	});
+	if (!checkParametersUpdateMe(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	if (req.body.hasOwnProperty('id')) {
+		return res.status(500).json(error.idFieldModification());
+	}
+
+	businessUserQ.get(req.user.id)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json(error.noResource());
+			}
+
+			if (user._ref !== req.body._ref) {
+				return res.status(409).json(error.updateConflict());
+			}
+
+			businessUserQ.update(req.user.id, req.body)
+				.then((updatedUser) => {
+					let r = builder.createResponse(updatedUser[0]);
+					res.status(200).json(r);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {getBusinessUsers, getBusinessUser,
