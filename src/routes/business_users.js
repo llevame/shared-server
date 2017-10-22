@@ -13,18 +13,25 @@ router.use((req, res, next) => {
 	next();
 });
 
+// GET /me
 router.get('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
 
+// PUT /me
 router.put('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
 
+// GET /
 router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.getBusinessUsers);
 
+// POST /
 router.post('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.postBusinessUser);
 
+// GET /:userId
 router.get('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getBusinessUser);
 
+// PUT /:userId
 router.put('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.updateBusinessUser);
 
+// DELETE /:userId
 router.delete('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.deleteBusinessUser);
 
 module.exports = router;
