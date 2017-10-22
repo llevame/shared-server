@@ -225,6 +225,40 @@ describe('users tests', () => {
 					done(err);
 				});
 		});
+
+		it('POST action on user with bad password', (done) => {
+			let credentials = {
+				username: "edu123",
+				password: "123"
+			};
+			chai.request(server)
+				.post(url + '/validate')
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Validación fallida');
+					done();
+				});
+		});
+
+		it('POST action on user with bad fbtoken', (done) => {
+			let credentials = {
+				username: "juan123",
+				facebookAuthToken: "fbtoken"
+			};
+			chai.request(server)
+				.post(url + '/validate')
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Validación fallida');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}', () => {
