@@ -7,13 +7,17 @@ var server = require('../index');
 
 chai.use(chaiHttp);
 
+var tokenGenerator = require('../libs/service');
+var token = tokenGenerator.createAppToken({id: 1});
+var suffix = '?token=' + token;
+
 describe('trips tests', () => {
 
 	describe('/trips', () => {
 		
 		it('POST action', (done) => {
 			chai.request(server)
-				.post('/api/trips')
+				.post('/api/trips' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -28,7 +32,7 @@ describe('trips tests', () => {
 		
 		it('POST action', (done) => {
 			chai.request(server)
-				.post('/api/trips/estimate')
+				.post('/api/trips/estimate' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -43,7 +47,7 @@ describe('trips tests', () => {
 		
 		it('GET action', (done) => {
 			chai.request(server)
-				.post('/api/trips/1')
+				.post('/api/trips/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
