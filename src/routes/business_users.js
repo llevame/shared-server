@@ -14,10 +14,10 @@ router.use((req, res, next) => {
 });
 
 // GET /me
-router.get('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
+router.get('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
 
 // PUT /me
-router.put('/me', tokenVerifier.verifyTokenMe, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
+router.put('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
 
 // GET /
 router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.getBusinessUsers);

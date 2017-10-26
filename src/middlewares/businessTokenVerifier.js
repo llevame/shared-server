@@ -6,20 +6,11 @@ var process = env(__dirname + '/../../process.env');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
 
+// verify that the given token is a valid
+// business-user token. In this case, that means
+// that it was created using the BUSINESS_TOKEN_SECRET_KEY and
+// it must not be expired
 function verifyToken(req, res, next) {
-
-	// code to verify that the given token is a
-	// valid business-user token.
-	// In this case, it has to be "verified" with the
-	// secret key BUSINESS_TOKEN_SECRET_KEY and it can not
-	// be expirated -> (token.exp < now)
-
-	next();
-}
-
-// 'verifyToken' will do exactly the same 
-// as this function does now
-function verifyTokenMe(req, res, next) {
 
 	if (!req.query || !req.query.token) {
 		return res.status(401).json(error.unathoAccess());
@@ -40,4 +31,4 @@ function verifyTokenMe(req, res, next) {
 	});
 }
 
-module.exports = {verifyToken, verifyTokenMe};
+module.exports = {verifyToken};
