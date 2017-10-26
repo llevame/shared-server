@@ -1,7 +1,7 @@
-var service = require('../libs/service');
 var error = require('../handlers/error-handler');
 var v = require('../../package.json').version;
 var businessQ = require('../../db/queries-wrapper/business_queries');
+var tokenBuilder = require('../builders/token_builder');
 var log = require('log4js').getLogger("error");
 
 function isThereAnAdminUser(users) {
@@ -11,7 +11,7 @@ function isThereAnAdminUser(users) {
 	}
 
 	for (u in users) {
-		
+
 		if (users[u].roles.some((role) => {
 			return (role == "admin");
 		})) {
@@ -39,18 +39,10 @@ function getToken(req, res) {
 
 				if ((users.length == 0) || !isThereAnAdminUser(users)) {
 
-					let tok = {
-						metadata: {
-							version: v
-						},
-						token: {
-							expiresAt: service.expiration,
-							token: service.createBusinessToken({id: 0, roles: ["admin"]})
-						}
-					};
+					res.status(201).json(tokenBuilder.createTokenResponse({id: 0, roles: ["admin"]}));
 
-					res.status(201).json(tok);
 				} else {
+					
 					return res.status(401).json(error.unathoAccess());
 				}
 			})
@@ -72,17 +64,7 @@ function getToken(req, res) {
 					return res.status(401).json(error.unathoAccess());
 				}
 
-				let tok = {
-					metadata: {
-						version: v
-					},
-					token: {
-						expiresAt: service.expiration,
-						token: service.createBusinessToken(bu)
-					}
-				};
-
-				res.status(201).json(tok);
+				res.status(201).json(tokenBuilder.createTokenResponse(bu));
 			})
 			.catch((err) => {
 				log.error("Error: " + err.message + " on: " + req.originalUrl);
