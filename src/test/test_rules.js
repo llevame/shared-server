@@ -7,13 +7,17 @@ var server = require('../index');
 
 chai.use(chaiHttp);
 
+var tokenGenerator = require('../libs/service');
+var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
+var suffix = '?token=' + token;
+
 describe('rules tests', () => {
 
 	describe('/rules', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/rules')
+				.get('/api/rules' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -25,7 +29,7 @@ describe('rules tests', () => {
 
 		it('POST action', (done) => {
 			chai.request(server)
-				.post('/api/rules')
+				.post('/api/rules' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -40,7 +44,7 @@ describe('rules tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/rules/1')
+				.get('/api/rules/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -52,7 +56,7 @@ describe('rules tests', () => {
 
 		it('PUT action', (done) => {
 			chai.request(server)
-				.put('/api/rules/1')
+				.put('/api/rules/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -64,7 +68,7 @@ describe('rules tests', () => {
 
 		it('DELETE action', (done) => {
 			chai.request(server)
-				.delete('/api/rules/1')
+				.delete('/api/rules/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -79,7 +83,7 @@ describe('rules tests', () => {
 
 		it('POST action', (done) => {
 			chai.request(server)
-				.post('/api/rules/1/run')
+				.post('/api/rules/1/run' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -94,7 +98,7 @@ describe('rules tests', () => {
 
 		it('POST action', (done) => {
 			chai.request(server)
-				.post('/api/rules/run')
+				.post('/api/rules/run' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -109,7 +113,7 @@ describe('rules tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/rules/1/commits')
+				.get('/api/rules/1/commits' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -124,7 +128,7 @@ describe('rules tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/rules/1/commits/1')
+				.get('/api/rules/1/commits/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
