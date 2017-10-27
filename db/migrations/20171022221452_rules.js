@@ -1,13 +1,16 @@
 
 exports.up = function(knex, Promise) {
+
 	return knex.schema.createTableIfNotExists('rules', (table) => {
 		table.increments('id').unsigned().primary();
-		table.specificType('rule', 'json').notNullable();
-		table.string('description').notNullable();
-		table.boolean('active').notNullable();
-	});  
+		table.string('_ref').notNullable();
+		table.string('blob');
+		table.specificType('lastCommit', 'json');
+		table.boolean('active');
+	});
 };
 
 exports.down = function(knex, Promise) {
+
 	return knex.schema.dropTableIfExists('rules');
 };
