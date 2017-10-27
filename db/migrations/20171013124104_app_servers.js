@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 
-	return knex.schema.createTable('app_servers', (table) => {
+	return knex.schema.createTableIfNotExists('app_servers', (table) => {
 		table.increments();
 		table.string('_ref').notNullable();
 		table.string('createdBy');

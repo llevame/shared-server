@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 	
-	return knex.schema.createTable('trips', (table) => {
+	return knex.schema.createTableIfNotExists('trips', (table) => {
 		table.increments();
 		table.string('applicationOwner');
 		table.string('driver');

@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 
-	return knex.schema.createTable('transactions', (table) => {
+	return knex.schema.createTableIfNotExists('transactions', (table) => {
 		table.increments();
 		table.string('trip');
 		table.timestamp('timestamp').defaultTo(knex.fn.now());

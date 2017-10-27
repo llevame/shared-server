@@ -7,16 +7,36 @@ exports.seed = function(knex, Promise) {
 		.then(() => {
 			return knex('rules').insert({
 				_ref: uuid(),
-				active: true,
-				description: 'A test description on active rule.',
-				rule: '{"rule":"rule"}'
+				blob: '{"rule":"rule"}',
+				author: {
+						id: 1,
+						_ref: uuid(),
+						username: 'juan123',
+						password: '123',
+						name: 'juan',
+						surname: 'lopez',
+						roles: ["admin"]
+				},
+				message: 'Create new rule',
+				timestamp: knex.fn.now(),
+				active: true
 			});
 		}).then(() => {
 			return knex('rules').insert({
 				_ref: uuid(),
-				active: false,
-				description: 'A test description on inactive rule.',
-				rule: '{"rule":"rule"}'
+				blob: '{"rule":"rule"}',
+				author: {
+					id: 2,
+					_ref: uuid(),
+					username: 'eduardo123',
+					password: '456',
+					name: 'eduardo',
+					surname: 'garcia',
+					roles: ["admin", "manager"]
+				},
+				message: 'Create new rule',
+				timestamp: knex.fn.now(),
+				active: true
 			});
 		});
 };
