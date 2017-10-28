@@ -18,7 +18,7 @@ function runRule(req, res) {
 }
 
 function postRule(req, res) {
-	
+
 	res.status(200).json({
 		type: 'POST',
 		url: '/api/rules'
