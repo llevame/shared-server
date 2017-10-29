@@ -24,7 +24,8 @@
     "node-env-file": "^0.1.8",
     "node-rules": "^3.1.0",
     "pg": "6.1.5",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "satellizer": "^0.15.5",
     "serialize-javascript": "^1.4.0",
     "uuid": "^3.1.0"
