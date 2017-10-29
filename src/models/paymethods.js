@@ -1,4 +1,5 @@
 var error = require('../handlers/error-handler');
+var builder = require('../builders/paymethods_builder');
 var log = require('log4js').getLogger("error");
 var request = require('request-promise');
 
@@ -15,20 +16,20 @@ function getPaymethods(req, res) {
 	};
 
 	request(postOptions)
-		.then((response) => {
+		.then((body) => {
 
 			const getOptions = {
 				method: 'GET',
 				uri: 'https://shielded-escarpment-27661.herokuapp.com/api/v1/paymethods',
 				headers: {
-					'Authorization': 'Bearer ' + response.body.access_token
+					'Authorization': 'Bearer ' + body.access_token
 				},
 				json: true
 			};
 
 			request(getOptions)
-				.then((r) => {
-					res.status(200).json(r.body);
+				.then((b) => {
+					res.status(200).json(builder.createPaymethodResponse(b.items));
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + " on: " + req.originalUrl);
@@ -39,12 +40,6 @@ function getPaymethods(req, res) {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
-/*
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/paymethods'
-	});
-*/
 }
 
 module.exports = {getPaymethods};
