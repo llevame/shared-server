@@ -9,8 +9,8 @@ function getPaymethods(req, res) {
 		method: 'POST',
 		uri: 'http://shielded-escarpment-27661.herokuapp.com/api/v1/user/oauth/authorize',
 		body: {
-			client_id: "342d9628-bf54-4a5a-adaa-4421872aacd9",
-  			client_secret: "f82119c5-7aab-406c-a89b-4595e2a61c09"
+			client_id: process.env.PAYMETHOD_CLIENT_ID,
+  			client_secret: process.env.PAYMETHOD_CLIENT_SECRET
 		},
 		json: true
 	};

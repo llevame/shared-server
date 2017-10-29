@@ -14,6 +14,5 @@ router.use((req, res, next) => {
 
 // GET /
 router.get('/', tokenVerifier.verifyToken, paymethods.getPaymethods);
-//router.get('/', paymethods.getPaymethods);
 
 module.exports = router;
