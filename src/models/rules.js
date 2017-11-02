@@ -82,18 +82,32 @@ function postRule(req, res) {
 
 function getRules(req, res) {
 	
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/rules'
-	});
+	rulesQ.getAll()
+		.then((rules) => {
+			let r = builder.createGetAllResponse(rules);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function getRule(req, res) {
 	
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/rules/' + req.params.ruleId
-	});
+	rulesQ.get(req.params.ruleId)
+		.then((rule) => {
+			if (!rule) {
+				return res.status(404).json(error.noResource());
+			}
+			
+			let r = builder.createResponse(rule)
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function updateRule(req, res) {
