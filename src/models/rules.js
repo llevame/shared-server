@@ -158,6 +158,9 @@ function getRuleStateInCommit(req, res) {
 	
 	commitQ.get(req.params.commitId)
 		.then((commit) => {
+			if (!commit) {
+				return res.status(404).json(error.noResource());
+			}
 			if (commit.rule_id != req.params.ruleId) {
 				return res.status(500).json(error.unexpected({
 					status: 500,
