@@ -5,6 +5,7 @@ exports.up = function(knex, Promise) {
 		table.increments();
 		table.string('message').notNullable();
 		table.string('rule');
+		table.boolean('active');
 		table.integer('rule_id');
 		table.specificType('author', 'json');
 		table.timestamp('timestamp').defaultTo(knex.fn.now());

@@ -81,8 +81,8 @@ function createRuleStateInCommit(commit) {
 				message: commit.message,
 				timestamp: commit.timestamp
 			},
-			blob: commit.rule
-			//active: commit.active
+			blob: commit.rule,
+			active: commit.active
 		}
 	};
 }

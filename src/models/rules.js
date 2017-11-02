@@ -56,6 +56,7 @@ function postRule(req, res) {
 				commitQ.add({
 					message: 'New rule',
 					rule: req.body.blob,
+					active: r.active,
 					rule_id: r.id,
 					author: user,
 					timestamp: r.timestamp
