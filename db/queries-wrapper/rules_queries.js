@@ -51,13 +51,9 @@ function update(id, updates) {
 
 function del(id) {
 
-	let ruleaux = {
-		active: false,
-	};
-
 	return Rules()
 		.where('id', parseInt(id))
-		.update(ruleaux);
+		.update({active: false});
 }
 
 module.exports = {getAll, get, add, update, del};

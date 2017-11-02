@@ -100,7 +100,7 @@ function getRule(req, res) {
 			if (!rule) {
 				return res.status(404).json(error.noResource());
 			}
-			
+
 			let r = builder.createResponse(rule)
 			res.status(200).json(r);
 		})
@@ -120,10 +120,25 @@ function updateRule(req, res) {
 
 function deleteRule(req, res) {
 	
-	res.status(200).json({
-		type: 'DELETE',
-		url: '/api/rules/' + req.params.ruleId
-	});
+	rulesQ.get(req.params.ruleId)
+		.then((rule) => {
+			if (!rule) {
+				return res.status(404).json(error.noResource());
+			}
+
+			rulesQ.del(req.params.ruleId)
+				.then(() => {
+					res.sendStatus(204);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function getRuleCommits(req, res) {
