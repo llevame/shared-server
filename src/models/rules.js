@@ -1,5 +1,16 @@
 var error = require('../handlers/error-handler');
+var rulesQ = require('../../db/queries-wrapper/rules_queries');
+var businessQ = require('../../db/queries-wrapper/business_queries');
+var commitQ = require('../../db/queries-wrapper/commits_queries');
+var builder = require('../builders/rules_builder');
+var knex = require('../../db/knex');
 var log = require('log4js').getLogger("error");
+
+function checkParameters(body) {
+	
+	return (body.language && body.blob &&
+			body.active);
+}
 
 function run(req, res) {
 
@@ -19,10 +30,54 @@ function runRule(req, res) {
 
 function postRule(req, res) {
 
-	res.status(200).json({
-		type: 'POST',
-		url: '/api/rules'
-	});
+	if (!checkParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	if (req.body.language != 'node-rules/javascript') {
+		return res.status(500).json(error.unexpected({
+			status: 500,
+			message: 'Lenguaje de reglas incorrecto'
+		}));
+	}
+
+	businessQ.get(req.user.id)
+		.then((user) => {
+			rulesQ.add({
+				blob: req.body.blob,
+				author: user,
+				timestamp: knex.fn.now(),
+				active: req.body.active
+			})
+			.then((ruleId) => {
+				return rulesQ.get(ruleId);
+			})
+			.then((r) => {
+				commitQ.add({
+					message: 'New rule',
+					rule: req.body.blob,
+					rule_id: r.id,
+					author: user,
+					timestamp: r.timestamp
+				})
+				.then((commitId) => {
+					let ru = builder.createResponse(r);
+					res.status(201).json(ru);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+			})
+			.catch((err) => {
+				log.error("Error: " + err.message + " on: " + req.originalUrl);
+				res.status(500).json(error.unexpected(err));
+			});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function getRules(req, res) {
