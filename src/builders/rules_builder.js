@@ -16,6 +16,16 @@ function createRule(r) {
 	};
 }
 
+function createCommit(c) {
+	
+	return {
+		id: c.id,
+		author: c.author,
+		message: c.message,
+		timestamp: c.timestamp
+	};
+}
+
 function createGetAllResponse(rules) {
 	
 	let rs = rules.map(createRule);
@@ -42,4 +52,40 @@ function createResponse(r) {
 	};
 }
 
-module.exports = {createGetAllResponse, createResponse};
+function createCommitsResponse(commits) {
+	
+	let cs = commits.map(createCommit);
+
+	return {
+		metadata: {
+			count: cs.length,
+			total: cs.length,
+			version: v
+		},
+		commits: cs
+	};
+}
+
+function createRuleStateInCommit(commit) {
+	
+	return {
+		metadata: {
+			version: v
+		},
+		rule: {
+			id: commit.rule_id,
+			language: 'node-rules/javascript',
+			lastCommit: {
+				id: commit.id,
+				author: commit.author,
+				message: commit.message,
+				timestamp: commit.timestamp
+			},
+			blob: commit.rule
+			//active: commit.active
+		}
+	};
+}
+
+module.exports = {createGetAllResponse, createResponse,
+	createCommitsResponse, createRuleStateInCommit};

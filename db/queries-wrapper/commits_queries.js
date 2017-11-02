@@ -4,10 +4,24 @@ function Commits() {
 	return knex('rules_commits');
 }
 
+function get(id) {
+	
+	return Commits()
+		.where('id', parseInt(id))
+		.first();
+}
+
 function add(commit) {
 	
 	return Commits()
 		.insert(commit, 'id');
 }
 
-module.exports = {add};
+function getAllOfRule(ruleId) {
+	
+	return Commits()
+		.select()
+		.where('rule_id', parseInt(ruleId));
+}
+
+module.exports = {get, add, getAllOfRule};

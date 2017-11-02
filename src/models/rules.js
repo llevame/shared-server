@@ -142,19 +142,36 @@ function deleteRule(req, res) {
 }
 
 function getRuleCommits(req, res) {
-	
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/rules/' + req.params.ruleId + '/commits'
-	});
+
+	commitQ.getAllOfRule(req.params.ruleId)
+		.then((commits) => {
+			let r = builder.createCommitsResponse(commits);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function getRuleStateInCommit(req, res) {
 	
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/rules/' + req.params.ruleId + '/commits/' + req.params.commitId
-	});
+	commitQ.get(req.params.commitId)
+		.then((commit) => {
+			if (commit.rule_id != req.params.ruleId) {
+				return res.status(500).json(error.unexpected({
+					status: 500,
+					message: 'Commit no pertenece a la regla'
+				}));
+			}
+
+			let r = builder.createRuleStateInCommit(commit);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {run, runRule, postRule,

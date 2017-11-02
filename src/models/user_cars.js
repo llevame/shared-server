@@ -26,7 +26,7 @@ function getCars(req, res) {
 		});
 }
 
-// returns information about a specif car of a user
+// returns information about a specific car of a user
 function getCar(req, res) {
 
 	carQ.get(req.params.userId, req.params.carId)
