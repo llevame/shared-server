@@ -9,7 +9,12 @@ var log = require('log4js').getLogger("error");
 function checkParameters(body) {
 	
 	return (body.language && body.blob &&
-			body.active);
+			(body.active != null));
+}
+
+function checkParametersUpdate(body) {
+	
+	return (checkParameters(body) && body._ref);
 }
 
 function run(req, res) {
@@ -63,6 +68,7 @@ function postRule(req, res) {
 				})
 				.then((commitId) => {
 					let ru = builder.createResponse(r);
+					ru.rule.lastCommit.id = parseInt(commitId);
 					res.status(201).json(ru);
 				})
 				.catch((err) => {
@@ -74,6 +80,70 @@ function postRule(req, res) {
 				log.error("Error: " + err.message + " on: " + req.originalUrl);
 				res.status(500).json(error.unexpected(err));
 			});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
+function updateRule(req, res) {
+
+	if (!checkParametersUpdate(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	if (req.body.language != 'node-rules/javascript') {
+		return res.status(500).json(error.unexpected({
+			status: 500,
+			message: 'Lenguaje de reglas incorrecto'
+		}));
+	}
+
+	rulesQ.get(req.params.ruleId)
+		.then((rule) => {
+			if (!rule) {
+				return res.status(404).json(error.noResource());
+			}
+			if (rule._ref !== req.body._ref) {
+				return res.status(409).json(error.updateConflict());
+			}
+			businessQ.get(req.user.id)
+				.then((user) => {
+					rulesQ.update(req.params.ruleId, {
+						blob: req.body.blob,
+						author: user,
+						timestamp: knex.fn.now(),
+						active: req.body.active
+					})
+					.then((updatedRule) => {
+						commitQ.add({
+							message: 'Update rule',
+							rule: req.body.blob,
+							active: updatedRule[0].active,
+							rule_id: updatedRule[0].id,
+							author: user,
+							timestamp: updatedRule[0].timestamp
+						})
+						.then((commitId) => {
+							let ru = builder.createResponse(updatedRule[0]);
+							ru.rule.lastCommit.id = parseInt(commitId);
+							res.status(201).json(ru);
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
+					})
+					.catch((err) => {
+						log.error("Error: " + err.message + " on: " + req.originalUrl);
+						res.status(500).json(error.unexpected(err));
+					});
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
@@ -109,14 +179,6 @@ function getRule(req, res) {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
-}
-
-function updateRule(req, res) {
-	
-	res.status(200).json({
-		type: 'PUT',
-		url: '/api/rules/' + req.params.ruleId
-	});
 }
 
 function deleteRule(req, res) {
