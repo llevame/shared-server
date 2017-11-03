@@ -4,6 +4,8 @@ var businessQ = require('../../db/queries-wrapper/business_queries');
 var commitQ = require('../../db/queries-wrapper/commits_queries');
 var builder = require('../builders/rules_builder');
 var knex = require('../../db/knex');
+var Rules = require('../libs/rules_engine');
+var serial = require('../libs/rules_serializer');
 var log = require('log4js').getLogger("error");
 
 function checkParameters(body) {
@@ -19,9 +21,60 @@ function checkParametersUpdate(body) {
 
 function run(req, res) {
 
-	res.status(200).json({
-		type: 'POST',
-		url: '/api/rules/run'
+	/*
+		1. Checkear parametros del body
+		2. Verficar existencia de reglas pasadas -> devovler error
+		3. Llmar al rules-engine con las reglas para cada uno de 
+			los facts recibidos
+		4. Devover el resultado de los facts ejecutados
+	*/
+
+	const rules = [{
+		condition: function (R) {
+			R.when(this && (this.transactionTotal < 500));
+		},
+		consequence: function (R) {
+			this.result = false;
+			R.stop();
+		}
+	}];
+
+	const facts = [
+	{
+		userIP: "27.3.4.5",
+		name: "user1",
+		application: "MOB2",
+		userLoggedIn: true,
+		transactionTotal: 600,
+		cardType: "Credit Card"
+	},
+	{
+		userIP: "27.3.4.5",
+		name: "user2",
+		application: "MOB2",
+		userLoggedIn: true,
+		transactionTotal: 400,
+		cardType: "Credit Card"
+	},
+	{
+		userIP: "27.3.4.5",
+		name: "user3",
+		application: "MOB2",
+		userLoggedIn: true,
+		transactionTotal: 1000,
+		cardType: "Credit Card"	
+	}];
+
+	let r = [];
+	for (var n = 0; n < facts.length; n++) {
+		r.push(Rules.execute(rules, facts[n]));
+	}
+
+	Promise.all(r).then((results) => {
+		let k = {
+			resultados: results
+		};
+		res.status(200).json(k);
 	});
 }
 
