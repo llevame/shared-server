@@ -17,6 +17,15 @@ function get(id) {
 		.first();
 }
 
+function getGroup(rules) {
+	
+	let rs = rules.map(parseInt);
+
+	return Rules()
+		.select('blob')
+		.whereIn('id', rs);
+}
+
 function add(rule) {
 
 	let ruleaux = {
@@ -56,5 +65,5 @@ function del(id) {
 		.update({active: false});
 }
 
-module.exports = {getAll, get, add, update, del};
+module.exports = {getAll, get, getGroup, add, update, del};
 

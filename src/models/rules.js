@@ -19,63 +19,58 @@ function checkParametersUpdate(body) {
 	return (checkParameters(body) && body._ref);
 }
 
+function checkRunParameters(body) {
+	
+	return (body.rules && (body.rules.length > 0)
+			&& body.facts && (body.facts.length > 0));
+}
+
+function checkRunRuleParameters(body) {
+	
+	return (body.facts && (body.facts.length > 0));
+}
+
 function run(req, res) {
 
-	/*
-		1. Checkear parametros del body
-		2. Verficar existencia de reglas pasadas -> devovler error
-		3. Llmar al rules-engine con las reglas para cada uno de 
-			los facts recibidos
-		4. Devover el resultado de los facts ejecutados
-	*/
-
-	const rules = [{
-		condition: function (R) {
-			R.when(this && (this.transactionTotal < 500));
-		},
-		consequence: function (R) {
-			this.result = false;
-			R.stop();
-		}
-	}];
-
-	const facts = [
-	{
-		userIP: "27.3.4.5",
-		name: "user1",
-		application: "MOB2",
-		userLoggedIn: true,
-		transactionTotal: 600,
-		cardType: "Credit Card"
-	},
-	{
-		userIP: "27.3.4.5",
-		name: "user2",
-		application: "MOB2",
-		userLoggedIn: true,
-		transactionTotal: 400,
-		cardType: "Credit Card"
-	},
-	{
-		userIP: "27.3.4.5",
-		name: "user3",
-		application: "MOB2",
-		userLoggedIn: true,
-		transactionTotal: 1000,
-		cardType: "Credit Card"	
-	}];
-
-	let r = [];
-	for (var n = 0; n < facts.length; n++) {
-		r.push(Rules.execute(rules, facts[n]));
+	if (!checkRunParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
 	}
 
-	Promise.all(r).then((results) => {
-		let k = {
-			resultados: results
-		};
-		res.status(200).json(k);
-	});
+	rulesQ.getGroup(req.body.rules)
+		.then((rules) => {
+			rules = rules.map((rule) => rule.blob);
+			try {
+				let desRules = serial.deserialize(rules);
+				let facts = req.body.facts;
+				let r = [];
+				
+				for (var n = 0; n < facts.length; n++) {
+					r.push(Rules.execute(desRules, facts[n]));
+				}
+
+				Promise.all(r)
+					.then((results) => {
+						let k = {
+							resultados: results
+						};
+						res.status(200).json(k);
+					})
+					.catch((err) => {
+						log.error("Error: " + err.message + " on: " + req.originalUrl);
+						res.status(500).json(error.unexpected(err));
+					});
+			} catch (e) {
+				log.error("Error: " + e.toString() + " on: " + req.originalUrl);
+				return res.status(500).json({
+					code: 500,
+					message: e.toString()
+				});
+			}
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function runRule(req, res) {
