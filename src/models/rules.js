@@ -40,16 +40,16 @@ function checkRulesState(rules) {
 	return true;
 }
 
-function runRulesWithFacts(req, res, rules, fcs) {
+function runRulesWithFacts(req, res, rules, facts) {
 
 	try {
 		// Transform them into JSON format
-		let desRules = serial.deserialize(rules);
-		let facts = fcs.map((fact) => serial.deserialize(fact.blob));
+		rules = serial.deserialize(rules);
+		facts = facts.map((fact) => serial.deserialize(fact.blob));
 		let r = [];
 		
 		for (var n = 0; n < facts.length; n++) {
-			r.push(Rules.execute(desRules, facts[n]));
+			r.push(Rules.execute(rules, facts[n]));
 		}
 
 		Promise.all(r)
