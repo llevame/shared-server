@@ -56,7 +56,7 @@ function run(req, res) {
 			try {
 				// Transform them into JSON format
 				let desRules = serial.deserialize(rules);
-				let facts = req.body.facts;
+				let facts = req.body.facts.map((fact) => serial.deserialize(fact.blob));
 				let r = [];
 				
 				for (var n = 0; n < facts.length; n++) {
@@ -89,10 +89,6 @@ function run(req, res) {
 
 function runRule(req, res) {
 
-	res.status(200).json({
-		type: 'POST',
-		url: '/api/rules/' + req.params.ruleId + '/run'
-	});
 }
 
 function postRule(req, res) {
