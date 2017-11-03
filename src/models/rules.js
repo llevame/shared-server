@@ -27,7 +27,7 @@ function checkRunParameters(body) {
 
 function checkRunRuleParameters(body) {
 	
-	return (body.facts && (body.facts.length > 0));
+	return (body && (body.length > 0));
 }
 
 function checkRulesState(rules) {
@@ -38,6 +38,37 @@ function checkRulesState(rules) {
 		}
 	}
 	return true;
+}
+
+function runRulesWithFacts(req, res, rules, fcs) {
+
+	try {
+		// Transform them into JSON format
+		let desRules = serial.deserialize(rules);
+		let facts = fcs.map((fact) => serial.deserialize(fact.blob));
+		let r = [];
+		
+		for (var n = 0; n < facts.length; n++) {
+			r.push(Rules.execute(desRules, facts[n]));
+		}
+
+		Promise.all(r)
+			.then((results) => {
+				res.status(200).json(builder.createFactResponse(results));
+			})
+			.catch((err) => {
+				log.error("Error: " + err.message + " on: " + req.originalUrl);
+				res.status(500).json(error.unexpected(err));
+			});
+
+	} catch (e) {
+
+		log.error("Error: " + e.toString() + " on: " + req.originalUrl);
+		return res.status(500).json({
+			code: 500,
+			message: e.toString()
+		});
+	}
 }
 
 function run(req, res) {
@@ -53,33 +84,8 @@ function run(req, res) {
 			}
 			// We only need the blob part of the result
 			rules = rules.map((rule) => rule.blob);
-			try {
-				// Transform them into JSON format
-				let desRules = serial.deserialize(rules);
-				let facts = req.body.facts.map((fact) => serial.deserialize(fact.blob));
-				let r = [];
-				
-				for (var n = 0; n < facts.length; n++) {
-					r.push(Rules.execute(desRules, facts[n]));
-				}
-
-				Promise.all(r)
-					.then((results) => {
-						res.status(200).json(builder.createFactResponse(results));
-					})
-					.catch((err) => {
-						log.error("Error: " + err.message + " on: " + req.originalUrl);
-						res.status(500).json(error.unexpected(err));
-					});
-
-			} catch (e) {
-
-				log.error("Error: " + e.toString() + " on: " + req.originalUrl);
-				return res.status(500).json({
-					code: 500,
-					message: e.toString()
-				});
-			}
+			var facts = req.body.facts;
+			runRulesWithFacts(req, res, rules, facts);
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
@@ -89,6 +95,27 @@ function run(req, res) {
 
 function runRule(req, res) {
 
+	if (!checkRunRuleParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	rulesQ.getForRun(req.params.ruleId)
+		.then((rule) => {
+			if (!rule) {
+				return res.status(404).json(error.noResource());
+			}
+			if (!rule.active) {
+				return res.status(500).json(error.inactiveRule());
+			}
+			// We only need the blob part of the result
+			var rules = new Array(rule.blob);
+			var facts = req.body;
+			runRulesWithFacts(req, res, rules, facts);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function postRule(req, res) {

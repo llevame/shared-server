@@ -17,6 +17,14 @@ function get(id) {
 		.first();
 }
 
+function getForRun(id) {
+	
+	return Rules()
+		.select('blob', 'active')
+		.where('id', parseInt(id))
+		.first();
+}
+
 function getGroup(rules) {
 	
 	let rs = rules.map(parseInt);
@@ -65,5 +73,7 @@ function del(id) {
 		.update({active: false});
 }
 
-module.exports = {getAll, get, getGroup, add, update, del};
+module.exports = {getAll, get,
+				getGroup, getForRun,
+				add, update, del};
 
