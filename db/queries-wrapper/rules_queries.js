@@ -22,7 +22,7 @@ function getGroup(rules) {
 	let rs = rules.map(parseInt);
 
 	return Rules()
-		.select('blob')
+		.select('blob', 'active')
 		.whereIn('id', rs);
 }
 

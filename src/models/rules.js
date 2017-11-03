@@ -30,6 +30,16 @@ function checkRunRuleParameters(body) {
 	return (body.facts && (body.facts.length > 0));
 }
 
+function checkRulesState(rules) {
+	
+	for (r in rules) {
+		if (!rules[r].active) {
+			return false;
+		}
+	}
+	return true;
+}
+
 function run(req, res) {
 
 	if (!checkRunParameters(req.body)) {
@@ -38,8 +48,13 @@ function run(req, res) {
 
 	rulesQ.getGroup(req.body.rules)
 		.then((rules) => {
+			if (!checkRulesState(rules)) {
+				return res.status(500).json(error.inactiveRule());
+			}
+			// We only need the blob part of the result
 			rules = rules.map((rule) => rule.blob);
 			try {
+				// Transform them into JSON format
 				let desRules = serial.deserialize(rules);
 				let facts = req.body.facts;
 				let r = [];
@@ -50,16 +65,15 @@ function run(req, res) {
 
 				Promise.all(r)
 					.then((results) => {
-						let k = {
-							resultados: results
-						};
-						res.status(200).json(k);
+						res.status(200).json(builder.createFactResponse(results));
 					})
 					.catch((err) => {
 						log.error("Error: " + err.message + " on: " + req.originalUrl);
 						res.status(500).json(error.unexpected(err));
 					});
+
 			} catch (e) {
+
 				log.error("Error: " + e.toString() + " on: " + req.originalUrl);
 				return res.status(500).json({
 					code: 500,
@@ -88,10 +102,7 @@ function postRule(req, res) {
 	}
 
 	if (req.body.language != 'node-rules/javascript') {
-		return res.status(500).json(error.unexpected({
-			status: 500,
-			message: 'Lenguaje de reglas incorrecto'
-		}));
+		return res.status(500).json(error.incorrectRuleLanguage());
 	}
 
 	businessQ.get(req.user.id)

@@ -1,4 +1,5 @@
 var v = require('../../package.json').version;
+var serial = require('../libs/rules_serializer');
 
 function createRule(r) {
 
@@ -23,6 +24,14 @@ function createCommit(c) {
 		author: c.author,
 		message: c.message,
 		timestamp: c.timestamp
+	};
+}
+
+function createFact(fact) {
+	
+	return {
+		language: 'node-rules/javascript',
+		blob: serial.serialize(fact)
 	};
 }
 
@@ -87,5 +96,18 @@ function createRuleStateInCommit(commit) {
 	};
 }
 
+function createFactResponse(rulesResults) {
+
+	let f = rulesResults.map(createFact);
+	
+	return {
+		metadata: {
+			version: v
+		},
+		facts: f
+	};
+}
+
 module.exports = {createGetAllResponse, createResponse,
-	createCommitsResponse, createRuleStateInCommit};
+				createCommitsResponse, createRuleStateInCommit,
+				createFactResponse};
