@@ -306,7 +306,7 @@ function getRuleStateInCommit(req, res) {
 			if (commit.rule_id != req.params.ruleId) {
 				return res.status(500).json(error.unexpected({
 					status: 500,
-					message: 'Commit no pertenece a la regla'
+					message: 'Commit no pertenece a la regla solicitada'
 				}));
 			}
 

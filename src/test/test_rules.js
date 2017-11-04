@@ -419,7 +419,7 @@ describe('rules tests', () => {
 				});
 		});
 	});
-
+*/
 	describe('/rules/:ruleId/commits', () => {
 
 		beforeEach(function(done) {
@@ -441,8 +441,16 @@ describe('rules tests', () => {
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/rules/1/commits');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('count').eql(res.body.commits.length);
+					res.body.metadata.should.have.property('total').eql(res.body.commits.length);
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('commits');
+					res.body.commits.should.be.a('array');
+					res.body.commits[0].should.have.property('id');
+					res.body.commits[0].should.have.property('author');
+					res.body.commits[0].should.have.property('message');
+					res.body.commits[0].should.have.property('timestamp');
 					done();
 				});
 		});
@@ -469,11 +477,44 @@ describe('rules tests', () => {
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/rules/1/commits/1');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('rule');
+					res.body.rule.should.have.property('id');
+					res.body.rule.should.have.property('blob');
+					res.body.rule.should.have.property('active');
+					res.body.rule.should.have.property('language');
+					res.body.rule.should.have.property('lastCommit');
+					res.body.rule.lastCommit.should.have.property('id');
+					res.body.rule.lastCommit.should.have.property('author');
+					res.body.rule.lastCommit.should.have.property('message');
+					res.body.rule.lastCommit.should.have.property('timestamp');
+					done();
+				});
+		});
+
+		it('GET action on no commit', (done) => {
+			chai.request(server)
+				.get('/api/rules/1/commits/2' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(404);
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('GET action on a commit whose rule is no the specified', (done) => {
+			chai.request(server)
+				.get('/api/rules/2/commits/1' + suffix)
+				.end((err, res) => {
+					res.should.have.status(500);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(500);
+					res.body.should.have.property('message').eql('Commit no pertenece a la regla solicitada');
 					done();
 				});
 		});
 	});
-*/
 });
