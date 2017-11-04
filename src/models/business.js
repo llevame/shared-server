@@ -6,7 +6,7 @@ var log = require('log4js').getLogger("error");
 function checkParametersBase(body) {
 
 	return (body.username && body.password &&
-		body.name && body.surname); 
+			body.name && body.surname); 
 }
 
 function checkParameters(body) {

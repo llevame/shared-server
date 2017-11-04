@@ -12,7 +12,9 @@ function getAll() {
 
 function getAllOfUser(userId) {
 
-	return Cars().select().where('owner', userId.toString());
+	return Cars()
+		.select()
+		.where('owner', userId.toString());
 }
 
 function get(userId, carId) {

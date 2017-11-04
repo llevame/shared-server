@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 
-	return knex.schema.createTable('invalid_server_tokens', (table) => {
+	return knex.schema.createTableIfNotExists('invalid_server_tokens', (table) => {
 		table.string('token');
 	});
 };
