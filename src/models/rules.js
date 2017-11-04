@@ -176,10 +176,7 @@ function updateRule(req, res) {
 	}
 
 	if (req.body.language != 'node-rules/javascript') {
-		return res.status(500).json(error.unexpected({
-			status: 500,
-			message: 'Lenguaje de reglas incorrecto'
-		}));
+		return res.status(500).json(error.incorrectRuleLanguage());
 	}
 
 	rulesQ.get(req.params.ruleId)
