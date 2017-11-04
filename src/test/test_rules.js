@@ -381,18 +381,18 @@ describe('rules tests', () => {
 
 		it('POST action', (done) => {
 			let f = [
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
-			    }
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+				}
 			];
 			chai.request(server)
 				.post('/api/rules/1/run' + suffix)
@@ -438,18 +438,18 @@ describe('rules tests', () => {
 
 		it('POST action on non-existent rule', (done) => {
 			let f = [
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
-			    }
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+				}
 			];
 			chai.request(server)
 				.post('/api/rules/3/run' + suffix)
@@ -465,18 +465,18 @@ describe('rules tests', () => {
 
 		it('POST action on an inactive rule', (done) => {
 			let f = [
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
-			    },
-			    {
-			        language: "node-rules/javascript",
-			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
-			    }
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+				},
+				{
+					language: "node-rules/javascript",
+					blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+				}
 			];
 			chai.request(server)
 				.post('/api/rules/2/run' + suffix)
@@ -490,7 +490,7 @@ describe('rules tests', () => {
 				});
 		});
 	});
-/*
+
 	describe('/rules/run', () => {
 
 		beforeEach(function(done) {
@@ -507,18 +507,145 @@ describe('rules tests', () => {
 		});
 
 		it('POST action', (done) => {
+			let s = {
+				rules: [
+					"1"
+				],
+				facts: [
+				    {
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+					},
+					{
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+					},
+					{
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+					}
+				]
+			};
 			chai.request(server)
 				.post('/api/rules/run' + suffix)
+				.send(s)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('POST');
-					res.body.should.have.property('url').eql('/api/rules/run');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('facts');
+					res.body.facts.should.be.a('array');
+					res.body.facts.length.should.be.eql(s.facts.length);
+					res.body.facts[0].should.have.property('language').eql('node-rules/javascript');
+					res.body.facts[0].should.have.property('blob');
+					done();
+				});
+		});
+
+		it('POST action with no rules and facts', (done) => {
+			chai.request(server)
+				.post('/api/rules/run' + suffix)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with empty body', (done) => {
+			chai.request(server)
+				.post('/api/rules/run' + suffix)
+				.send({})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with empty facts array', (done) => {
+			chai.request(server)
+				.post('/api/rules/run' + suffix)
+				.send({
+					rules: ["1"],
+					facts: []
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with empty rules array', (done) => {
+			chai.request(server)
+				.post('/api/rules/run' + suffix)
+				.send({
+					rules: [],
+					facts: [
+						{
+							language: "node-rules/javascript",
+							blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+						},
+						{
+							language: "node-rules/javascript",
+							blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+						},
+						{
+							language: "node-rules/javascript",
+							blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+						}
+					]
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action on an inactive rule', (done) => {
+			let s = {
+				rules: [
+					"2"
+				],
+				facts: [
+				    {
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+					},
+					{
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+					},
+					{
+						language: "node-rules/javascript",
+						blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+					}
+				]
+			};
+			chai.request(server)
+				.post('/api/rules/run' + suffix)
+				.send(s)
+				.end((err, res) => {
+					res.should.have.status(500);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(500);
+					res.body.should.have.property('message').eql('Alguna regla está inactiva');
 					done();
 				});
 		});
 	});
-*/
+
 	describe('/rules/:ruleId/commits', () => {
 
 		beforeEach(function(done) {
