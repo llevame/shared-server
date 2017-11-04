@@ -156,7 +156,7 @@ describe('rules tests', () => {
 	describe('/rules/:ruleId', (done) => {
 
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -192,7 +192,7 @@ describe('rules tests', () => {
 
 		it('GET action on no resource', (done) => {
 			chai.request(server)
-				.get('/api/rules/2' + suffix)
+				.get('/api/rules/3' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -312,7 +312,7 @@ describe('rules tests', () => {
 				active: true
 			};
 			chai.request(server)
-				.put('/api/rules/2' + suffix)
+				.put('/api/rules/3' + suffix)
 				.send(r)
 				.end((err, res) => {
 					res.should.have.status(404);
@@ -353,7 +353,7 @@ describe('rules tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete('/api/rules/2' + suffix)
+				.delete('/api/rules/3' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -363,7 +363,7 @@ describe('rules tests', () => {
 				});
 		});
 	});
-/*
+
 	describe('/rules/:ruleId/run', () => {
 
 		beforeEach(function(done) {
@@ -380,18 +380,117 @@ describe('rules tests', () => {
 		});
 
 		it('POST action', (done) => {
+			let f = [
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+			    }
+			];
 			chai.request(server)
 				.post('/api/rules/1/run' + suffix)
+				.send(f)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('POST');
-					res.body.should.have.property('url').eql('/api/rules/1/run');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('facts');
+					res.body.facts.should.be.a('array');
+					res.body.facts.length.should.be.eql(f.length);
+					res.body.facts[0].should.have.property('language').eql('node-rules/javascript');
+					res.body.facts[0].should.have.property('blob');
+					done();
+				});
+		});
+
+		it('POST action with no facts', (done) => {
+			chai.request(server)
+				.post('/api/rules/1/run' + suffix)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with empty facts array', (done) => {
+			chai.request(server)
+				.post('/api/rules/1/run' + suffix)
+				.send([])
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action on non-existent rule', (done) => {
+			let f = [
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+			    }
+			];
+			chai.request(server)
+				.post('/api/rules/3/run' + suffix)
+				.send(f)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(404);
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('POST action on an inactive rule', (done) => {
+			let f = [
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user1\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":600,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user2\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":400,\"cardType\":\"Credit Card\"}"
+			    },
+			    {
+			        language: "node-rules/javascript",
+			        blob: "{\"userIP\":\"27.3.4.5\",\"name\":\"user3\",\"application\":\"MOB2\",\"userLoggedIn\":true,\"transactionTotal\":1000,\"cardType\":\"Credit Card\"}"
+			    }
+			];
+			chai.request(server)
+				.post('/api/rules/2/run' + suffix)
+				.send(f)
+				.end((err, res) => {
+					res.should.have.status(500);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(500);
+					res.body.should.have.property('message').eql('Alguna regla está inactiva');
 					done();
 				});
 		});
 	});
-
+/*
 	describe('/rules/run', () => {
 
 		beforeEach(function(done) {
@@ -495,7 +594,7 @@ describe('rules tests', () => {
 
 		it('GET action on no commit', (done) => {
 			chai.request(server)
-				.get('/api/rules/1/commits/2' + suffix)
+				.get('/api/rules/1/commits/3' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
