@@ -8,6 +8,8 @@ var Rules = require('../libs/rules_engine');
 var serial = require('../libs/rules_serializer');
 var log = require('log4js').getLogger("error");
 
+/*** Check functions to validate input ***/
+
 function checkParameters(body) {
 	
 	return (body.language && body.blob &&
@@ -40,12 +42,14 @@ function checkRulesState(rules) {
 	return true;
 }
 
+// runs all the rules with every fact
+// into the rules-engine
 function runRulesWithFacts(req, res, rules, facts) {
 
 	try {
 		// Transform them into JSON format
-		rules = serial.deserialize(rules);
-		facts = facts.map((fact) => serial.deserialize(fact.blob));
+		rules = rules.map((rule) => serial.deserialize(rule));
+		facts = facts.map((fact) => serial.deserialize(fact));
 		let r = [];
 		
 		for (var n = 0; n < facts.length; n++) {
@@ -71,6 +75,18 @@ function runRulesWithFacts(req, res, rules, facts) {
 	}
 }
 
+function test(req, res) {
+	
+	if (!checkRunParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	let rules = req.body.rules.map((r) => r.blob);
+	let facts = req.body.facts.map((f) => f.blob);
+
+	runRulesWithFacts(req, res, rules, facts);
+}
+
 function run(req, res) {
 
 	if (!checkRunParameters(req.body)) {
@@ -84,7 +100,7 @@ function run(req, res) {
 			}
 			// We only need the blob part of the result
 			rules = rules.map((rule) => rule.blob);
-			var facts = req.body.facts;
+			var facts = req.body.facts.map((fact) => fact.blob);
 			runRulesWithFacts(req, res, rules, facts);
 		})
 		.catch((err) => {
@@ -109,7 +125,7 @@ function runRule(req, res) {
 			}
 			// We only need the blob part of the result
 			var rules = new Array(rule.blob);
-			var facts = req.body;
+			var facts = req.body.map((fact) => fact.blob);
 			runRulesWithFacts(req, res, rules, facts);
 		})
 		.catch((err) => {
@@ -319,7 +335,7 @@ function getRuleStateInCommit(req, res) {
 		});
 }
 
-module.exports = {run, runRule, postRule,
+module.exports = {test, run, runRule, postRule,
 			getRule, getRules, deleteRule,
 			updateRule, getRuleCommits,
 			getRuleStateInCommit};

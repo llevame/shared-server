@@ -13,6 +13,9 @@ router.use((req, res, next) => {
 	next();
 });
 
+// POST /test
+router.post('/test', rules.test);
+
 // POST /run
 router.post('/run', tokenVerifier.verifyToken, roleVerifier(['admin']), rules.run);
 
