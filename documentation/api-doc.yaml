@@ -3,9 +3,9 @@ info:
   description: API para el shared server de Llevame
   title: Llevame - Shared Server API
   version: 1.0.0
-host: llevame.7552.fi.uba.ar
+host: llevame-sharedserver.herokuapp.com
 schemes:
-  - http
+  - https
 basePath: /api
 consumes:
   - application/json
