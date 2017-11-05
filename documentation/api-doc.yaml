@@ -1222,6 +1222,46 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       summary: "Ejecutar un set de reglas"
+  /rules/test:
+    post:
+      tags:
+        - admin
+        - manager
+        - user
+      description: "Ejecuta las reglas para cada uno de los facts suministrados"
+      parameters:
+        - description: "Reglas y Hechos"
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              rules:
+                items:
+                  $ref: '#/definitions/RuleTest'
+              facts:
+                items:
+                  $ref: '#/definitions/Fact'
+      responses:
+        200:
+          description: "Ejecución correcta del set de reglas"
+          schema:
+            description: Todos los hechos
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              facts:
+                items:
+                  $ref: '#/definitions/Fact'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Ejecutar un set de reglas de test"
   /rules/{ruleId}:
     parameters:
       - description: "Identificador de la regla"
@@ -1841,6 +1881,12 @@ definitions:
       La implementación del motor de inferencia que se use soportará distintos idiomas / lenguajes, este campo
       representa el idioma / lenguaje del hecho. Además, la implementación de shared server, decidirá como representar
       dichos hechos.
+  RuleTest:
+    properties:
+      language:
+        $ref: '#/definitions/FactLanguage'
+      blob:
+        type: string
   Fact:
     properties:
       language:
