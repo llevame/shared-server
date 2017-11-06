@@ -9,6 +9,10 @@ function getAll() {
 
 	return Rules().select();
 }
+function getAllActive() {
+
+	return Rules().select().where('active', true);
+}
 
 function get(id) {
 

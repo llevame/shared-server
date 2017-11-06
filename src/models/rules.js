@@ -42,6 +42,32 @@ function checkRulesState(rules) {
 	return true;
 }
 
+function runTripRules(rules, fact){
+	try {
+		// Transform them into JSON format
+		rules = rules.map((rule) => serial.deserialize(rule));
+		facts = serial.deserialize(fact);
+		let r = [];
+		
+		for (var n = 0; n < facts.length; n++) {
+			r.push(Rules.execute(rules, facts[n]));
+		}
+
+		Promise.all(r)
+			.then((results) => {
+				return builder.createFactResponse(results);
+			})
+			.catch((err) => {
+				log.error("Error: " + err.message);
+				return error.unexpected(err);
+			});
+
+	} catch (e) {
+		log.error("Error: " + e.toString());
+		return e.toString()
+	}
+}
+
 // runs all the rules with every fact
 // into the rules-engine
 function runRulesWithFacts(req, res, rules, facts) {

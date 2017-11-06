@@ -42,4 +42,52 @@ function getPaymethods(req, res) {
 		});
 }
 
-module.exports = {getPaymethods};
+function generatePayment(data) {
+
+	const postOptions = {
+		method: 'POST',
+		uri: 'http://shielded-escarpment-27661.herokuapp.com/api/v1/user/oauth/authorize',
+		body: {
+			client_id: process.env.PAYMETHOD_CLIENT_ID,
+  			client_secret: process.env.PAYMETHOD_CLIENT_SECRET
+		},
+		json: true
+	};
+
+	request(postOptions)	
+	.then((body) => {
+
+			const postPayOptions = {
+				method: 'GET',
+				uri: 'https://shielded-escarpment-27661.herokuapp.com/api/v1/paymethods',
+				headers: {
+					'Authorization': 'Bearer ' + body.access_token
+				},
+				body:{
+					transaction_id: data.transaction_id,
+					currency: data.currency,
+					value: data.cost,
+					paymentMethod: data.paymentMethod,
+					access_token: 	body.access_token,
+				},
+				json: true
+			};
+
+			request(postPayOptions)
+				.then((result) => {
+					return result;
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message );
+					return err.message;
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message);
+			return error.unexpected(err);
+		});
+}
+
+
+
+module.exports = {getPaymethods,generatePayment};
