@@ -28,6 +28,12 @@ class Menu extends Component {
 							<li>
 								<Link to={'/business-add'}>Add one</Link>
 							</li>
+							<li>
+								<Link to={'/business-me'}>Get my information</Link>
+							</li>
+							<li>
+								<Link to={'/business-update-me'}>Update my information</Link>
+							</li>
 						</ul>
 					</li>
 					<li>
@@ -41,6 +47,29 @@ class Menu extends Component {
 							</li>
 							<li>
 								<Link to={'/servers-add'}>Add one</Link>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Rules
+						<ul>
+							<li>
+								<Link to={'/rules'}>Get all</Link>
+							</li>
+							<li>
+								<Link to={'/rules-get'}>Get one</Link>
+							</li>
+							<li>
+								<Link to={'/rules-add'}>Add one</Link>
+							</li>
+							<li>
+								<Link to={'/rules-run-test'}>Run tests</Link>
+							</li>
+							<li>
+								<Link to={'/rules-run'}>Run all</Link>
+							</li>
+							<li>
+								<Link to={'/rules-run-one'}>Run one</Link>
 							</li>
 						</ul>
 					</li>
