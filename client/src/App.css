@@ -1,7 +1,36 @@
 .App {
-  text-align: center;
   font-family: "Courier New", monospace;
   width: 100%;
+}
+
+.App-header {
+  text-align: center;
+  background-color: #222;
+  height: 190px;
+  padding: 20px;
+  color: white;
+}
+
+.App-logo {
+  height: 140px;
+}
+
+.List {
+  color: red;
+}
+
+.SubList {
+  color: red;
+  padding-left: 40px; 
+}
+
+.Form {
+  padding-left: 20px
+}
+
+.TokenResult {
+  color: green;
+  word-wrap: break-word;
 }
 
 h1 {
@@ -9,16 +38,17 @@ h1 {
   font-size: 42px;
 }
 
-.more {
-  font-size: 32px;
-  font-family: "Courier New", monospace;
-  border: 2px solid #000;
-  background-color: #fff;
-  padding: 10px 25px;
+h2 {
+  padding-left: 10px;
+  font-weight: normal;
 }
-.more:hover {
-  background-color: #FDD836;
+
+h3 {
+  padding-left: 20px;
+  font-weight: normal;
 }
-.more:active {
-  background-color: #FFEFA9;
+
+h4 {
+  padding-left: 20px;
+  font-weight: normal;
 }
