@@ -30,6 +30,20 @@ class Menu extends Component {
 							</li>
 						</ul>
 					</li>
+					<li>
+						Servers
+						<ul>
+							<li>
+								<Link to={'/servers'}>Get all</Link>
+							</li>
+							<li>
+								<Link to={'/servers-get'}>Get one</Link>
+							</li>
+							<li>
+								<Link to={'/servers-add'}>Add one</Link>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		);
