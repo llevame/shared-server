@@ -11,6 +11,11 @@
   color: white;
 }
 
+.App-Routes {
+  background-color: #aaa;
+  padding: 20px;
+}
+
 .App-logo {
   height: 140px;
 }

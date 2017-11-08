@@ -34,25 +34,27 @@ class App extends Component {
 					<img src={logo} className="App-logo" alt="logo"/>
 					<h2>Bienvenido a Llevame</h2>
 				</div>
-				<Switch>
-					<Route exact path="/" component={ LogIn } />
-					<Route path="/about" component={ About } />
-					<Route path="/contact" component={ Contact } />
-					<Route path="/business" component={ GetBusinessUsers } />
-					<Route path="/business-add" component={ AddBusinessUser } />
-					<Route path="/business-get" component={ GetOneBusinessUser } />
-					<Route path="/business-me" component={ GetMyInformation } />
-					<Route path="/business-update-me" component={ UpdateMyInformation } />
-					<Route path="/servers" component={ GetServers } />
-					<Route path="/servers-add" component={ AddServer } />
-					<Route path="/servers-get" component={ GetOneServer } />
-					<Route path="/rules" component={ GetRules } />
-					<Route path="/rules-get" component={ GetOneRule } />
-					<Route path="/rules-add" component={ AddRule } />
-					<Route path="/rules-run-test" component={ RunTestRules } />
-					<Route path="/rules-run" component={ RunAllRules } />
-					<Route path="/rules-run-one" component={ RunOneRule } />
-				</Switch>
+				<div className="App-Routes">
+					<Switch>
+						<Route exact path="/" component={ LogIn } />
+						<Route path="/about" component={ About } />
+						<Route path="/contact" component={ Contact } />
+						<Route path="/business" component={ GetBusinessUsers } />
+						<Route path="/business-add" component={ AddBusinessUser } />
+						<Route path="/business-get" component={ GetOneBusinessUser } />
+						<Route path="/business-me" component={ GetMyInformation } />
+						<Route path="/business-update-me" component={ UpdateMyInformation } />
+						<Route path="/servers" component={ GetServers } />
+						<Route path="/servers-add" component={ AddServer } />
+						<Route path="/servers-get" component={ GetOneServer } />
+						<Route path="/rules" component={ GetRules } />
+						<Route path="/rules-get" component={ GetOneRule } />
+						<Route path="/rules-add" component={ AddRule } />
+						<Route path="/rules-run-test" component={ RunTestRules } />
+						<Route path="/rules-run" component={ RunAllRules } />
+						<Route path="/rules-run-one" component={ RunOneRule } />
+					</Switch>
+				</div>
 			</div>
 		);
 	}

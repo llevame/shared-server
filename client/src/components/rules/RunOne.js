@@ -32,7 +32,38 @@ class RunOneRule extends Component {
 	}
 
 	onRunRule(e) {
-		// send the facts to the server
+		e.preventDefault();
+		let facts = JSON.parse(this.state.facts);
+		facts = facts.map((fact) => {
+			return {
+				language: 'node-rules/javascript',
+				blob: JSON.stringify(fact)
+			};
+		});
+		fetch('/api/rules/' + e.target.id.value + '/run?token=' + e.target.token.value, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(facts)
+		})
+		.then((res) => res.json())
+		.then((json) => {
+			if (json.code) {
+				this.setState({
+					...this.state,
+					result: {},
+					hide: true
+				});
+				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+			} else {
+				this.setState({
+					...this.state,
+					result: json.facts,
+					hide: false
+				});
+			}
+		});
 	}
 
 	render() {
@@ -42,6 +73,7 @@ class RunOneRule extends Component {
 				<form className="Form" onSubmit={this.onRunRule}>
 					<input type="text" placeholder="Token" name="token" />
 					<br /><br />
+					<input type="text" placeholder="Rule Id" name="id" />
 					<input type="submit" value="Run" />
 					<h4>Facts:</h4>
 					<CodeMirror options={this.config} onChange={this.setFacts}/>
