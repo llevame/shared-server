@@ -19,10 +19,8 @@ describe('trips tests', () => {
 			chai.request(server)
 				.post('/api/trips' + suffix)
 				.end((err, res) => {
-					res.should.have.status(200);
+					res.should.have.status(400);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/trips');
 					done();
 				});
 		});

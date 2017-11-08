@@ -28,6 +28,22 @@ function get(id) {
 			'data');
 }
 
+function addTransactionTrip(userId,tripId,cost, trip) {
+
+	let taux = {
+		user_id: parseInt(userId),
+		trip: tripId,
+		cost: cost,
+		data: trip,
+		timestamp: knex.fn.now(),
+		description: tripId,
+		
+	};
+
+	return Transacions()
+		.insert(taux, 'id');
+}
+
 function add(userId) {
 
 	let taux = {
