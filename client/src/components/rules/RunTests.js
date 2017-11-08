@@ -88,15 +88,31 @@ class RunTestRules extends Component {
 	}
 
 	render() {
+		let r = "Ej: run this rules\n" + serialize([{
+			condition: function (R) {
+				R.when(this && (this.transactionTotal < 500));
+			},
+			consequence: function (R) {
+				this.result = false;
+				R.stop();
+			}
+		}], {space: 2});
+		let f = "Ej: fact sample\n" + JSON.stringify([{
+			"name": "user1",
+			"application": "MOB2",
+			"userLoggedIn": true,
+			"transactionTotal": 600,
+			"cardType": "Credit Card"
+		}], null, 2);
 		return (
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onRunRules}>
 					<input type="submit" value="Run" />
 					<h4>Rules:</h4>
-					<CodeMirror options={this.config} onChange={this.setRules}/>
+					<CodeMirror value={r} options={this.config} onChange={this.setRules}/>
 					<h4>Facts:</h4>
-					<CodeMirror options={this.config} onChange={this.setFacts}/>
+					<CodeMirror value={f} options={this.config} onChange={this.setFacts}/>
 				</form>
 				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>

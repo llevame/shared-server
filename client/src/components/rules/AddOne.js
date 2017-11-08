@@ -3,6 +3,7 @@ import JSONTree from 'react-json-tree';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
+import serialize from 'serialize-javascript';
 import Menu from '../Menu';
 
 class AddRule extends Component {
@@ -64,6 +65,15 @@ class AddRule extends Component {
 	}
 
 	render() {
+		let r = "Ej: add this rule\n" + serialize({
+			condition: function (R) {
+				R.when(this && (this.transactionTotal < 500));
+			},
+			consequence: function (R) {
+				this.result = false;
+				R.stop();
+			}
+		}, {space: 2});
 		return (
 			<div>
 				<Menu />
@@ -72,7 +82,7 @@ class AddRule extends Component {
 					<br /><br />
 					<input type="submit" value="Add" />
 					<h4>Rule:</h4>
-					<CodeMirror options={this.config} onChange={this.setRule}/>
+					<CodeMirror value={r} options={this.config} onChange={this.setRule}/>
 				</form>
 				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>

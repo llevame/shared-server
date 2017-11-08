@@ -83,6 +83,14 @@ class RunAllRules extends Component {
 	}
 
 	render() {
+		let r = "Ej: [1, 4, 5] - run this rules";
+		let f = "Ej: fact sample\n" + JSON.stringify([{
+			"name": "user1",
+			"application": "MOB2",
+			"userLoggedIn": true,
+			"transactionTotal": 600,
+			"cardType": "Credit Card"
+		}], null, 2);
 		return (
 			<div>
 				<Menu />
@@ -91,9 +99,9 @@ class RunAllRules extends Component {
 					<br /><br />
 					<input type="submit" value="Run" />
 					<h4>Rules:</h4>
-					<CodeMirror options={this.config} onChange={this.setRules}/>
+					<CodeMirror value={r} options={this.config} onChange={this.setRules}/>
 					<h4>Facts:</h4>
-					<CodeMirror options={this.config} onChange={this.setFacts}/>
+					<CodeMirror value={f} options={this.config} onChange={this.setFacts}/>
 				</form>
 				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>

@@ -67,6 +67,13 @@ class RunOneRule extends Component {
 	}
 
 	render() {
+		let f = "Ej: fact sample\n" + JSON.stringify([{
+			"name": "user1",
+			"application": "MOB2",
+			"userLoggedIn": true,
+			"transactionTotal": 600,
+			"cardType": "Credit Card"
+		}], null, 2);
 		return (
 			<div>
 				<Menu />
@@ -76,7 +83,7 @@ class RunOneRule extends Component {
 					<input type="text" placeholder="Rule Id" name="id" />
 					<input type="submit" value="Run" />
 					<h4>Facts:</h4>
-					<CodeMirror options={this.config} onChange={this.setFacts}/>
+					<CodeMirror value={f} options={this.config} onChange={this.setFacts}/>
 				</form>
 				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>
