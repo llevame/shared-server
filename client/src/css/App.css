@@ -28,6 +28,12 @@
   word-wrap: break-word;
 }
 
+.ReactCodeMirror {
+  margin: 15px;
+  text-align: left;
+  border: 5px solid #333;
+}
+
 h1 {
   font-weight: normal;
   font-size: 42px;
