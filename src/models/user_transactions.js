@@ -38,7 +38,7 @@ function postTransaction(req, res) {
 							return transactionQ.get(transId);
 						})
 						.then((t) => {
-							let t = {
+							let r = {
 								metadata: {
 									version: v
 								},
@@ -54,7 +54,7 @@ function postTransaction(req, res) {
 									data: t.data
 								}
 							};
-							res.status(200).json(t);
+							res.status(200).json(r);
 						})
 						.catch((err) => {
 							log.error("Error: " + err.message + " on: " + req.originalUrl);

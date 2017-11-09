@@ -46,20 +46,12 @@ function runTripRules(req, res, rules, fact) {
 
 	try {
 		// Transform them into JSON format
-		rules = rules.map((rule) => serial.deserialize(rule));
-
-		Rules.execute(rules, fact)
-			.then((result) => {
-				return result;
-			})
-			.catch((err) => {
-				log.error("Error: " + err.message + " on: " + req.originalUrl);
-				res.status(500).json(error.unexpected(err));
-			});
+		rules = rules.map((rule) => serial.deserialize(rule.blob));
+		return Rules.execute(rules, fact);
 
 	} catch (e) {
 
-		log.error("Error: " + e.toString() + " on: " + req.originalUrl);
+		log.error("Error1: " + e.toString() + " on: " + req.originalUrl);
 		res.status(500).json({
 			code: 500,
 			message: e.toString()

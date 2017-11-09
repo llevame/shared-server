@@ -4,7 +4,7 @@ var rulesQ = require('../../db/queries-wrapper/rules_queries');
 var transactionQ = require('../../db/queries-wrapper/transaction_queries');
 var tripsQ = require('../../db/queries-wrapper/trips_queries');
 var builder = require('../builders/trips_builder');
-var rules = require('./rules');
+var rulesModel = require('./rules');
 var paymethods = require('./paymethods');
 
 function checkParameters(body) {
@@ -19,47 +19,55 @@ function postTrip(req, res) {
 	}
 
 	var fact = {
-	    "driver": req.body.trip.driver,
-	    "passenger": req.body.trip.passenger,
-	    "start": req.body.trip.start,
-	    "end": req.body.trip.end,
-	    "totaltime": req.body.trip.totaltime,
-	    "waitTime": req.body.trip.waitTime,
-	    "travelTime": req.body.trip.travelTime,
-	    "distance": req.body.trip.distance,
-	    "route": req.body.trip.route,
-	    "paymethod": req.body.paymethod,
-	    "cost": 50
+		"driver": req.body.trip.driver,
+		"passenger": req.body.trip.passenger,
+		"start": req.body.trip.start,
+		"end": req.body.trip.end,
+		"totaltime": req.body.trip.totaltime,
+		"waitTime": req.body.trip.waitTime,
+		"travelTime": req.body.trip.travelTime,
+		"distance": req.body.trip.distance
 	};
 
 	// run all active rules with trip information
 	// as the fact
 	rulesQ.getAllActive()
 		.then((rules) => {
-			
-			//let result = rules.runTripRules(req, res, rules, fact);
-			let currency = 'ARS'; // currency ISO 4217 standar 
-			//let cost = result.cost;
-			let cost = 10;
-			
-			tripsQ.add(req.body, cost, currency)
-				.then((tripId) => {
+			rulesModel.runTripRules(req, res, rules, fact)
+				.then((result) => {
 
-					let r = [];
-					r.push(transactionQ.addTransactionTrip(req.body.trip.passenger, tripId, cost * (-1), req.body.trip)); //Negative -> passenger
-					r.push(transactionQ.addTransactionTrip(req.body.trip.driver, tripId, cost, req.body.trip)); //Positive -> driver
+					let currency = 'ARS'; // currency ISO 4217 standar 
+					let cost = result.cost;
+					let pay = result.pay;
 
-					Promise.all(r)
-						.then((results) => {
-							var data = {
-								currency: currency,
-								value: cost,
-								paymethod: req.body.paymethod
-							};
-							paymethods.generatePayment(data);
-							transactionQ.addTransactionTrip(req.body.trip.passenger, tripId, cost, req.body.trip)
-								.then((transId) => {
-									res.status(200).json(builder.createResponse(req.body.trip, currency, cost));
+					tripsQ.add(req.body, cost, currency)
+						.then((tripId) => {
+
+							let r = [];
+							r.push(transactionQ.addTransactionTrip(req.body.trip.passenger,
+																	tripId,
+																	cost * (-1),
+																	req.body.trip)); //Negative -> passenger
+							r.push(transactionQ.addTransactionTrip(req.body.trip.driver,
+																	tripId,
+																	pay,
+																	req.body.trip)); //Positive -> driver
+							Promise.all(r)
+								.then((results) => {
+									var data = {
+										currency: currency,
+										value: cost,
+										paymethod: req.body.paymethod
+									};
+									paymethods.generatePayment(data);
+									transactionQ.addTransactionTrip(req.body.trip.passenger, tripId, cost, req.body.trip)
+										.then((transId) => {
+											res.status(200).json(builder.createResponse(req.body.trip, currency, cost));
+										})
+										.catch((err) => {
+											log.error("Error: " + err.message + " on: " + req.originalUrl);
+											res.status(500).json(error.unexpected(err));
+										});
 								})
 								.catch((err) => {
 									log.error("Error: " + err.message + " on: " + req.originalUrl);
