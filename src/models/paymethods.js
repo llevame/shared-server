@@ -55,31 +55,30 @@ function generatePayment(data) {
 	};
 
 	request(postOptions)	
-	.then((body) => {
+		.then((body) => {
 
 			const postPayOptions = {
-				method: 'GET',
-				uri: 'https://shielded-escarpment-27661.herokuapp.com/api/v1/paymethods',
+				method: 'POST',
+				uri: 'https://shielded-escarpment-27661.herokuapp.com/api/v1/payments',
 				headers: {
-					'Authorization': 'Bearer ' + body.access_token
+					'Authorization': 'Bearer ' + body.access_token,
+					'Content-Type': 'application/json'
 				},
-				body:{
-					transaction_id: data.transaction_id,
+				body: {
 					currency: data.currency,
-					value: data.cost,
-					paymentMethod: data.paymentMethod,
-					access_token: 	body.access_token,
+					value: data.value,
+					paymentMethod: data.paymethod.parameters
 				},
 				json: true
 			};
 
 			request(postPayOptions)
-				.then((result) => {
-					return result;
+				.then((b) => {
+					return b.transaction_id;
 				})
 				.catch((err) => {
-					log.error("Error: " + err.message );
-					return err.message;
+					log.error("Error: " + err.message);
+					return error.unexpected(err);
 				});
 		})
 		.catch((err) => {
@@ -88,6 +87,4 @@ function generatePayment(data) {
 		});
 }
 
-
-
-module.exports = {getPaymethods,generatePayment};
+module.exports = {getPaymethods, generatePayment};

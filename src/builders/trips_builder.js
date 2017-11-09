@@ -12,19 +12,18 @@ function createGetAllResponse(t) {
 	};
 }
 
-function createResponse(t, currency,costValue) {
-	
+function createResponse(t, currency, costValue) {
+
+	t.cost = {
+		currency: currency,
+		value: costValue
+	};
 
 	return {
 		metadata: {
 			version: v
 		},
-		trip: t,
-		cost: {
-			currency: currency,
-			value:costValue,
-		},
-
+		trip: t
 	};
 }
 

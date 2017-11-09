@@ -42,29 +42,28 @@ function checkRulesState(rules) {
 	return true;
 }
 
-function runTripRules(rules, fact){
+function runTripRules(req, res, rules, fact) {
+
 	try {
 		// Transform them into JSON format
 		rules = rules.map((rule) => serial.deserialize(rule));
-		facts = serial.deserialize(fact);
-		let r = [];
-		
-		for (var n = 0; n < facts.length; n++) {
-			r.push(Rules.execute(rules, facts[n]));
-		}
 
-		Promise.all(r)
-			.then((results) => {
-				return builder.createFactResponse(results);
+		Rules.execute(rules, fact)
+			.then((result) => {
+				return result;
 			})
 			.catch((err) => {
-				log.error("Error: " + err.message);
-				return error.unexpected(err);
+				log.error("Error: " + err.message + " on: " + req.originalUrl);
+				res.status(500).json(error.unexpected(err));
 			});
 
 	} catch (e) {
-		log.error("Error: " + e.toString());
-		return e.toString()
+
+		log.error("Error: " + e.toString() + " on: " + req.originalUrl);
+		res.status(500).json({
+			code: 500,
+			message: e.toString()
+		});
 	}
 }
 
@@ -361,7 +360,8 @@ function getRuleStateInCommit(req, res) {
 		});
 }
 
-module.exports = {test, run, runRule, postRule,
+module.exports = {test, run, runRule,
+			runTripRules, postRule,
 			getRule, getRules, deleteRule,
 			updateRule, getRuleCommits,
 			getRuleStateInCommit};

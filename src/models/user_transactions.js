@@ -25,6 +25,7 @@ function getTransactions(req, res) {
 			res.status(500).json(error.unexpected(err));
 		});
 }
+
 // post a new transaction into a specific user
 function postTransaction(req, res) {
 

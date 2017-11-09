@@ -13,7 +13,8 @@ router.use((req, res, next) => {
 });
 
 // POST /
-router.post('/', tokenVerifier.verifyToken, trip.postTrip);
+//router.post('/', tokenVerifier.verifyToken, trip.postTrip);
+router.post('/', trip.postTrip);
 
 // POST /estimate
 router.post('/estimate', tokenVerifier.verifyToken, trip.estimateTrip);
