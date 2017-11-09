@@ -42,6 +42,23 @@ function checkRulesState(rules) {
 	return true;
 }
 
+function runTripRules(req, res, rules, fact) {
+
+	try {
+		// Transform them into JSON format
+		rules = rules.map((rule) => serial.deserialize(rule.blob));
+		return Rules.execute(rules, fact);
+
+	} catch (e) {
+
+		log.error("Error1: " + e.toString() + " on: " + req.originalUrl);
+		res.status(500).json({
+			code: 500,
+			message: e.toString()
+		});
+	}
+}
+
 // runs all the rules with every fact
 // into the rules-engine
 function runRulesWithFacts(req, res, rules, facts) {
@@ -335,7 +352,8 @@ function getRuleStateInCommit(req, res) {
 		});
 }
 
-module.exports = {test, run, runRule, postRule,
+module.exports = {test, run, runRule,
+			runTripRules, postRule,
 			getRule, getRules, deleteRule,
 			updateRule, getRuleCommits,
 			getRuleStateInCommit};

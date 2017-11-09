@@ -822,7 +822,7 @@ describe('users tests', () => {
 					done();
 				});
 		});
-
+/*
 		it('POST action', (done) => {
 			chai.request(server)
 				.post(url + '/1/transactions' + suffix)
@@ -839,5 +839,6 @@ describe('users tests', () => {
 					done();
 				});
 		});
+*/
 	});
 });

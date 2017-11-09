@@ -9,6 +9,12 @@ function getAll() {
 
 	return Rules().select();
 }
+function getAllActive() {
+
+	return Rules()
+		.select('blob')
+		.where('active', true);
+}
 
 function get(id) {
 
@@ -73,7 +79,7 @@ function del(id) {
 		.update({active: false});
 }
 
-module.exports = {getAll, get,
+module.exports = {getAll, getAllActive, get,
 				getGroup, getForRun,
 				add, update, del};
 
