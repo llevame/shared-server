@@ -28,6 +28,19 @@ function get(id) {
 			'data');
 }
 
+function getLast(userId) {
+
+	return Transacions()
+		.max('timestamp')
+		.where('user_id', userId);
+}
+
+function getByTimestamp(ts) {
+
+	return Transacions()
+		.where('timestamp', ts);
+}
+
 function addTransactionTrip(userId, tripId, cost, trip) {
 
 	let taux = {
@@ -42,14 +55,6 @@ function addTransactionTrip(userId, tripId, cost, trip) {
 		.insert(taux, 'id');
 }
 
-function add(userId) {
-
-	let taux = {
-		user_id: parseInt(userId)
-	};
-
-	return Transacions()
-		.insert(taux, 'id');
-}
-
-module.exports = {add, addTransactionTrip, get, getAllOfUser};
+module.exports = {addTransactionTrip, get,
+				getLast, getByTimestamp,
+				getAllOfUser};

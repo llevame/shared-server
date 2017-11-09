@@ -49,10 +49,10 @@ function add(t, cst, curr) {
 		.insert(taux, 'id');
 }
 
-function getAllByUser(username) {
+function getAllByUser(userId) {
 
 	return Trips()
-		.where('passenger', username)
+		.where('passenger', userId)
 		.select('id',
 			'applicationOwner',
 			'driver',

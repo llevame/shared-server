@@ -29,6 +29,7 @@ function postTrip(req, res) {
 	    "distance": req.body.trip.distance,
 	    "route": req.body.trip.route,
 	    "paymethod": req.body.paymethod,
+	    "cost": 50
 	};
 
 	// run all active rules with trip information
@@ -91,10 +92,17 @@ function estimateTrip(req, res) {
 
 function getTrip(req, res) {
 
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/trips/' + req.params.tripId
-	});
+	tripsQ.get(req.params.tripId)
+		.then((t) => {
+			if (!t) {
+				return res.status(404).json(error.noResource());
+			}
+			let r = builder.createResponse(t, t.cost.currency, t.cost.value);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 module.exports = {postTrip, estimateTrip, getTrip};
