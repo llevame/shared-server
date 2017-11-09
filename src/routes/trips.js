@@ -17,7 +17,8 @@ router.use((req, res, next) => {
 router.post('/', trip.postTrip);
 
 // POST /estimate
-router.post('/estimate', tokenVerifier.verifyToken, trip.estimateTrip);
+//router.post('/estimate', tokenVerifier.verifyToken, trip.estimateTrip);
+router.post('/estimate', trip.estimateTrip);
 
 // GET /{tripId}
 router.post('/:tripId', tokenVerifier.verifyToken, trip.getTrip);

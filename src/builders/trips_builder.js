@@ -27,4 +27,17 @@ function createResponse(t, currency, costValue) {
 	};
 }
 
-module.exports = {createResponse, createGetAllResponse};
+function createEstimateResponse(currency, costValue) {
+	
+	return {
+		metadata: {
+			version: v
+		},
+		cost: {
+			currency: currency,
+			value: costValue
+		}
+	};
+}
+
+module.exports = {createResponse, createGetAllResponse, createEstimateResponse};

@@ -1,5 +1,6 @@
 var error = require('../handlers/error-handler');
 var log = require('log4js').getLogger("error");
+var geo = require('geolib');
 var rulesQ = require('../../db/queries-wrapper/rules_queries');
 var transactionQ = require('../../db/queries-wrapper/transaction_queries');
 var tripsQ = require('../../db/queries-wrapper/trips_queries');
@@ -10,6 +11,19 @@ var paymethods = require('./paymethods');
 function checkParameters(body) {
 	
 	return (body.trip && body.paymethod);
+}
+
+function checkEstimateParameters(body) {
+
+	return (body && body.passenger &&
+			body.start && body.end &&
+			body.start.timestamp && 
+			body.start.address &&
+			body.start.address.street &&
+			body.start.address.location &&
+			body.end.address &&
+			body.end.address.street &&
+			body.end.address.location);
 }
 
 function postTrip(req, res) {
@@ -92,10 +106,43 @@ function postTrip(req, res) {
 
 function estimateTrip(req, res) {
 
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/trips/estimate'
-	});
+	if (!checkEstimateParameters(req.body)) {
+		return res.status(400).json(error.missingParameters());
+	}
+
+	let startLocation = [req.body.start.address.location.lon, req.body.start.address.location.lat];
+	let endLocation = [req.body.end.address.location.lon, req.body.end.address.location.lat];
+
+	let distance = geo.getDistance(startLocation, endLocation);
+
+	var fact = {
+		"passenger": req.body.passenger,
+		"start": req.body.start,
+		"end": req.body.end,
+		"distance": distance
+	};
+
+	// run all active rules with trip information
+	// as the fact
+	rulesQ.getAllActive()
+		.then((rules) => {
+			rulesModel.runTripRules(req, res, rules, fact)
+				.then((result) => {
+
+					let currency = 'ARS'; // currency ISO 4217 standar 
+					let cost = result.cost;
+
+					res.status(200).json(builder.createEstimateResponse(currency, cost));
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
 }
 
 function getTrip(req, res) {
