@@ -839,6 +839,6 @@ describe('users tests', () => {
 					done();
 				});
 		});
-	});
 */
+	});
 });
