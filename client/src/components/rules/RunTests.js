@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
-import serialize from 'serialize-javascript';
+import Serial from '../../utils/Serial';
 import Menu from '../Menu';
 
 class RunTestRules extends Component {
@@ -13,8 +12,8 @@ class RunTestRules extends Component {
 		this.state = {
 			facts: "",
 			rules: "",
-			result: {},
-			hide: true,
+			result: "",
+			show: false
 		};
 		this.config = {
 			mode: 'javascript',
@@ -42,10 +41,9 @@ class RunTestRules extends Component {
 	}
 
 	onRunRules(e) {
-		e.preventDefault(); // eslint-disable-next-line
-		var deserialize = str => eval(`(${str})`);
+		e.preventDefault();
 		let facts = JSON.parse(this.state.facts);
-		let rules = deserialize(this.state.rules);
+		let rules = Serial.deserialize(this.state.rules);
 		facts = facts.map((fact) => {
 			return {
 				language: 'node-rules/javascript',
@@ -55,7 +53,7 @@ class RunTestRules extends Component {
 		rules = rules.map((rule) => {
 			return {
 				language: 'node-rules/javascript',
-				blob: serialize(rule)
+				blob: Serial.serialize(rule)
 			};
 		});
 		fetch('/api/rules/test', {
@@ -73,22 +71,38 @@ class RunTestRules extends Component {
 			if (json.code) {
 				this.setState({
 					...this.state,
-					result: {},
-					hide: true
+					result: "",
+					show: false
 				});
 				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 			} else {
+				let r = json.facts.map((f) => {
+					return Serial.deserialize(f.blob);
+				});
 				this.setState({
 					...this.state,
-					result: json.facts,
-					hide: false
+					result: JSON.stringify(r, null, 2),
+					show: true
 				});
 			}
 		});
 	}
 
+	renderResult() {
+		const {result, show} = this.state;
+
+		if (show) {
+			return (
+				<div>
+					<h4>Results:</h4>
+					<CodeMirror value={result} options={{...this.config, readOnly: true}}/>
+				</div>
+			);
+		}
+	}
+
 	render() {
-		let r = "Ej: run this rules\n" + serialize([{
+		let r = "Ej: run this rules\n" + Serial.serialize([{
 			condition: function (R) {
 				R.when(this && (this.transactionTotal < 500));
 			},
@@ -113,8 +127,8 @@ class RunTestRules extends Component {
 					<CodeMirror value={r} options={this.config} onChange={this.setRules}/>
 					<h4>Facts:</h4>
 					<CodeMirror value={f} options={this.config} onChange={this.setFacts}/>
+					{this.renderResult()}
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>
 		);
 	}

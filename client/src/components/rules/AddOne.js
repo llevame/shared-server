@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
-import serialize from 'serialize-javascript';
+import Serial from '../../utils/Serial';
 import Menu from '../Menu';
 
 class AddRule extends Component {
@@ -54,7 +54,7 @@ class AddRule extends Component {
 	}
 
 	render() {
-		let r = "Ej: add this rule\n" + serialize({
+		let r = "Ej: add this rule\n" + Serial.serialize({
 			condition: function (R) {
 				R.when(this && (this.transactionTotal < 500));
 			},

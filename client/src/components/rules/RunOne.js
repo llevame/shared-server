@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
+import Serial from '../../utils/Serial';
 import Menu from '../Menu';
 
 class RunOneRule extends Component {
@@ -11,8 +11,7 @@ class RunOneRule extends Component {
 		super(props);
 		this.state = {
 			facts: "",
-			result: {},
-			hide: true,
+			result: "",
 		};
 		this.config = {
 			mode: 'javascript',
@@ -52,18 +51,37 @@ class RunOneRule extends Component {
 			if (json.code) {
 				this.setState({
 					...this.state,
-					result: {},
-					hide: true
+					result: "",
+					show: false
 				});
 				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 			} else {
+				let r = json.facts.map((f) => {
+					return Serial.deserialize(f.blob);
+				});
 				this.setState({
 					...this.state,
-					result: json.facts,
-					hide: false
+					result: JSON.stringify(r, null, 2),
 				});
 			}
-		});
+		})
+		.then(() => this.setState({
+			...this.state,
+			show: true
+		}));
+	}
+
+	renderResult() {
+		const {result, show} = this.state;
+
+		if (show) {
+			return (
+				<div>
+					<h4>Results:</h4>
+					<CodeMirror value={result} options={this.config}/>
+				</div>
+			);
+		}
 	}
 
 	render() {
@@ -84,8 +102,8 @@ class RunOneRule extends Component {
 					<input type="submit" value="Run" />
 					<h4>Facts:</h4>
 					<CodeMirror value={f} options={this.config} onChange={this.setFacts}/>
+					{this.renderResult()}
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>
 		);
 	}
