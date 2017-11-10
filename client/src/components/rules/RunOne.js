@@ -32,43 +32,48 @@ class RunOneRule extends Component {
 
 	onRunRule(e) {
 		e.preventDefault();
-		let facts = JSON.parse(this.state.facts);
-		facts = facts.map((fact) => {
-			return {
-				language: 'node-rules/javascript',
-				blob: JSON.stringify(fact)
-			};
-		});
-		fetch('/api/rules/' + e.target.id.value + '/run?token=' + e.target.token.value, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(facts)
-		})
-		.then((res) => res.json())
-		.then((json) => {
-			if (json.code) {
-				this.setState({
-					...this.state,
-					result: "",
-					show: false
-				});
-				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-			} else {
-				let r = json.facts.map((f) => {
-					return Serial.deserialize(f.blob);
-				});
-				this.setState({
-					...this.state,
-					result: JSON.stringify(r, null, 2),
-				});
-			}
-		})
-		.then(() => this.setState({
-			...this.state,
-			show: true
-		}));
+		let token = sessionStorage.getItem('token');
+		if (token == null) {
+			alert('You must be logged in');
+		} else {
+			let facts = JSON.parse(this.state.facts);
+			facts = facts.map((fact) => {
+				return {
+					language: 'node-rules/javascript',
+					blob: JSON.stringify(fact)
+				};
+			});
+			fetch('/api/rules/' + e.target.id.value + '/run?token=' + token, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(facts)
+			})
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.code) {
+					this.setState({
+						...this.state,
+						result: "",
+						show: false
+					});
+					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+				} else {
+					let r = json.facts.map((f) => {
+						return Serial.deserialize(f.blob);
+					});
+					this.setState({
+						...this.state,
+						result: JSON.stringify(r, null, 2),
+					});
+				}
+			})
+			.then(() => this.setState({
+				...this.state,
+				show: true
+			}));
+		}
 	}
 
 	renderResult() {
@@ -96,8 +101,6 @@ class RunOneRule extends Component {
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onRunRule}>
-					<input type="text" placeholder="Token" name="token" />
-					<br /><br />
 					<input type="text" placeholder="Rule Id" name="id" />
 					<input type="submit" value="Run" />
 					<h4>Facts:</h4>

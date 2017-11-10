@@ -36,21 +36,26 @@ class AddRule extends Component {
 			blob: this.state.rule,
 			active: true
 		};
-		fetch('/api/rules?token=' + e.target.token.value, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(credentials)
-		})
-		.then((res) => res.json())
-		.then((json) => {
-			if (json.code) {
-				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-			} else {
-				alert(`Rule has been added with id: ${json.rule.id}`);
-			}
-		});
+		let token = sessionStorage.getItem('token');
+		if (token == null) {
+			alert('You must be logged in');
+		} else {
+			fetch('/api/rules?token=' + token, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(credentials)
+			})
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.code) {
+					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+				} else {
+					alert(`Rule has been added with id: ${json.rule.id}`);
+				}
+			});
+		}
 	}
 
 	render() {
@@ -67,8 +72,6 @@ class AddRule extends Component {
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onAddRule}>
-					<input type="text" placeholder="Token" name="token" />
-					<br /><br />
 					<input type="submit" value="Add" />
 					<h4>Rule:</h4>
 					<CodeMirror value={r} options={this.config} onChange={this.setRule}/>

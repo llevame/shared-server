@@ -31,30 +31,35 @@ class AddBusinessUser extends Component {
 			surname: e.target.surname.value,
 			roles: [this.state.selectValue]
 		};
-		fetch('/api/business-users?token=' + e.target.token.value, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(credentials)
-		})
-		.then((res) => res.json())
-		.then((json) => {
-			if (json.code) {
-				this.setState({
-					...this.state,
-					result: {},
-					hide: true
-				});
-				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-			} else {
-				this.setState({
-					...this.state,
-					result: json.businessUser,
-					hide: false
-				});
-			}
-		});
+		let token = sessionStorage.getItem('token');
+		if (token == null) {
+			alert('You must be logged in');
+		} else {
+			fetch('/api/business-users?token=' + token, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(credentials)
+			})
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.code) {
+					this.setState({
+						...this.state,
+						result: {},
+						hide: true
+					});
+					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+				} else {
+					this.setState({
+						...this.state,
+						result: json.businessUser,
+						hide: false
+					});
+				}
+			});
+		}
 	}
 
 	render() {
@@ -62,8 +67,6 @@ class AddBusinessUser extends Component {
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onAddUser}>
-					<input type="text" placeholder="Token" name="token" />
-					<br /><br />
 					<input type="text" placeholder="Username" name="username" />
 					<br />
 					<input type="password" placeholder="Password" name="password" />

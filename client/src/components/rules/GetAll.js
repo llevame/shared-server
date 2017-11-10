@@ -10,42 +10,46 @@ class GetRules extends Component {
 			result: [],
 			hide: true,
 		};
-		this.onEnterToken = this.onEnterToken.bind(this);
+		this.onGetAll = this.onGetAll.bind(this);
 	}
 
-	onEnterToken(e) {
+	onGetAll(e) {
 		e.preventDefault();
-		fetch('/api/rules?token=' + e.target.token.value, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-		.then((res) => res.json())
-		.then((json) => {
-			if (json.code) {
-				this.setState({
-					...this.state,
-					result: {},
-					hide: true
-				});
-				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-			} else {
-				this.setState({
-					...this.state,
-					result: json.rules,
-					hide: false
-				});
-			}
-		});
+		let token = sessionStorage.getItem('token');
+		if (token == null) {
+			alert('You must be logged in');
+		} else {
+			fetch('/api/rules?token=' + token, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.code) {
+					this.setState({
+						...this.state,
+						result: {},
+						hide: true
+					});
+					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+				} else {
+					this.setState({
+						...this.state,
+						result: json.rules,
+						hide: false
+					});
+				}
+			});
+		}
 	}
 
 	render() {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onEnterToken}>
-					<input type="text" placeholder="Token" name="token" />
+				<form className="Form" onSubmit={this.onGetAll}>
 					<input type="submit" value="Get rules" />
 				</form>
 				<JSONTree hideRoot={this.state.hide} data={this.state.result} />

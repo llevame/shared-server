@@ -22,30 +22,35 @@ class AddServer extends Component {
 			createdBy: e.target.createdBy.value,
 			createdTime: moment().unix()
 		};
-		fetch('/api/servers?token=' + e.target.token.value, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(credentials)
-		})
-		.then((res) => res.json())
-		.then((json) => {
-			if (json.code) {
-				this.setState({
-					...this.state,
-					result: {},
-					hide: true
-				});
-				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-			} else {
-				this.setState({
-					...this.state,
-					result: json.server,
-					hide: false
-				});
-			}
-		});
+		let token = sessionStorage.getItem('token');
+		if (token == null) {
+			alert('You must be logged in');
+		} else {
+			fetch('/api/servers?token=' + token, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(credentials)
+			})
+			.then((res) => res.json())
+			.then((json) => {
+				if (json.code) {
+					this.setState({
+						...this.state,
+						result: {},
+						hide: true
+					});
+					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
+				} else {
+					this.setState({
+						...this.state,
+						result: json.server,
+						hide: false
+					});
+				}
+			});
+		}
 	}
 
 	render() {
@@ -53,8 +58,6 @@ class AddServer extends Component {
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onAddServer}>
-					<input type="text" placeholder="Token" name="token" />
-					<br /><br />
 					<input type="text" placeholder="Name" name="name" />
 					<br />
 					<input type="text" placeholder="Creator" name="createdBy" />

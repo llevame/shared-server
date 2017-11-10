@@ -5,9 +5,7 @@ class LogIn extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			result: 'Your new token is: '
-		};
+		this.state = {};
 	}
 
 	onLogIn(e) {
@@ -26,16 +24,10 @@ class LogIn extends Component {
 		.then((res) => res.json())
 		.then((json) => {
 			if (json.code) {
-				this.setState({
-					...this.state,
-					result: 'Your new token is: ',
-				});
 				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 			} else {
-				this.setState({
-					...this.state,
-					result: 'Your new token is: ' + json.token.token,
-				});
+				sessionStorage.setItem('token', json.token.token.toString());
+				alert('You are now logged in!');
 			}
 		})
 		.catch((err) => console.log(err));
@@ -50,7 +42,6 @@ class LogIn extends Component {
 					<input type="password" placeholder="Password" name="password" />
 					<input type="submit" value="Log In" />
 				</form>
-				<h4 className="TokenResult">{this.state.result}</h4>
 			</div>
 		);
 	}
