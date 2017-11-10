@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -12,8 +11,6 @@ class AddRule extends Component {
 		super(props);
 		this.state = {
 			rule: "",
-			result: {},
-			hide: true,
 		};
 		this.config = {
 			mode: 'javascript',
@@ -33,6 +30,7 @@ class AddRule extends Component {
 	}
 
 	onAddRule(e) {
+		e.preventDefault();
 		let credentials = {
 			language: 'node-rules/javascript',
 			blob: this.state.rule,
@@ -48,18 +46,9 @@ class AddRule extends Component {
 		.then((res) => res.json())
 		.then((json) => {
 			if (json.code) {
-				this.setState({
-					...this.state,
-					result: {},
-					hide: true
-				});
 				alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 			} else {
-				this.setState({
-					...this.state,
-					result: json.rule,
-					hide: false
-				});
+				alert(`Rule has been added with id: ${json.rule.id}`);
 			}
 		});
 	}
@@ -84,7 +73,6 @@ class AddRule extends Component {
 					<h4>Rule:</h4>
 					<CodeMirror value={r} options={this.config} onChange={this.setRule}/>
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
 			</div>
 		);
 	}
