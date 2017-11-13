@@ -12,6 +12,21 @@ var token = tokenGenerator.createAppToken({id: 1});
 var suffix = '?token=' + token;
 
 describe('trips tests', () => {
+
+	describe('/trips/{tripId}', () => {
+		
+		it('GET action', (done) => {
+			chai.request(server)
+				.post('/api/trips/1' + suffix)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('type').eql('GET');
+					res.body.should.have.property('url').eql('/api/trips/1');
+					done();
+				});
+		});
+	});
 /*
 	describe('/trips', () => {
 		
@@ -36,21 +51,6 @@ describe('trips tests', () => {
 					res.body.should.be.a('object');
 					res.body.should.have.property('type').eql('GET');
 					res.body.should.have.property('url').eql('/api/trips/estimate');
-					done();
-				});
-		});
-	});
-
-	describe('/trips/{tripId}', () => {
-		
-		it('GET action', (done) => {
-			chai.request(server)
-				.post('/api/trips/1' + suffix)
-				.end((err, res) => {
-					res.should.have.status(200);
-					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/trips/1');
 					done();
 				});
 		});
