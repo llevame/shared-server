@@ -1,6 +1,7 @@
 var error = require('../handlers/error-handler');
 var log = require('log4js').getLogger("error");
 var geo = require('geolib');
+var moment = require('moment');
 var rulesQ = require('../../db/queries-wrapper/rules_queries');
 var transactionQ = require('../../db/queries-wrapper/transaction_queries');
 var tripsQ = require('../../db/queries-wrapper/trips_queries');
@@ -35,12 +36,18 @@ function postTrip(req, res) {
 	var fact = {
 		"driver": req.body.trip.driver,
 		"passenger": req.body.trip.passenger,
-		"start": req.body.trip.start,
-		"end": req.body.trip.end,
-		"totaltime": req.body.trip.totaltime,
-		"waitTime": req.body.trip.waitTime,
-		"travelTime": req.body.trip.travelTime,
-		"distance": req.body.trip.distance
+		"distance": req.body.trip.distance,
+		"isFirstTrip": false,
+		"hasLlevameDomain": false,
+		"tripsInTheDayPassenger": 12,
+		"tripsInTheLastHalfHourPassenger": 11,
+		"tripsInTheDayDriver": 12,
+		"startDay": moment(req.body.trip.start.timestamp*1000).format('dddd'),
+		"startTime": parseInt(moment(req.body.trip.start.timestamp*1000).format('H')),
+		"endDay": moment(req.body.trip.end.timestamp*1000).format('dddd'),
+		"endTime": parseInt(moment(req.body.trip.end.timestamp*1000).format('H')),
+		"cp": [],
+		"pp": []
 	};
 
 	// run all active rules with trip information
@@ -50,9 +57,16 @@ function postTrip(req, res) {
 			rulesModel.runTripRules(req, res, rules, fact)
 				.then((result) => {
 
-					let currency = 'ARS'; // currency ISO 4217 standar 
-					let cost = result.cost;
-					let pay = result.pay;
+					let currency = 'ARS'; // currency ISO 4217 standar
+					let sumPassenger = result.cp.reduce((total, num) => {
+						return total + num;
+					});
+					let sumDriver = result.pp.reduce((total, num) => {
+						return total + num;
+					});
+
+					let cost = result.cost + sumPassenger;
+					let pay = result.pay + sumDriver;
 
 					tripsQ.add(req.body, cost, currency)
 						.then((tripId) => {
