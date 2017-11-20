@@ -51,7 +51,7 @@ function runTripRules(req, res, rules, fact) {
 
 	} catch (e) {
 
-		log.error("Error1: " + e.toString() + " on: " + req.originalUrl);
+		log.error("Error: " + e.toString() + " on: " + req.originalUrl);
 		res.status(500).json({
 			code: 500,
 			message: e.toString()

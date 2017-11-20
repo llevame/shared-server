@@ -16,7 +16,7 @@ describe('paymethods tests', () => {
 	describe('/paymethods', () => {
 	
 		it('GET action', function(done) {
-			this.timeout(5000);
+			this.timeout(6000);
 			chai.request(server)
 				.get('/api/paymethods' + suffix)
 				.end((err, res) => {

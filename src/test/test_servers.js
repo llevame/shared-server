@@ -16,7 +16,8 @@ describe('servers tests', () => {
 
 	describe('/servers', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -301,7 +302,8 @@ describe('servers tests', () => {
 
 	describe('/servers/ping', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())

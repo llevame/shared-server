@@ -41,7 +41,10 @@ app.use('/', routes);
 
 app.listen(app.get('port'));
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' &&
+	process.env.NODE_ENV !== 'test_rules' &&
+	process.env.NODE_ENV !== 'test_transactions') {
+	
 	log.info('App listening on port %s: ', app.get('port'));
 }
 

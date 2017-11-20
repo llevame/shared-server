@@ -12,11 +12,15 @@ var tokenGenerator = require('../libs/service');
 var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
 var suffix = '?token=' + token;
 
+var userRoleToken = tokenGenerator.createBusinessToken({id:1, roles: ["user"]});
+var userRoleSuffix = '?token=' + userRoleToken;
+
 describe('business-users tests', () => {
 
 	describe('/business-users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -215,6 +219,17 @@ describe('business-users tests', () => {
 				});
 		});
 
+		it('DELETE action with unauthorized role', (done) => {
+			chai.request(server)
+				.delete('/api/business-users/6' + userRoleSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});
+		});
+
 		it('PUT action with good parameters', (done) => {
 			chai.request(server)
 				.get('/api/business-users/1' + suffix)
@@ -355,7 +370,8 @@ describe('business-users tests', () => {
 
 	describe('/business-users/me', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -366,7 +382,7 @@ describe('business-users tests', () => {
 			knex.migrate.rollback()
 			.then(() => done());
 		});
-
+		
 		it('GET action', (done) => {
 			chai.request(server)
 				.get('/api/business-users/me?token=' + token)

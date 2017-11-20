@@ -5,10 +5,10 @@ var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
-var url = '/api/users';
 
 chai.use(chaiHttp);
 
+var url = '/api/users';
 var tokenGenerator = require('../libs/service');
 var token = tokenGenerator.createAppToken({id: 1});
 var suffix = '?token=' + token;
@@ -17,7 +17,8 @@ describe('users tests', () => {
 
 	describe('/users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -163,7 +164,8 @@ describe('users tests', () => {
 
 	describe('/users/validate', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -267,7 +269,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -505,7 +508,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/trips', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -533,7 +537,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -621,7 +626,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars/{carId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -794,51 +800,5 @@ describe('users tests', () => {
 					done();
 				});
 		});
-	});
-
-	describe('/users/{userId}/transactions', () => {
-		
-		beforeEach(done => {
-			knex.migrate.rollback()
-			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
-			.then(() => done());
-		});
-
-		afterEach((done) => {
-			knex.migrate.rollback()
-			.then(() => done());
-		});
-
-		it('GET action', (done) => {
-			chai.request(server)
-				.get(url + '/1/transactions' + suffix)
-				.end((err, res) => {
-					res.should.have.status(200);
-					res.body.should.be.a('object');
-					res.body.should.have.property('metadata');
-					res.body.should.have.property('transactions');
-					res.body.transactions.should.be.a('array');
-					done();
-				});
-		});
-/*
-		it('POST action', (done) => {
-			chai.request(server)
-				.post(url + '/1/transactions' + suffix)
-				.end((err, res) => {
-					res.should.have.status(200);
-					res.body.should.have.property('metadata');
-					res.body.should.have.property('transaction');
-					res.body.transaction.should.have.property('id');
-					res.body.transaction.should.have.property('trip');
-					res.body.transaction.should.have.property('timestamp');
-					res.body.transaction.should.have.property('cost');
-					res.body.transaction.should.have.property('description');
-					res.body.transaction.should.have.property('data');
-					done();
-				});
-		});
-*/
 	});
 });

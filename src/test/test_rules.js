@@ -1,10 +1,11 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test_rules';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
-var knex = require('../../db/knex');
+var config = require('../../knexfile.js')[process.env.NODE_ENV];
+var knex = require('knex')(config);
 
 chai.use(chaiHttp);
 
@@ -17,10 +18,10 @@ describe('rules tests', () => {
 	describe('/rules', () => {
 
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -159,7 +160,7 @@ describe('rules tests', () => {
 			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -192,7 +193,7 @@ describe('rules tests', () => {
 
 		it('GET action on no resource', (done) => {
 			chai.request(server)
-				.get('/api/rules/3' + suffix)
+				.get('/api/rules/12' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -312,7 +313,7 @@ describe('rules tests', () => {
 				active: true
 			};
 			chai.request(server)
-				.put('/api/rules/3' + suffix)
+				.put('/api/rules/12' + suffix)
 				.send(r)
 				.end((err, res) => {
 					res.should.have.status(404);
@@ -353,7 +354,7 @@ describe('rules tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete('/api/rules/3' + suffix)
+				.delete('/api/rules/12' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -370,7 +371,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -452,7 +453,7 @@ describe('rules tests', () => {
 				}
 			];
 			chai.request(server)
-				.post('/api/rules/3/run' + suffix)
+				.post('/api/rules/12/run' + suffix)
 				.send(f)
 				.end((err, res) => {
 					res.should.have.status(404);
@@ -497,7 +498,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -770,7 +771,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -806,7 +807,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
