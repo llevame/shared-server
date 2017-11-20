@@ -28,33 +28,18 @@ function get(id) {
 			'data');
 }
 
-function getLast(userId) {
-
-	return Transacions()
-		.max('timestamp')
-		.where('user_id', userId);
-}
-
-function getByTimestamp(ts) {
-
-	return Transacions()
-		.where('timestamp', ts);
-}
-
-function addTransactionTrip(userId, tripId, cost, trip) {
+function addTransactionTrip(userId, tripId, cost, trip, desc) {
 
 	let taux = {
 		user_id: parseInt(userId),
 		trip: tripId,
 		cost: cost,
 		timestamp: knex.fn.now(),
-		description: tripId,
+		description: desc,
 	};
 
 	return Transacions()
 		.insert(taux, 'id');
 }
 
-module.exports = {addTransactionTrip, get,
-				getLast, getByTimestamp,
-				getAllOfUser};
+module.exports = {addTransactionTrip, get, getAllOfUser};

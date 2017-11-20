@@ -29,37 +29,35 @@ function getTransactions(req, res) {
 // post a new transaction into a specific user
 function postTransaction(req, res) {
 
-	transactionQ.getLast(req.params.userId)
-		.then((timestamp) => {
-			transactionQ.getByTimestamp(timestamp)
-				.then((trans) => {
-					transactionQ.addTransactionTrip(req.params.userId, trans.trip, trans.cost * (-1), trans.data)
-						.then((transId) => {
-							return transactionQ.get(transId);
-						})
-						.then((t) => {
-							let r = {
-								metadata: {
-									version: v
-								},
-								transaction: {
-									id: t.id,
-									trip: t.trip,
-									timestamp: t.timestamp,
-									cost: {
-										currency: "ARS",
-										value: t.cost
-									},
-									description: t.description,
-									data: t.data
-								}
-							};
-							res.status(200).json(r);
-						})
-						.catch((err) => {
-							log.error("Error: " + err.message + " on: " + req.originalUrl);
-							res.status(500).json(error.unexpected(err));
-						});
+	transactionQ.getAllOfUser(req.params.userId)
+		.then((transactions) => {
+			
+			let trans = transactions.sort((a, b) => {
+				return (b.id - a.id);
+			})[0];
+
+			transactionQ.addTransactionTrip(req.params.userId, trans.trip, trans.cost.value * (-1), trans.data, 'Passenger transaction')
+				.then((transId) => {
+					return transactionQ.get(transId);
+				})
+				.then((t) => {
+					let r = {
+						metadata: {
+							version: v
+						},
+						transaction: {
+							id: t.id,
+							trip: t.trip,
+							timestamp: t.timestamp,
+							cost: {
+								currency: "ARS",
+								value: t.cost
+							},
+							description: t.description,
+							data: t.data
+						}
+					};
+					res.status(200).json(r);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + " on: " + req.originalUrl);

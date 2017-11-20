@@ -114,11 +114,13 @@ function postTrip(req, res) {
 									r.push(transactionQ.addTransactionTrip(req.body.trip.passenger,
 																			tripId,
 																			cost * (-1),
-																			req.body.trip)); //Negative -> passenger
+																			req.body.trip,
+																			'Passenger transaction')); //Negative -> passenger
 									r.push(transactionQ.addTransactionTrip(req.body.trip.driver,
 																			tripId,
 																			pay,
-																			req.body.trip)); //Positive -> driver
+																			req.body.trip,
+																			'Driver transaction')); //Positive -> driver
 									Promise.all(r)
 										.then((transactionsIds) => {
 											var data = {
@@ -127,7 +129,9 @@ function postTrip(req, res) {
 												paymethod: req.body.paymethod
 											};
 											paymethods.generatePayment(data);
-											transactionQ.addTransactionTrip(req.body.trip.passenger, tripId, cost, req.body.trip)
+											transactionQ.addTransactionTrip(req.body.trip.passenger,
+																			tripId, cost, req.body.trip,
+																			'Passenger transaction')
 												.then((transId) => {
 													req.body.trip.id = tripId;
 													req.body.trip.applicationOwner = req.user.id;
