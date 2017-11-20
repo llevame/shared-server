@@ -1,7 +1,7 @@
 var error = require('../handlers/error-handler');
 var tripsQ = require('../../db/queries-wrapper/trips_queries');
-var usersQ = require('../../db/queries-wrapper/users_queries')
-var v = require('../../package.json').version;
+var usersQ = require('../../db/queries-wrapper/users_queries');
+var builder = require('../builders/trips_builder');
 var log = require('log4js').getLogger("error");
 
 // returns all the trips made by a specific user
@@ -16,15 +16,8 @@ function getTrips(req, res) {
 
 			tripsQ.getAllByUser(req.params.userId, user.type)
 				.then((userTrips) => {
-					let trps = {
-						metadata: {
-							count: userTrips.length,
-							total: userTrips.length,
-							version: v
-						},
-						trips: userTrips
-					};
-					res.status(200).json(trps);
+					let r = builder.createGetAllResponse(userTrips);
+					res.status(200).json(r);
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + " on: " + req.originalUrl);

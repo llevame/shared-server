@@ -16,7 +16,8 @@ describe('business-users tests', () => {
 
 	describe('/business-users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -355,7 +356,8 @@ describe('business-users tests', () => {
 
 	describe('/business-users/me', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -366,7 +368,7 @@ describe('business-users tests', () => {
 			knex.migrate.rollback()
 			.then(() => done());
 		});
-
+		
 		it('GET action', (done) => {
 			chai.request(server)
 				.get('/api/business-users/me?token=' + token)

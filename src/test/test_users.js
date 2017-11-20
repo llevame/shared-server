@@ -5,10 +5,10 @@ var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
-var url = '/api/users';
 
 chai.use(chaiHttp);
 
+var url = '/api/users';
 var tokenGenerator = require('../libs/service');
 var token = tokenGenerator.createAppToken({id: 1});
 var suffix = '?token=' + token;
@@ -17,7 +17,8 @@ describe('users tests', () => {
 
 	describe('/users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -163,7 +164,8 @@ describe('users tests', () => {
 
 	describe('/users/validate', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -267,7 +269,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -505,7 +508,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/trips', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -533,7 +537,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -621,7 +626,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars/{carId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())

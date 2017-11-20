@@ -4,8 +4,8 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
-var knex = require('../../db/knex');
 var config = require('../../knexfile.js')[process.env.NODE_ENV];
+var knex = require('knex')(config);
 
 chai.use(chaiHttp);
 
