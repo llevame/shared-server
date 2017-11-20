@@ -19,6 +19,8 @@ function createResponse(t, currency, costValue) {
 		value: costValue
 	};
 
+	t.totalTime = t.waitTime + t.travelTime;
+
 	return {
 		metadata: {
 			version: v
