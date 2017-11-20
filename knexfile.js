@@ -9,6 +9,16 @@ module.exports = {
       directory: __dirname + '/db/seeds/test'
     }
   },
+  test_rules: {
+    client: 'pg',
+    connection: 'postgres://postgres:postgres@localhost:5432/llevame-server-test',
+    migrations: {
+      directory: __dirname + '/db/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/db/seeds/test-rules'
+    }
+  },
   development: {
     client: 'pg',
     connection: 'postgres://postgres:postgres@localhost:5432/llevame-server',

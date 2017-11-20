@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test_rules';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -17,7 +17,7 @@ describe('rules tests', () => {
 	describe('/rules', () => {
 
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
