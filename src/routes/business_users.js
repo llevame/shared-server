@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("http");
 var business = require('../models/business');
+var tokenVerifier = require('../middlewares/businessTokenVerifier');
+var roleVerifier = require('../middlewares/roleVerifier');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,18 +13,25 @@ router.use((req, res, next) => {
 	next();
 });
 
-router.get('/me', business.getConnectedBusinessUser);
+// GET /me
+router.get('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
 
-router.put('/me', business.updateConnectedBusinessUser);
+// PUT /me
+router.put('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
 
-router.get('/', business.getBusinessUsers);
+// GET /
+router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.getBusinessUsers);
 
-router.post('/', business.postBusinessUser);
+// POST /
+router.post('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.postBusinessUser);
 
-router.get('/:userId', business.getBusinessUser);
+// GET /:userId
+router.get('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getBusinessUser);
 
-router.put('/:userId', business.updateBusinessUser);
+// PUT /:userId
+router.put('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.updateBusinessUser);
 
-router.delete('/:userId', business.deleteBusinessUser);
+// DELETE /:userId
+router.delete('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.deleteBusinessUser);
 
 module.exports = router;

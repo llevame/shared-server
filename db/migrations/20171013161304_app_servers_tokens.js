@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 
-	return knex.schema.createTable('app_servers_tokens', (table) => {
+	return knex.schema.createTableIfNotExists('app_servers_tokens', (table) => {
 		table.integer('server_id');
 		table.string('token');
 	})

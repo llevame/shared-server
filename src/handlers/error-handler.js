@@ -72,8 +72,25 @@ function noCar() {
 	};
 }
 
+function inactiveRule() {
+	
+	return {
+		code: 500,
+		message: 'Alguna regla está inactiva'
+	};
+}
+
+function incorrectRuleLanguage() {
+	
+	return {
+		code: 500,
+		message: 'Lenguaje de reglas incorrecto'
+	};
+}
+
 module.exports = {unexpected, unathoAccess,
 				updateConflict, noResource,
 				idFieldModification, missingParameters,
 				faillingValidation, noCar,
-				invalidToken};
+				invalidToken, inactiveRule,
+				incorrectRuleLanguage};

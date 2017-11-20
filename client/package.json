@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "moment": "^2.19.1",
     "react": "^15.6.1",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^15.6.1",
+    "react-json-tree": "^0.10.9",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.12",
-    "react-json-tree": "^0.10.9" 
+    "serialize-javascript": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -21,30 +21,51 @@ function getTransactions(req, res) {
 			res.status(200).json(ts);
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }
+
 // post a new transaction into a specific user
 function postTransaction(req, res) {
 
-	transactionQ.add(req.params.userId)
-		.then((transId) => {
-			return transactionQ.get(transId);
-		})
-		.then((trans) => {
+	transactionQ.getAllOfUser(req.params.userId)
+		.then((transactions) => {
 			
-			let t = {
-				metadata: {
-					version: v
-				},
-				transaction: trans
-			};
+			let trans = transactions.sort((a, b) => {
+				return (b.id - a.id);
+			})[0];
 
-			res.status(200).json(t);
+			transactionQ.addTransactionTrip(req.params.userId, trans.trip, trans.cost.value * (-1), trans.data, 'Passenger transaction')
+				.then((transId) => {
+					return transactionQ.get(transId);
+				})
+				.then((t) => {
+					let r = {
+						metadata: {
+							version: v
+						},
+						transaction: {
+							id: t.id,
+							trip: t.trip,
+							timestamp: t.timestamp,
+							cost: {
+								currency: "ARS",
+								value: t.cost
+							},
+							description: t.description,
+							data: t.data
+						}
+					};
+					res.status(200).json(r);
+				})
+				.catch((err) => {
+					log.error("Error: " + err.message + " on: " + req.originalUrl);
+					res.status(500).json(error.unexpected(err));
+				});
 		})
 		.catch((err) => {
-			log.error("Error: " + err.message + "on: " + req.originalUrl);
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
 			res.status(500).json(error.unexpected(err));
 		});
 }

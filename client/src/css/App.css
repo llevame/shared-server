@@ -1,0 +1,60 @@
+.App {
+  font-family: "Courier New", monospace;
+  width: 100%;
+}
+
+.App-header {
+  text-align: center;
+  background-color: #222;
+  height: 190px;
+  padding: 20px;
+  color: white;
+}
+
+.App-Routes {
+  background-color: #aaa;
+  padding: 20px;
+}
+
+.App-logo {
+  height: 140px;
+}
+
+.List {
+  color: red;
+}
+
+.Form {
+  padding-left: 20px
+}
+
+.TokenResult {
+  color: green;
+  word-wrap: break-word;
+}
+
+.ReactCodeMirror {
+  margin: 15px;
+  text-align: left;
+  border: 5px solid #333;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 42px;
+}
+
+h2 {
+  padding-left: 10px;
+  font-weight: normal;
+}
+
+h3 {
+  padding-left: 20px;
+  font-weight: normal;
+}
+
+h4 {
+  padding-left: 20px;
+  font-weight: normal;
+}

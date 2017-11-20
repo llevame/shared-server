@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("http");
 var rules = require('../models/rules');
+var tokenVerifier = require('../middlewares/businessTokenVerifier');
+var roleVerifier = require('../middlewares/roleVerifier');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,22 +13,34 @@ router.use((req, res, next) => {
 	next();
 });
 
-router.post('/run', rules.run);
+// POST /test
+router.post('/test', rules.test);
 
-router.post('/:ruleId/run', rules.runRule);
+// POST /run
+router.post('/run', tokenVerifier.verifyToken, roleVerifier(['admin']), rules.run);
 
-router.post('/', rules.postRule);
+// POST /:ruleId/run
+router.post('/:ruleId/run', tokenVerifier.verifyToken, roleVerifier(['admin']), rules.runRule);
 
-router.get('/', rules.getRules);
+// POST /
+router.post('/', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), rules.postRule);
 
-router.get('/:ruleId', rules.getRule);
+// GET /
+router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), rules.getRules);
 
-router.put('/:ruleId', rules.updateRule);
+// GET /:ruleId
+router.get('/:ruleId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), rules.getRule);
 
-router.delete('/:ruleId', rules.deleteRule);
+// PUT /:ruleId
+router.put('/:ruleId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), rules.updateRule);
 
-router.get('/:ruleId/commits', rules.getRuleCommits);
+// DELETE /:ruleId
+router.delete('/:ruleId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), rules.deleteRule);
 
-router.get('/:ruleId/commits/:commitId', rules.getRuleStateInCommit);
+// GET /:ruleId/commits
+router.get('/:ruleId/commits', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), rules.getRuleCommits);
+
+// GET /:ruleId/commits/commitId
+router.get('/:ruleId/commits/:commitId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), rules.getRuleStateInCommit);
 
 module.exports = router;

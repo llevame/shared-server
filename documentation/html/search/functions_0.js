@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['add',['add',['../app__token__queries_8js.html#a31bf19fa9aafa3e347928d9684302a5d',1,'add(serverId, tok):&#160;app_token_queries.js'],['../business__queries_8js.html#ad504aacffdba55afa2cf2ccfc6c6fc70',1,'add(bu):&#160;business_queries.js'],['../cars__queries_8js.html#a133d664b4a1aa55b8eb2c5f957db5e1a',1,'add(userId, car):&#160;cars_queries.js'],['../invalid__tokens__queries_8js.html#a6a4de25e43112e01baf9d904f7aa3208',1,'add(tok):&#160;invalid_tokens_queries.js'],['../server__queries_8js.html#a0d4319bab0ff87b40e302cbbbad102f2',1,'add(server):&#160;server_queries.js'],['../transaction__queries_8js.html#a8dbae1c7de16116bf90dfd8efeffb353',1,'add(userId):&#160;transaction_queries.js'],['../trips__queries_8js.html#a879540c45044683b9d063219f82cfff3',1,'add(t):&#160;trips_queries.js'],['../users__queries_8js.html#a8624e21b3abc55bc5167b971994a4718',1,'add(u):&#160;users_queries.js']]],
+  ['apptokens',['AppTokens',['../app__token__queries_8js.html#a66c3a4dbacd0564d2dfc52168e79cd76',1,'app_token_queries.js']]]
+];

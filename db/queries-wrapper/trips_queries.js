@@ -27,16 +27,10 @@ function get(id) {
 		.first();
 }
 
-function add(t) {
+function getAllByUser(userId, type) {
 
 	return Trips()
-		.insert(t, 'id');
-}
-
-function getAllByUser(username) {
-
-	return Trips()
-		.where('passenger', username)
+		.where(type, userId)
 		.select('id',
 			'applicationOwner',
 			'driver',
@@ -50,4 +44,27 @@ function getAllByUser(username) {
 			'cost');
 }
 
-module.exports = {getAll, getAllByUser, add, get};
+function add(t, cst, curr) {
+
+	let taux = {
+		driver: t.trip.driver,
+		passenger: t.trip.passenger,
+		start: t.trip.start,
+		end: t.trip.end,
+		waitTime: t.trip.waitTime,
+		travelTime: t.trip.travelTime,
+		distance: t.trip.distance,
+		route: t.trip.route,
+		cost: {
+			currency: curr,
+			value: cst
+		},
+		paymethod: t.paymethod
+	};
+
+	return Trips()
+		.insert(taux, 'id');
+}
+
+module.exports = {getAll, getAllByUser,
+				add, get};

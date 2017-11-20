@@ -8,11 +8,16 @@ var knex = require('../../db/knex');
 
 chai.use(chaiHttp);
 
+var tokenGenerator = require('../libs/service');
+var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
+var suffix = '?token=' + token;
+
 describe('servers tests', () => {
 
 	describe('/servers', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -31,7 +36,7 @@ describe('servers tests', () => {
 				name: "app_server4"
 			};
 			chai.request(server)
-				.post('/api/servers')
+				.post('/api/servers' + suffix)
 				.send(s)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -63,7 +68,7 @@ describe('servers tests', () => {
 				lastConnection: "0"
 			};
 			chai.request(server)
-				.post('/api/servers')
+				.post('/api/servers' + suffix)
 				.send(s)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -84,7 +89,7 @@ describe('servers tests', () => {
 				lastConnection: "0"
 			};
 			chai.request(server)
-				.post('/api/servers')
+				.post('/api/servers' + suffix)
 				.send(s)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -105,7 +110,7 @@ describe('servers tests', () => {
 				lastConnection: "0"
 			};
 			chai.request(server)
-				.post('/api/servers')
+				.post('/api/servers' + suffix)
 				.send(s)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -118,7 +123,7 @@ describe('servers tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/servers')
+				.get('/api/servers' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -141,7 +146,7 @@ describe('servers tests', () => {
 
 		it('GET action on a single server', (done) => {
 			chai.request(server)
-				.get('/api/servers/1')
+				.get('/api/servers/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -160,7 +165,7 @@ describe('servers tests', () => {
 
 		it('GET action on no resource', (done) => {
 			chai.request(server)
-				.get('/api/servers/6')
+				.get('/api/servers/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -172,7 +177,7 @@ describe('servers tests', () => {
 
 		it('DELETE action on an existing resource', (done) => {
 			chai.request(server)
-				.delete('/api/servers/1')
+				.delete('/api/servers/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(204);
 					done();
@@ -181,7 +186,7 @@ describe('servers tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete('/api/servers/6')
+				.delete('/api/servers/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.have.property('code');
@@ -192,7 +197,7 @@ describe('servers tests', () => {
 
 		it('PUT action with good parameters', (done) => {
 			chai.request(server)
-				.get('/api/servers/1')
+				.get('/api/servers/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -206,7 +211,7 @@ describe('servers tests', () => {
 					res.body.server.should.have.property('name').eql('app_server0');
 					res.body.server.should.have.property('lastConnection');
 					chai.request(server)
-						.put('/api/servers/1')
+						.put('/api/servers/1' + suffix)
 						.send({
 							_ref: res.body.server._ref,
 							name: "app_server0_modificado"
@@ -230,7 +235,7 @@ describe('servers tests', () => {
 
 		it('PUT action with no parameter _ref', (done) => {
 			chai.request(server)
-				.put('/api/servers/1')
+				.put('/api/servers/1' + suffix)
 				.send({
 					name: "app_server0_modificado"
 				})
@@ -244,7 +249,7 @@ describe('servers tests', () => {
 
 		it('PUT action with no parameter name', (done) => {
 			chai.request(server)
-				.put('/api/servers/1')
+				.put('/api/servers/1' + suffix)
 				.send({
 					_ref: "c3r2f43ff3f34f43f3"
 				})
@@ -258,7 +263,7 @@ describe('servers tests', () => {
 
 		it('PUT action with bad _ref parameter', (done) => {
 			chai.request(server)
-				.put('/api/servers/1')
+				.put('/api/servers/1' + suffix)
 				.send({
 					_ref: "scv43t34f43f43f432",
 					name: "app_server0_modificado"
@@ -273,7 +278,7 @@ describe('servers tests', () => {
 
 		it('POST action reseting a server´s token', (done) => {
 			chai.request(server)
-				.post('/api/servers/1')
+				.post('/api/servers/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(201);
 					res.body.should.be.a('object');
@@ -297,7 +302,8 @@ describe('servers tests', () => {
 
 	describe('/servers/ping', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -316,7 +322,7 @@ describe('servers tests', () => {
 				name: "app_server4"
 			};
 			chai.request(server)
-				.post('/api/servers')
+				.post('/api/servers' + suffix)
 				.send(s)
 				.end((err, res) => {
 					res.should.have.status(201);

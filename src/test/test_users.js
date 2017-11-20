@@ -5,15 +5,20 @@ var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
-var url = '/api/users';
 
 chai.use(chaiHttp);
+
+var url = '/api/users';
+var tokenGenerator = require('../libs/service');
+var token = tokenGenerator.createAppToken({id: 1});
+var suffix = '?token=' + token;
 
 describe('users tests', () => {
 
 	describe('/users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -27,7 +32,7 @@ describe('users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get(url)
+				.get(url + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -73,7 +78,7 @@ describe('users tests', () => {
 				images: ["i1", "i2"]
 			};
 			chai.request(server)
-				.post(url)
+				.post(url + suffix)
 				.send(user)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -111,7 +116,7 @@ describe('users tests', () => {
 				images: ["i1", "i2"]
 			};
 			chai.request(server)
-				.post(url)
+				.post(url + suffix)
 				.send(user)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -135,7 +140,7 @@ describe('users tests', () => {
 				images: ["i1", "i2"]
 			};
 			chai.request(server)
-				.post(url)
+				.post(url + suffix)
 				.send(user)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -159,7 +164,8 @@ describe('users tests', () => {
 
 	describe('/users/validate', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -178,7 +184,7 @@ describe('users tests', () => {
 				facebookAuthToken: "mkmcemke4322"
 			};
 			chai.request(server)
-				.post(url + '/validate')
+				.post(url + '/validate' + suffix)
 				.send(credentials)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -205,7 +211,7 @@ describe('users tests', () => {
 				password: "1234fdf"
 			};
 			chai.request(server)
-				.post(url + '/validate')
+				.post(url + '/validate' + suffix)
 				.send(credentials)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -225,11 +231,46 @@ describe('users tests', () => {
 					done(err);
 				});
 		});
+
+		it('POST action on user with bad password', (done) => {
+			let credentials = {
+				username: "edu123",
+				password: "123"
+			};
+			chai.request(server)
+				.post(url + '/validate' + suffix)
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Validación fallida');
+					done();
+				});
+		});
+
+		it('POST action on user with bad fbtoken', (done) => {
+			let credentials = {
+				username: "juan123",
+				facebookAuthToken: "fbtoken"
+			};
+			chai.request(server)
+				.post(url + '/validate' + suffix)
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Validación fallida');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -243,7 +284,7 @@ describe('users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get(url + '/1')
+				.get(url + '/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -265,7 +306,7 @@ describe('users tests', () => {
 
 		it('GET action on no resource', (done) => {
 			chai.request(server)
-				.get(url + '/6')
+				.get(url + '/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -277,7 +318,7 @@ describe('users tests', () => {
 
 		it('PUT action with good parameters', (done) => {
 			chai.request(server)
-				.get(url + '/1')
+				.get(url + '/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -294,7 +335,7 @@ describe('users tests', () => {
 					res.body.user.should.have.property('images').eql(["i1", "i2"]);
 					res.body.user.should.have.property('balance');
 					chai.request(server)
-						.put(url + '/1')
+						.put(url + '/1' + suffix)
 						.send({
 							_ref: res.body.user._ref,
 							type: res.body.user.type,
@@ -333,7 +374,7 @@ describe('users tests', () => {
 
 		it('PUT action with no _ref parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1')
+				.put(url + '/1' + suffix)
 				.send({
 					type: "passenger",
 					username: "user123",
@@ -355,7 +396,7 @@ describe('users tests', () => {
 
 		it('PUT action with no username parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1')
+				.put(url + '/1' + suffix)
 				.send({
 					_ref: "crf43f3f3fdfweaf32",
 					type: "passenger",
@@ -377,7 +418,7 @@ describe('users tests', () => {
 
 		it('PUT action with no type parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1')
+				.put(url + '/1' + suffix)
 				.send({
 					_ref: "cf43fwefe43fwe",
 					username: "user123",
@@ -399,7 +440,7 @@ describe('users tests', () => {
 
 		it('PUT action with on no resource', (done) => {
 			chai.request(server)
-				.put(url + '/7')
+				.put(url + '/7' + suffix)
 				.send({
 					_ref: "cref44fwf34rf",
 					type: "passenger",
@@ -422,7 +463,7 @@ describe('users tests', () => {
 
 		it('PUT action with bad _ref parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1')
+				.put(url + '/1' + suffix)
 				.send({
 					_ref: "cref44fwf34rf",
 					type: "passenger",
@@ -445,7 +486,7 @@ describe('users tests', () => {
 
 		it('DELETE action', (done) => {
 			chai.request(server)
-				.delete(url + '/1')
+				.delete(url + '/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(204);
 					done();
@@ -454,7 +495,7 @@ describe('users tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete(url + '/6')
+				.delete(url + '/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -467,7 +508,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/trips', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -481,7 +523,7 @@ describe('users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get(url + '/1/trips')
+				.get(url + '/1/trips' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -495,7 +537,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -509,7 +552,7 @@ describe('users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get(url + '/1/cars')
+				.get(url + '/1/cars' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -537,7 +580,7 @@ describe('users tests', () => {
 				]
 			};
 			chai.request(server)
-				.post(url + '/1/cars')
+				.post(url + '/1/cars' + suffix)
 				.send(car)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -554,7 +597,7 @@ describe('users tests', () => {
 
 		it('POST action with no properties parameter', (done) => {
 			chai.request(server)
-				.post(url + '/1/cars')
+				.post(url + '/1/cars' + suffix)
 				.send({
 					owner: "1"
 				})
@@ -568,7 +611,7 @@ describe('users tests', () => {
 
 		it('POST action with empty properties parameter', (done) => {
 			chai.request(server)
-				.post(url + '/1/cars')
+				.post(url + '/1/cars' + suffix)
 				.send({
 					properties: []
 				})
@@ -583,7 +626,8 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars/{carId}', () => {
 		
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -597,7 +641,7 @@ describe('users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get(url + '/1/cars/1')
+				.get(url + '/1/cars/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -613,7 +657,7 @@ describe('users tests', () => {
 
 		it('GET action on no car resource', (done) => {
 			chai.request(server)
-				.get(url + '/1/cars/3')
+				.get(url + '/1/cars/3' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -625,7 +669,7 @@ describe('users tests', () => {
 
 		it('DELETE action', (done) => {
 			chai.request(server)
-				.delete(url + '/1/cars/1')
+				.delete(url + '/1/cars/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(204);
 					done();
@@ -634,7 +678,7 @@ describe('users tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete(url + '/1/cars/6')
+				.delete(url + '/1/cars/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -646,7 +690,7 @@ describe('users tests', () => {
 
 		it('PUT action', (done) => {
 			chai.request(server)
-				.get(url + '/1/cars/1')
+				.get(url + '/1/cars/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -657,7 +701,7 @@ describe('users tests', () => {
 					res.body.car.should.have.property('owner').eql("1");
 					res.body.car.should.have.property('properties').eql([{name: "color", value: "verde"}]);
 					chai.request(server)
-						.put(url + '/1/cars/1')
+						.put(url + '/1/cars/1' + suffix)
 						.send({
 							_ref: res.body.car._ref,
 							properties: [
@@ -681,7 +725,7 @@ describe('users tests', () => {
 
 		it('PUT action with no _ref parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1/cars/1')
+				.put(url + '/1/cars/1' + suffix)
 				.send({
 					properties: [{name: "color", value: "negro"}]
 				})
@@ -696,7 +740,7 @@ describe('users tests', () => {
 
 		it('PUT action with no properties parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1/cars/1')
+				.put(url + '/1/cars/1' + suffix)
 				.send({
 					_ref: "f45tgh67uj"
 				})
@@ -711,7 +755,7 @@ describe('users tests', () => {
 
 		it('PUT action with empty properties parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1/cars/1')
+				.put(url + '/1/cars/1' + suffix)
 				.send({
 					_ref: "f45tgh67uj",
 					properties: []
@@ -727,7 +771,7 @@ describe('users tests', () => {
 
 		it('PUT action on no resource', (done) => {
 			chai.request(server)
-				.put(url + '/1/cars/6')
+				.put(url + '/1/cars/6' + suffix)
 				.send({
 					_ref: "f45tgh67uj",
 					properties: [{name: "color", value: "negro"}]
@@ -743,7 +787,7 @@ describe('users tests', () => {
 
 		it('PUT action with bad _ref parameter', (done) => {
 			chai.request(server)
-				.put(url + '/1/cars/1')
+				.put(url + '/1/cars/1' + suffix)
 				.send({
 					_ref: "f45tgh67uj",
 					properties: [{name: "color", value: "negro"}]
@@ -753,51 +797,6 @@ describe('users tests', () => {
 					res.body.should.be.a('object');
 					res.body.should.have.property('code');
 					res.body.should.have.property('message').eql('Conflicto en el update');
-					done();
-				});
-		});
-	});
-
-	describe('/users/{userId}/transactions', () => {
-		
-		beforeEach(done => {
-			knex.migrate.rollback()
-			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
-			.then(() => done());
-		});
-
-		afterEach((done) => {
-			knex.migrate.rollback()
-			.then(() => done());
-		});
-
-		it('GET action', (done) => {
-			chai.request(server)
-				.get(url + '/1/transactions')
-				.end((err, res) => {
-					res.should.have.status(200);
-					res.body.should.be.a('object');
-					res.body.should.have.property('metadata');
-					res.body.should.have.property('transactions');
-					res.body.transactions.should.be.a('array');
-					done();
-				});
-		});
-
-		it('POST action', (done) => {
-			chai.request(server)
-				.post(url + '/1/transactions')
-				.end((err, res) => {
-					res.should.have.status(200);
-					res.body.should.have.property('metadata');
-					res.body.should.have.property('transaction');
-					res.body.transaction.should.have.property('id');
-					res.body.transaction.should.have.property('trip');
-					res.body.transaction.should.have.property('timestamp');
-					res.body.transaction.should.have.property('cost');
-					res.body.transaction.should.have.property('description');
-					res.body.transaction.should.have.property('data');
 					done();
 				});
 		});

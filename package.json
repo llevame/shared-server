@@ -4,8 +4,9 @@
   "description": "Shared Server para la aplicación Llevame",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf coverage/ log/ && node ./src/index.js",
-    "test": "rm -rf coverage/ log/ *.lcov && nyc node_modules/mocha/bin/_mocha src/test/*",
+    "start": "node ./src/index.js",
+    "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
+    "clean": "rm -rf coverage/ log/ *.lcov",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
@@ -17,20 +18,24 @@
     "cors": "^2.8.4",
     "create-react-app": "^1.4.0",
     "express": "^4.15.3",
+    "geolib": "^2.0.24",
     "jsonwebtoken": "^8.1.0",
     "knex": "^0.13.0",
     "log4js": "^1.1.1",
     "moment": "^2.19.0",
     "node-env-file": "^0.1.8",
+    "node-rules": "^3.1.0",
     "pg": "6.1.5",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "satellizer": "^0.15.5",
+    "serialize-javascript": "^1.4.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.1",
     "chai-http": "^3.0.0",
-    "codecov": "^1.0.0",
+    "codecov": "^2.3.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
     "nyc": "^11.1.0"

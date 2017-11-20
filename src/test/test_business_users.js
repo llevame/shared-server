@@ -8,11 +8,19 @@ var knex = require('../../db/knex');
 
 chai.use(chaiHttp);
 
+var tokenGenerator = require('../libs/service');
+var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
+var suffix = '?token=' + token;
+
+var userRoleToken = tokenGenerator.createBusinessToken({id:1, roles: ["user"]});
+var userRoleSuffix = '?token=' + userRoleToken;
+
 describe('business-users tests', () => {
 
 	describe('/business-users', () => {
 
-		beforeEach(done => {
+		beforeEach(function(done) {
+			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
 			.then(() => knex.seed.run())
@@ -26,7 +34,7 @@ describe('business-users tests', () => {
 
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/business-users')
+				.get('/api/business-users' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -51,7 +59,7 @@ describe('business-users tests', () => {
 
 		it('GET action single business-user', (done) => {
 			chai.request(server)
-				.get('/api/business-users/1')
+				.get('/api/business-users/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -79,7 +87,7 @@ describe('business-users tests', () => {
 				roles: ["admin"]
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -105,7 +113,7 @@ describe('business-users tests', () => {
 				roles: ["admin"]
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -124,7 +132,7 @@ describe('business-users tests', () => {
 				roles: ["admin"]
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -143,7 +151,7 @@ describe('business-users tests', () => {
 				roles: ["admin"]
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -162,7 +170,7 @@ describe('business-users tests', () => {
 				roles: ["admin"]
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -181,7 +189,7 @@ describe('business-users tests', () => {
 				roles: []
 			};
 			chai.request(server)
-				.post('/api/business-users')
+				.post('/api/business-users' + suffix)
 				.send(bu)
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -193,7 +201,7 @@ describe('business-users tests', () => {
 
 		it('DELETE action on an existing resource', (done) => {
 			chai.request(server)
-				.delete('/api/business-users/1')
+				.delete('/api/business-users/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(204);
 					done();
@@ -202,7 +210,7 @@ describe('business-users tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete('/api/business-users/6')
+				.delete('/api/business-users/6' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.have.property('code');
@@ -211,9 +219,20 @@ describe('business-users tests', () => {
 				});
 		});
 
+		it('DELETE action with unauthorized role', (done) => {
+			chai.request(server)
+				.delete('/api/business-users/6' + userRoleSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});
+		});
+
 		it('PUT action with good parameters', (done) => {
 			chai.request(server)
-				.get('/api/business-users/1')
+				.get('/api/business-users/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
@@ -229,7 +248,7 @@ describe('business-users tests', () => {
 					res.body.businessUser.should.have.property('roles').eql(["admin"]);
 					res.body.businessUser.roles.should.be.a('array');
 					chai.request(server)
-						.put('/api/business-users/1')
+						.put('/api/business-users/1' + suffix)
 						.send({
 							_ref: res.body.businessUser._ref,
 							username: res.body.businessUser.username,
@@ -259,7 +278,7 @@ describe('business-users tests', () => {
 
 		it('PUT action with no parameter username', (done) => {
 			chai.request(server)
-				.put('/api/business-users/1')
+				.put('/api/business-users/1' + suffix)
 				.send({
 					_ref: '343242323432432423',
 					password: '23133',
@@ -277,7 +296,7 @@ describe('business-users tests', () => {
 
 		it('PUT action with no parameter password', (done) => {
 			chai.request(server)
-				.put('/api/business-users/1')
+				.put('/api/business-users/1' + suffix)
 				.send({
 					_ref: '343242323432432423',
 					username: 'admin',
@@ -295,7 +314,7 @@ describe('business-users tests', () => {
 
 		it('PUT action with no parameter _ref', (done) => {
 			chai.request(server)
-				.put('/api/business-users/1')
+				.put('/api/business-users/1' + suffix)
 				.send({
 					username: 'admin',
 					name: 'fddaf',
@@ -312,7 +331,7 @@ describe('business-users tests', () => {
 
 		it('PUT action with bad _ref parameter', (done) => {
 			chai.request(server)
-				.put('/api/business-users/1')
+				.put('/api/business-users/1' + suffix)
 				.send({
 					_ref: '343242323432432423',
 					username: 'juan123',
@@ -331,7 +350,7 @@ describe('business-users tests', () => {
 
 		it('PUT action on no resource', (done) => {
 			chai.request(server)
-				.put('/api/business-users/6')
+				.put('/api/business-users/6' + suffix)
 				.send({
 					_ref: '343242323432432423',
 					username: 'juan123',
@@ -351,27 +370,82 @@ describe('business-users tests', () => {
 
 	describe('/business-users/me', () => {
 
+		beforeEach(function(done) {
+			this.timeout(4000);
+			knex.migrate.rollback()
+			.then(() => knex.migrate.latest())
+			.then(() => knex.seed.run())
+			.then(() => done());
+		});
+
+		afterEach((done) => {
+			knex.migrate.rollback()
+			.then(() => done());
+		});
+		
 		it('GET action', (done) => {
 			chai.request(server)
-				.get('/api/business-users/me')
+				.get('/api/business-users/me?token=' + token)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/business-users/me');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('businessUser');
+					res.body.businessUser.should.have.property('id').eql(1);
+					res.body.businessUser.should.have.property('_ref');
+					res.body.businessUser.should.have.property('username').eql('juan123');
+					res.body.businessUser.should.have.property('password').eql('123');
+					res.body.businessUser.should.have.property('name').eql('juan');
+					res.body.businessUser.should.have.property('surname').eql('lopez');
+					res.body.businessUser.should.have.property('roles').eql(["admin"]);
+					res.body.businessUser.roles.should.be.a('array');
 					done();
 				});
 		});
 
 		it('PUT action', (done) => {
 			chai.request(server)
-				.put('/api/business-users/me')
+				.get('/api/business-users/1' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('PUT');
-					res.body.should.have.property('url').eql('/api/business-users/me');
-					done();
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('businessUser');
+					res.body.businessUser.should.have.property('id').eql(1);
+					res.body.businessUser.should.have.property('_ref');
+					res.body.businessUser.should.have.property('username').eql('juan123');
+					res.body.businessUser.should.have.property('password').eql('123');
+					res.body.businessUser.should.have.property('name').eql('juan');
+					res.body.businessUser.should.have.property('surname').eql('lopez');
+					res.body.businessUser.should.have.property('roles').eql(["admin"]);
+					res.body.businessUser.roles.should.be.a('array');
+					chai.request(server)
+						.put('/api/business-users/me?token=' + token)
+						.send({
+							_ref: res.body.businessUser._ref,
+							username: res.body.businessUser.username,
+							password: res.body.businessUser.password,
+							name: "juan pedro",
+							surname: res.body.businessUser.surname
+						})
+						.end((e, r) => {
+							r.should.have.status(200);
+							r.body.should.be.a('object');
+							r.body.should.have.property('metadata');
+							r.body.metadata.should.have.property('version');
+							r.body.should.have.property('businessUser');
+							r.body.businessUser.should.have.property('id').eql(1);
+							r.body.businessUser.should.have.property('_ref');
+							r.body.businessUser.should.have.property('username').eql('juan123');
+							r.body.businessUser.should.have.property('password').eql('123');
+							r.body.businessUser.should.have.property('name').eql('juan pedro');
+							r.body.businessUser.should.have.property('surname').eql('lopez');
+							r.body.businessUser.should.have.property('roles').eql(["admin"]);
+							r.body.businessUser.roles.should.be.a('array');
+							done();
+						});
 				});
 		});
 	});

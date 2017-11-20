@@ -3,6 +3,8 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("http");
+var trip = require('../models/trips');
+var tokenVerifier = require('../middlewares/appTokenVerifier');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,27 +13,12 @@ router.use((req, res, next) => {
 });
 
 // POST /
-router.post('/', (req, res) => {
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/trips'
-	});
-});
+router.post('/', tokenVerifier.verifyToken, trip.postTrip);
 
 // POST /estimate
-router.post('/estimate', (req, res) => {
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/trips/estimate'
-	});
-});
+router.post('/estimate', tokenVerifier.verifyToken, trip.estimateTrip);
 
 // GET /{tripId}
-router.post('/:tripId', (req, res) => {
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/trips/' + req.params.tripId
-	});
-});
+router.get('/:tripId', tokenVerifier.verifyToken, trip.getTrip);
 
 module.exports = router;

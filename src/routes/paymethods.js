@@ -3,6 +3,8 @@
 var express = require('express');
 var router = express.Router();
 var log = require('log4js').getLogger("http");
+var paymethods = require('../models/paymethods');
+var tokenVerifier = require('../middlewares/appTokenVerifier');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -11,11 +13,6 @@ router.use((req, res, next) => {
 });
 
 // GET /
-router.get('/', (req, res) => {
-	res.status(200).json({
-		type: 'GET',
-		url: '/api/paymethods'
-	});
-});
+router.get('/', tokenVerifier.verifyToken, paymethods.getPaymethods);
 
 module.exports = router;
