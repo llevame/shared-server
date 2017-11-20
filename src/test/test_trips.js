@@ -13,7 +13,7 @@ var token = tokenGenerator.createAppToken({id: 1});
 var suffix = '?token=' + token;
 
 describe('trips tests', () => {
-/*
+
 	describe('/trips/{tripId}', () => {
 		
 		beforeEach(function(done) {
@@ -476,17 +476,157 @@ describe('trips tests', () => {
 				});
 		});
 	});
-*/
+
 	describe('/trips/estimate', () => {
-		
+
+		beforeEach(function(done) {
+			this.timeout(4000);
+			knex.migrate.rollback()
+			.then(() => knex.migrate.latest())
+			.then(() => knex.seed.run())
+			.then(() => done());
+		});
+
+		afterEach(function(done) {
+			this.timeout(4000);
+			knex.migrate.rollback()
+			.then(() => done());
+		});
+
 		it('POST action', (done) => {
+			let t = {
+				"passenger": "1",
+				"start": {
+					"address": {
+						"street": "Paseo Colón 850",
+						"location": {
+							"lat": -34.61770932655934,
+							"lon": -58.36873590946197
+						}
+					},
+					"timestamp": 1510769400
+				},
+				"end": {
+					"address": {
+						"street": "Las Heras 2200",
+						"location": {
+							"lat": -34.58833750880012,
+							"lon": -58.396180272102356
+						}
+					},
+					"timestamp": 1510770600
+				}
+			};
 			chai.request(server)
 				.post('/api/trips/estimate' + suffix)
+				.send(t)
 				.end((err, res) => {
 					res.should.have.status(200);
 					res.body.should.be.a('object');
-					res.body.should.have.property('type').eql('GET');
-					res.body.should.have.property('url').eql('/api/trips/estimate');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('cost');
+					res.body.cost.should.have.property('currency');
+					res.body.cost.should.have.property('value');
+					done();
+				});
+		});
+
+		it('POST action with no token', (done) => {
+			chai.request(server)
+				.post('/api/trips/estimate')
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(401);
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});
+		});
+
+		it('POST action with no passenger parameter', (done) => {
+			let t = {
+				"start": {
+					"address": {
+						"street": "Paseo Colón 850",
+						"location": {
+							"lat": -34.61770932655934,
+							"lon": -58.36873590946197
+						}
+					},
+					"timestamp": 1510769400
+				},
+				"end": {
+					"address": {
+						"street": "Las Heras 2200",
+						"location": {
+							"lat": -34.58833750880012,
+							"lon": -58.396180272102356
+						}
+					},
+					"timestamp": 1510770600
+				}
+			};
+			chai.request(server)
+				.post('/api/trips/estimate' + suffix)
+				.send(t)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with no start parameter', (done) => {
+			let t = {
+				"passenger": "1",
+				"end": {
+					"address": {
+						"street": "Las Heras 2200",
+						"location": {
+							"lat": -34.58833750880012,
+							"lon": -58.396180272102356
+						}
+					},
+					"timestamp": 1510770600
+				}
+			};
+			chai.request(server)
+				.post('/api/trips/estimate' + suffix)
+				.send(t)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with no end parameter', (done) => {
+			let t = {
+				"passenger": "1",
+				"start": {
+					"address": {
+						"street": "Paseo Colón 850",
+						"location": {
+							"lat": -34.61770932655934,
+							"lon": -58.36873590946197
+						}
+					},
+					"timestamp": 1510769400
+				}
+			};
+			chai.request(server)
+				.post('/api/trips/estimate' + suffix)
+				.send(t)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(400);
+					res.body.should.have.property('message').eql('Parámetros faltantes');
 					done();
 				});
 		});
