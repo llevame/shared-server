@@ -5,6 +5,7 @@ var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
+var config = require('../../knexfile.js')[process.env.NODE_ENV];
 var url = '/api/users';
 
 chai.use(chaiHttp);
@@ -21,7 +22,7 @@ describe('users transactions test', () => {
 			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 

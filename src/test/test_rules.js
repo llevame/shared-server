@@ -5,6 +5,7 @@ var chaiHttp = require('chai-http');
 var should = require('chai').should();
 var server = require('../index');
 var knex = require('../../db/knex');
+var config = require('../../knexfile.js')[process.env.NODE_ENV];
 
 chai.use(chaiHttp);
 
@@ -20,7 +21,7 @@ describe('rules tests', () => {
 			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -159,7 +160,7 @@ describe('rules tests', () => {
 			this.timeout(4000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -370,7 +371,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -497,7 +498,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -770,7 +771,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
@@ -806,7 +807,7 @@ describe('rules tests', () => {
 			this.timeout(3000);
 			knex.migrate.rollback()
 			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run())
+			.then(() => knex.seed.run([config]))
 			.then(() => done());
 		});
 
