@@ -10,11 +10,12 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Initial cost and pay",
+					priority: 10,
 					condition: function (R) {
 						R.when(this.distance > 0);
 					},
 					consequence: function (R) {
-						this.cost = this.hasLLevameDomain ? 0 : 50;
+						this.cost = this.hasLlevameDomain ? 0 : 50;
 						this.pay = 30;
 						R.next();
 					}
@@ -38,6 +39,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Trip distance cost for the passenger",
+					priority: 9,
 					condition: function (R) {
 						R.when(this.distance > 0 && (this.cost > 0));
 					},
@@ -65,6 +67,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Trip distance gain for the driver",
+					priority: 8,
 					condition: function (R) {
 						R.when(this.distance > 0);
 					},
@@ -92,6 +95,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Discount - passenger - Wednesday",
+					priority: 7,
 					condition: function(R) {
 						R.when(this &&
 							(this.startTime !== null) &&
@@ -100,7 +104,7 @@ exports.seed = function(knex, Promise) {
 							(this.endDay !== null) &&
 							(this.startDay === "Wednesday") &&
 							(this.startTime >= 15) &&
-							(this.endTime < 16))
+							(this.endTime < 16));
 					},
 					consequence: function(R) {
 						this.cp.push((-1)*(5*this.cost)/100);
@@ -126,6 +130,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Charge/Gain - passenger/driver - week days - rush hour",
+					priority: 6,
 					condition: function(R) {
 						var a = ["Monday", "Thursday", "Wednesday", "Tuesday", "Friday"].some((day) => {
 							return day == this.startDay;
@@ -164,6 +169,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Charge - passenger - trips of the last half hour",
+					priority: 5,
 					condition: function (R) {
 						R.when(this.tripsInTheLastHalfHourPassenger > 10);
 					},
@@ -191,6 +197,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Gain - driver - trips made in the day",
+					priority: 4,
 					condition: function (R) {
 						R.when(this.tripsInTheDayDriver > 10);
 					},
@@ -218,6 +225,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Discount - passenger - trips made in the day",
+					priority: 3,
 					condition: function (R) {
 						R.when(this.tripsInTheDayPassenger >= 5);
 					},
@@ -245,6 +253,7 @@ exports.seed = function(knex, Promise) {
 				_ref: uuid(),
 				blob: serial.serialize({
 					name: "Discount - passenger - first trip",
+					priority: 2,
 					condition: function(R) {
 						R.when(this && this.isFirstTrip && (this.cost > 0));
 					},

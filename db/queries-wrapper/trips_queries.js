@@ -27,6 +27,23 @@ function get(id) {
 		.first();
 }
 
+function getAllByUser(userId, type) {
+
+	return Trips()
+		.where(type, userId)
+		.select('id',
+			'applicationOwner',
+			'driver',
+			'passenger',
+			'start',
+			'end',
+			'waitTime',
+			'travelTime',
+			'distance',
+			'route',
+			'cost');
+}
+
 function add(t, cst, curr) {
 
 	let taux = {
@@ -49,21 +66,5 @@ function add(t, cst, curr) {
 		.insert(taux, 'id');
 }
 
-function getAllByUser(userId) {
-
-	return Trips()
-		.where('passenger', userId)
-		.select('id',
-			'applicationOwner',
-			'driver',
-			'passenger',
-			'start',
-			'end',
-			'waitTime',
-			'travelTime',
-			'distance',
-			'route',
-			'cost');
-}
-
-module.exports = {getAll, getAllByUser, add, get};
+module.exports = {getAll, getAllByUser,
+				add, get};

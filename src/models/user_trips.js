@@ -6,7 +6,7 @@ var log = require('log4js').getLogger("error");
 // returns all the trips made by a specific user
 function getTrips(req, res) {
 
-	tripsQ.getAllByUser(req.params.userId)
+	tripsQ.getAllByUser(req.params.userId, 'passenger')
 		.then((userTrips) => {
 			let trps = {
 				metadata: {
