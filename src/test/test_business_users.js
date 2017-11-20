@@ -12,6 +12,9 @@ var tokenGenerator = require('../libs/service');
 var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
 var suffix = '?token=' + token;
 
+var userRoleToken = tokenGenerator.createBusinessToken({id:1, roles: ["user"]});
+var userRoleSuffix = '?token=' + userRoleToken;
+
 describe('business-users tests', () => {
 
 	describe('/business-users', () => {
@@ -212,6 +215,17 @@ describe('business-users tests', () => {
 					res.should.have.status(404);
 					res.body.should.have.property('code');
 					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
+		it('DELETE action with unauthorized role', (done) => {
+			chai.request(server)
+				.delete('/api/business-users/6' + userRoleSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Acceso no autorizado');
 					done();
 				});
 		});
