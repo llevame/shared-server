@@ -192,7 +192,7 @@ describe('rules tests', () => {
 
 		it('GET action on no resource', (done) => {
 			chai.request(server)
-				.get('/api/rules/3' + suffix)
+				.get('/api/rules/12' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -312,7 +312,7 @@ describe('rules tests', () => {
 				active: true
 			};
 			chai.request(server)
-				.put('/api/rules/3' + suffix)
+				.put('/api/rules/12' + suffix)
 				.send(r)
 				.end((err, res) => {
 					res.should.have.status(404);
@@ -353,7 +353,7 @@ describe('rules tests', () => {
 
 		it('DELETE action on no resource', (done) => {
 			chai.request(server)
-				.delete('/api/rules/3' + suffix)
+				.delete('/api/rules/12' + suffix)
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.be.a('object');
@@ -452,7 +452,7 @@ describe('rules tests', () => {
 				}
 			];
 			chai.request(server)
-				.post('/api/rules/3/run' + suffix)
+				.post('/api/rules/12/run' + suffix)
 				.send(f)
 				.end((err, res) => {
 					res.should.have.status(404);
