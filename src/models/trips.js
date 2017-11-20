@@ -50,9 +50,10 @@ function tripsInAPeriodOfTime(trips, start, end) {
 
 function calculateTotal(subTotal, parcials) {
 
-	return subTotal + parcials.reduce((total, num) => {
-		return total + num;
-	});
+	return subTotal + (parcials.length > 0) ? 
+		parcials.reduce((total, num) => {
+			return total + num;
+		}) : 0;
 }
 
 function postTrip(req, res) {
@@ -172,26 +173,56 @@ function estimateTrip(req, res) {
 	let startLocation = [req.body.start.address.location.lon, req.body.start.address.location.lat];
 	let endLocation = [req.body.end.address.location.lon, req.body.end.address.location.lat];
 
-	let distance = geo.getDistance(startLocation, endLocation);
+	var distance = geo.getDistance(startLocation, endLocation);
 
-	var fact = {
-		"passenger": req.body.passenger,
-		"start": req.body.start,
-		"end": req.body.end,
-		"distance": distance
-	};
+	let q = [];
+	q.push(tripsQ.getAllByUser(req.body.passenger, 'passenger'));
+	q.push(usersQ.get(req.body.passenger));
 
-	// run all active rules with trip information
-	// as the fact
-	rulesQ.getAllActive()
-		.then((rules) => {
-			rulesModel.runTripRules(req, res, rules, fact)
-				.then((result) => {
+	Promise.all(q)
+		.then((data) => {
 
-					let currency = 'ARS'; // currency ISO 4217 standar 
-					let cost = result.cost;
+			let startOfTheDay = moment(req.body.start.timestamp*1000).startOf('day').unix();
+			let endOfTheDay = moment(req.body.start.timestamp*1000).endOf('day').unix();
+			let endT = req.body.start.timestamp;
+			let startT = moment(endT*1000).subtract(30, 'minutes').unix();
 
-					res.status(200).json(builder.createEstimateResponse(currency, cost));
+			let passengerTripsInDay = tripsInAPeriodOfTime(data[0], startOfTheDay, endOfTheDay);
+			let passengerTripsInTheLastHalfHour = tripsInAPeriodOfTime(data[0], startT, endT);
+
+			var fact = {
+				"driver": 0,
+				"passenger": req.body.passenger,
+				"distance": distance,
+				"isFirstTrip": (data[0].length > 0) ? false : true,
+				"hasLlevameDomain": (data[1].email.includes("@llevame.com")) ? true : false,
+				"tripsInTheDayPassenger": passengerTripsInDay.length,
+				"tripsInTheLastHalfHourPassenger": passengerTripsInTheLastHalfHour.length,
+				"tripsInTheDayDriver": 0,
+				"startDay": moment(req.body.start.timestamp*1000).format('dddd'),
+				"startTime": parseInt(moment(req.body.start.timestamp*1000).format('H')),
+				"endDay": null,
+				"endTime": null,
+				"cp": [],
+				"pp": []
+			};
+
+			// run all active rules with trip information
+			// as the fact
+			rulesQ.getAllActive()
+				.then((rules) => {
+					rulesModel.runTripRules(req, res, rules, fact)
+						.then((result) => {
+
+							let currency = 'ARS'; // currency ISO 4217 standar 
+							let cost = calculateTotal(result.cost, result.cp);
+
+							res.status(200).json(builder.createEstimateResponse(currency, cost));
+						})
+						.catch((err) => {
+							log.error("Error: " + err.message + " on: " + req.originalUrl);
+							res.status(500).json(error.unexpected(err));
+						});
 				})
 				.catch((err) => {
 					log.error("Error: " + err.message + " on: " + req.originalUrl);
