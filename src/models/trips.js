@@ -95,7 +95,6 @@ function postTrip(req, res) {
 				"cp": [],
 				"pp": []
 			};
-			console.log(fact);
 			// run all active rules with trip information
 			// as the fact
 			rulesQ.getAllActive()
@@ -107,7 +106,6 @@ function postTrip(req, res) {
 
 							let cost = calculateTotal(result.cost, result.cp);
 							let pay = calculateTotal(result.pay, result.pp);
-							console.log("cost: ", cost, " pay: ", pay);
 
 							tripsQ.add(req.body, cost, currency)
 								.then((tripId) => {
