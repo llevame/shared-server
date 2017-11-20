@@ -57,6 +57,29 @@ describe('trips tests', () => {
 					done();
 				});
 		});
+
+		it('GET action with no token', (done) => {
+			chai.request(server)
+				.get('/api/trips/1')
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code').eql(401);
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});
+		});
+
+		it('GET action on non-existing trip', (done) => {
+			chai.request(server)
+				.get('/api/trips/2' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
 	});
 /*
 	describe('/trips', () => {
@@ -88,6 +111,3 @@ describe('trips tests', () => {
 	});
 */
 });
-
-
-
