@@ -243,6 +243,7 @@ function getTrip(req, res) {
 				return res.status(404).json(error.noResource());
 			}
 			let r = builder.createResponse(t, t.cost.currency, t.cost.value);
+			res.status(200).json(r);
 		})
 		.catch((err) => {
 			log.error("Error: " + err.message + " on: " + req.originalUrl);
