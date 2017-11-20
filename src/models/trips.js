@@ -129,7 +129,9 @@ function postTrip(req, res) {
 											paymethods.generatePayment(data);
 											transactionQ.addTransactionTrip(req.body.trip.passenger, tripId, cost, req.body.trip)
 												.then((transId) => {
-													res.status(200).json(builder.createResponse(req.body.trip, currency, cost));
+													req.body.trip.id = tripId;
+													req.body.trip.applicationOwner = req.user.id;
+													res.status(201).json(builder.createResponse(req.body.trip, currency, cost));
 												})
 												.catch((err) => {
 													log.error("Error: " + err.message + " on: " + req.originalUrl);
