@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import JSONView from 'react-json-view';
+import CodeMirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
-import Serial from '../../utils/Serial';
 
 class GetRules extends Component {
 
@@ -36,13 +38,9 @@ class GetRules extends Component {
 					});
 					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 				} else {
-					let r = json.rules.map((rule) => {
-						rule.blob = Serial.deserialize(rule.blob);
-						return rule;
-					});
 					this.setState({
 						...this.state,
-						result: r,
+						result: json.rules,
 						hide: false
 					});
 				}
@@ -54,9 +52,29 @@ class GetRules extends Component {
 
 		if (!this.state.hide) {
 
+			let rules = this.state.result.map((r) => {
+				return {
+					information: {
+						id: r.id,
+						_ref: r._ref,
+						language: r.language,
+						active: r.active,
+						lastCommit: r.lastCommit
+					},
+					blob: r.blob
+				};
+			});
+
 			return (
-				<div style={{"padding": "20px"}}>
-					<JSONView src={this.state.result} name="rules" theme="monokai" style={{"padding": "20px"}}/>
+				<div>
+					{rules.map((rule) => 
+						<div>
+							<h4>Information:</h4>
+							<TableResults result={rule.information} style={{"justify-content": "left"}}/>
+							<h4>Rule:</h4>
+							<CodeMirror value={rule.blob} options={{...this.config, readOnly: true}}/>
+						</div>
+					)}
 				</div>
 			);
 		}
