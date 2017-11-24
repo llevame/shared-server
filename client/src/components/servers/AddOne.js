@@ -56,7 +56,7 @@ class AddServer extends Component {
 
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justify-content": "left"}}/>
+				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
 			);
 		}
 	}

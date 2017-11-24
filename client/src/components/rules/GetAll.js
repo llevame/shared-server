@@ -70,7 +70,7 @@ class GetRules extends Component {
 					{rules.map((rule) => 
 						<div>
 							<h4>Information:</h4>
-							<TableResults result={rule.information} style={{"justify-content": "left"}}/>
+							<TableResults result={rule.information} style={{"justifyContent": "left"}}/>
 							<h4>Rule:</h4>
 							<CodeMirror value={rule.blob} options={{...this.config, readOnly: true}}/>
 						</div>

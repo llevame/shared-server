@@ -57,7 +57,7 @@ class UpdateMyInformation extends Component {
 
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justify-content": "center"}}/>
+				<TableResults result={this.state.result} style={{"justifyContent": "center"}}/>
 			);
 		}
 	}
