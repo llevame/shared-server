@@ -55,7 +55,9 @@ class GetRules extends Component {
 		if (!this.state.hide) {
 
 			return (
-				<JSONView src={this.state.result} name="rules" theme="monokai"/>
+				<div style={{"padding": "20px"}}>
+					<JSONView src={this.state.result} name="rules" theme="monokai" style={{"padding": "20px"}}/>
+				</div>
 			);
 		}
 	}
