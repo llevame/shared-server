@@ -5,6 +5,7 @@ exports.seed = function(knex, Promise) {
 	return knex('trips').del()
 		.then(() => {
 			return knex('trips').insert({
+				"applicationOwner": "1",
 				"driver": "3",
 				"passenger": "1",
 				"start": {
