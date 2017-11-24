@@ -91,6 +91,14 @@ class Menu extends Component {
 							</li>
 						</ul>
 					</li>
+					<li>
+						Trips
+						<ul>
+							<li>
+								<Link to={'/trips'}>Get all</Link>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		);

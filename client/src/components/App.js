@@ -28,6 +28,8 @@ import RunAllRules from './rules/RunAll';
 import DeleteRule from './rules/DeleteOne';
 import UpdateRule from './rules/UpdateOne';
 
+import GetTrips from './trips/GetAll';
+
 import logo from '../carretera.jpg';
 import '../css/App.css';
 
@@ -65,6 +67,7 @@ class App extends Component {
 						<Route path="/rules-run-one" component={ RunOneRule } />
 						<Route path="/rules-del" component={ DeleteRule } />
 						<Route path="/rules-update" component={ UpdateRule } />
+						<Route path="/trips" component={ GetTrips } />
 					</Switch>
 				</div>
 			</div>
