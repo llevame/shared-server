@@ -54,6 +54,12 @@ class Menu extends Component {
 							<li>
 								<Link to={'/servers-add'}>Add one</Link>
 							</li>
+							<li>
+								<Link to={'/servers-update'}>Update one</Link>
+							</li>
+							<li>
+								<Link to={'/servers-del'}>Delete one</Link>
+							</li>
 						</ul>
 					</li>
 					<li>

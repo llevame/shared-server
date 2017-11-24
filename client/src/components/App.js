@@ -16,6 +16,8 @@ import UpdateMyInformation from './business-users/UpdateMe'
 import GetServers from './servers/GetAll';
 import GetOneServer from './servers/GetOne';
 import AddServer from './servers/AddOne';
+import UpdateServer from './servers/UpdateOne';
+import DeleteServer from './servers/DeleteOne';
 
 import GetRules from './rules/GetAll';
 import GetOneRule from './rules/GetOne';
@@ -51,6 +53,8 @@ class App extends Component {
 						<Route path="/servers" component={ GetServers } />
 						<Route path="/servers-add" component={ AddServer } />
 						<Route path="/servers-get" component={ GetOneServer } />
+						<Route path="/servers-update" component={ UpdateServer } />
+						<Route path="/servers-del" component={ DeleteServer } />
 						<Route path="/rules" component={ GetRules } />
 						<Route path="/rules-get" component={ GetOneRule } />
 						<Route path="/rules-add" component={ AddRule } />

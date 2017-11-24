@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class AddServer extends Component {
+class UpdateServer extends Component {
 
 	constructor(props) {
 		super(props);
@@ -11,22 +10,21 @@ class AddServer extends Component {
 			result: {},
 			hide: true
 		};
-		this.onAddServer = this.onAddServer.bind(this);
+		this.onUpdateServer = this.onUpdateServer.bind(this);
 	}
 
-	onAddServer(e) {
+	onUpdateServer(e) {
 		e.preventDefault();
 		let credentials = {
+			_ref: e.target._ref.value,
 			name: e.target.name.value,
-			createdBy: e.target.createdBy.value,
-			createdTime: moment().unix()
 		};
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/servers?token=' + token, {
-				method: 'POST',
+			fetch('/api/servers/' + e.target.id.value + '?token=' + token, {
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -56,7 +54,7 @@ class AddServer extends Component {
 
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justify-content": "left"}}/>
+				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
 			);
 		}
 	}
@@ -65,12 +63,14 @@ class AddServer extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onAddServer}>
+				<form className="Form" onSubmit={this.onUpdateServer}>
+					<input type="text" placeholder="Server Id" name="id" />
+					<br /><br />
+					<input type="text" placeholder="Revison Code" name="_ref" />
+					<br />
 					<input type="text" placeholder="Name" name="name" />
-					<br />
-					<input type="text" placeholder="Creator" name="createdBy" />
-					<br />
-					<input type="submit" value="Add" />
+					<br /><br />
+					<input type="submit" value="Update" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -78,4 +78,4 @@ class AddServer extends Component {
 	}
 }
 
-export default AddServer;
+export default UpdateServer;
