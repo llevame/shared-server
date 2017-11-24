@@ -107,7 +107,7 @@ function postTrip(req, res) {
 							let cost = calculateTotal(result.cost, result.cp);
 							let pay = calculateTotal(result.pay, result.pp);
 
-							tripsQ.add(req.body, cost, currency)
+							tripsQ.add(req.body, req.user.id, cost, currency)
 								.then((tripId) => {
 
 									let r = [];
@@ -255,4 +255,17 @@ function getTrip(req, res) {
 		});
 }
 
-module.exports = {postTrip, estimateTrip, getTrip};
+function getTrips(req, res) {
+
+	tripsQ.getAll()
+		.then((trips) => {
+			let r = builder.createGetAllResponse(trips);
+			res.status(200).json(r);
+		})
+		.catch((err) => {
+			log.error("Error: " + err.message + " on: " + req.originalUrl);
+			res.status(500).json(error.unexpected(err));
+		});
+}
+
+module.exports = {postTrip, estimateTrip, getTrip, getTrips};

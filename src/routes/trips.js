@@ -5,6 +5,7 @@ var router = express.Router();
 var log = require('log4js').getLogger("http");
 var trip = require('../models/trips');
 var tokenVerifier = require('../middlewares/appTokenVerifier');
+var tokenBusinessVerifier = require('../middlewares/businessTokenVerifier');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -20,5 +21,8 @@ router.post('/estimate', tokenVerifier.verifyToken, trip.estimateTrip);
 
 // GET /{tripId}
 router.get('/:tripId', tokenVerifier.verifyToken, trip.getTrip);
+
+// GET /
+router.get('/', tokenBusinessVerifier.verifyToken, trip.getTrips);
 
 module.exports = router;
