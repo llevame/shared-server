@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
 import moment from 'moment';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class AddServer extends Component {
@@ -53,6 +53,15 @@ class AddServer extends Component {
 		}
 	}
 
+	renderResult() {
+
+		if (!this.state.hide) {
+			return (
+				<TableResults result={this.state.result} style={{"justify-content": "left"}}/>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -64,7 +73,7 @@ class AddServer extends Component {
 					<br />
 					<input type="submit" value="Add" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}
