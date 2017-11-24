@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class AddBusinessUser extends Component {
+class UpdateBusinessUser extends Component {
 
 	constructor(props) {
 		super(props);
@@ -11,8 +11,8 @@ class AddBusinessUser extends Component {
 			result: {},
 			hide: true
 		};
+		this.onUpdateUser = this.onUpdateUser.bind(this);
 		this.handleSelectChange = this.handleSelectChange.bind(this);
-		this.onAddUser = this.onAddUser.bind(this);
 	}
 
 	handleSelectChange(e) {
@@ -22,9 +22,10 @@ class AddBusinessUser extends Component {
 		});
 	}
 
-	onAddUser(e) {
+	onUpdateUser(e) {
 		e.preventDefault();
 		let credentials = {
+			_ref: e.target._ref.value,
 			username: e.target.username.value,
 			password: e.target.password.value,
 			name: e.target.name.value,
@@ -35,8 +36,8 @@ class AddBusinessUser extends Component {
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/business-users?token=' + token, {
-				method: 'POST',
+			fetch('/api/business-users/' + e.target.id.value + '?token=' + token, {
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -75,7 +76,11 @@ class AddBusinessUser extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onAddUser}>
+				<form className="Form" onSubmit={this.onUpdateUser}>
+					<input type="text" placeholder="User Id" name="id" />
+					<br /><br />
+					<input type="text" placeholder="Revision Code" name="_ref" />
+					<br />
 					<input type="text" placeholder="Username" name="username" />
 					<br />
 					<input type="password" placeholder="Password" name="password" />
@@ -93,7 +98,7 @@ class AddBusinessUser extends Component {
 						</select>
 					</label>
 					<br /><br />
-					<input type="submit" value="Add" />
+					<input type="submit" value="Update" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -101,4 +106,4 @@ class AddBusinessUser extends Component {
 	}
 }
 
-export default AddBusinessUser;
+export default UpdateBusinessUser;

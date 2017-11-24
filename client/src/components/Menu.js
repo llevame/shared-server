@@ -29,6 +29,12 @@ class Menu extends Component {
 								<Link to={'/business-add'}>Add one</Link>
 							</li>
 							<li>
+								<Link to={'/business-update'}>Update one</Link>
+							</li>
+							<li>
+								<Link to={'/business-del'}>Delete one</Link>
+							</li>
+							<li>
 								<Link to={'/business-me'}>Get my information</Link>
 							</li>
 							<li>

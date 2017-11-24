@@ -8,6 +8,8 @@ import LogIn from './LogIn';
 import GetBusinessUsers from './business-users/GetAll';
 import GetOneBusinessUser from './business-users/GetOne';
 import AddBusinessUser from './business-users/AddOne';
+import UpdateBusinessUser from './business-users/UpdateOne';
+import DeleteBusinessUser from './business-users/DeleteOne';
 import GetMyInformation from './business-users/GetMe'
 import UpdateMyInformation from './business-users/UpdateMe'
 
@@ -42,6 +44,8 @@ class App extends Component {
 						<Route path="/business" component={ GetBusinessUsers } />
 						<Route path="/business-add" component={ AddBusinessUser } />
 						<Route path="/business-get" component={ GetOneBusinessUser } />
+						<Route path="/business-update" component={ UpdateBusinessUser } />
+						<Route path="/business-del" component={ DeleteBusinessUser } />
 						<Route path="/business-me" component={ GetMyInformation } />
 						<Route path="/business-update-me" component={ UpdateMyInformation } />
 						<Route path="/servers" component={ GetServers } />
