@@ -83,6 +83,12 @@ class Menu extends Component {
 							<li>
 								<Link to={'/rules-run-one'}>Run one</Link>
 							</li>
+							<li>
+								<Link to={'/rules-del'}>Delete one</Link>
+							</li>
+							<li>
+								<Link to={'/rules-update'}>Update one</Link>
+							</li>
 						</ul>
 					</li>
 				</ul>

@@ -25,6 +25,8 @@ import AddRule from './rules/AddOne';
 import RunTestRules from './rules/RunTests'
 import RunOneRule from './rules/RunOne';
 import RunAllRules from './rules/RunAll';
+import DeleteRule from './rules/DeleteOne';
+import UpdateRule from './rules/UpdateOne';
 
 import logo from '../carretera.jpg';
 import '../css/App.css';
@@ -61,6 +63,8 @@ class App extends Component {
 						<Route path="/rules-run-test" component={ RunTestRules } />
 						<Route path="/rules-run" component={ RunAllRules } />
 						<Route path="/rules-run-one" component={ RunOneRule } />
+						<Route path="/rules-del" component={ DeleteRule } />
+						<Route path="/rules-update" component={ UpdateRule } />
 					</Switch>
 				</div>
 			</div>
