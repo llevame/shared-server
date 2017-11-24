@@ -70,7 +70,9 @@ class GetOneRule extends Component {
 
 			return (
 				<div>
+					<h4>Information:</h4>
 					<TableResults result={this.state.result} style={{"justify-content": "left"}}/>
+					<h4>Rule:</h4>
 					<CodeMirror value={this.state.rule} options={{...this.config, readOnly: true}}/>
 				</div>
 			);

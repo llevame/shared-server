@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import JSONView from 'react-json-view';
 import Menu from '../Menu';
+import Serial from '../../utils/Serial';
 
 class GetRules extends Component {
 
@@ -35,13 +36,27 @@ class GetRules extends Component {
 					});
 					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 				} else {
+					let r = json.rules.map((rule) => {
+						rule.blob = Serial.deserialize(rule.blob);
+						return rule;
+					});
 					this.setState({
 						...this.state,
-						result: json.rules,
+						result: r,
 						hide: false
 					});
 				}
 			});
+		}
+	}
+
+	renderResult() {
+
+		if (!this.state.hide) {
+
+			return (
+				<JSONView src={this.state.result} name="rules" theme="monokai"/>
+			);
 		}
 	}
 
@@ -52,7 +67,7 @@ class GetRules extends Component {
 				<form className="Form" onSubmit={this.onGetAll}>
 					<input type="submit" value="Get rules" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}
