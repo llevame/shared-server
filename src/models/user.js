@@ -110,7 +110,7 @@ function postUser(req, res) {
 		return res.status(400).json(error.missingParameters());
 	}
 
-	userQ.add(req.body)
+	userQ.add(req.body, req.user.id)
 		.then((userId) => {
 			return userQ.get(userId);
 		})

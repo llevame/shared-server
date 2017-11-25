@@ -81,10 +81,11 @@ function update(id, updates) {
 		.returning('*');
 }
 
-function add(u) {
+function add(u, appOwner) {
 
 	let uaux = {
 		_ref: uuid(),
+		applicationOwner: appOwner,
 		type: u.type,
 		username: u.username,
 		password: u.password,
