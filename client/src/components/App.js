@@ -18,6 +18,7 @@ import GetOneServer from './servers/GetOne';
 import AddServer from './servers/AddOne';
 import UpdateServer from './servers/UpdateOne';
 import DeleteServer from './servers/DeleteOne';
+import ServerStatus from './servers/GetStatus';
 
 import GetRules from './rules/GetAll';
 import GetOneRule from './rules/GetOne';
@@ -59,6 +60,7 @@ class App extends Component {
 						<Route path="/servers-get" component={ GetOneServer } />
 						<Route path="/servers-update" component={ UpdateServer } />
 						<Route path="/servers-del" component={ DeleteServer } />
+						<Route path="/servers-status" component={ ServerStatus } />
 						<Route path="/rules" component={ GetRules } />
 						<Route path="/rules-get" component={ GetOneRule } />
 						<Route path="/rules-add" component={ AddRule } />

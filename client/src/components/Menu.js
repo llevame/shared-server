@@ -60,6 +60,9 @@ class Menu extends Component {
 							<li>
 								<Link to={'/servers-del'}>Delete one</Link>
 							</li>
+							<li>
+								<Link to={'/servers-status'}>Get status</Link>
+							</li>
 						</ul>
 					</li>
 					<li>
