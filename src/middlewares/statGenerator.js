@@ -2,6 +2,7 @@
 // with the app_server_id, endpoint and method
 
 var urlParser = require('url');
+var moment = require('moment');
 var error = require('../handlers/error-handler');
 var statsQ = require('../../db/queries-wrapper/stats_queries');
 
@@ -10,7 +11,8 @@ function generateStat(req, res, next) {
 	let stat = {
 		app_id: req.user.id,
 		endpoint: urlParser.parse(req.originalUrl).pathname,
-		method: req.method
+		method: req.method,
+		madeTime: moment().unix()
 	};
 
 	statsQ.add(stat)

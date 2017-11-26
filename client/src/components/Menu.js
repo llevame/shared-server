@@ -63,6 +63,9 @@ class Menu extends Component {
 							<li>
 								<Link to={'/servers-status'}>Get status</Link>
 							</li>
+							<li>
+								<Link to={'/servers-stats'}>Get statistics</Link>
+							</li>
 						</ul>
 					</li>
 					<li>

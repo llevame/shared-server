@@ -1,4 +1,3 @@
-var moment = require('moment');
 
 exports.up = function(knex, Promise) {
 
@@ -6,7 +5,7 @@ exports.up = function(knex, Promise) {
 		table.integer('app_id');
 		table.string('endpoint', 1024);
 		table.string('method');
-		table.integer('madeTime').defaultTo(moment().unix());
+		table.integer('madeTime');
 		table.integer('count').defaultTo(1);
 	});
 };
