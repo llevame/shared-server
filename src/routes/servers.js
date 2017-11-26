@@ -7,6 +7,7 @@ var server = require('../models/server');
 var appTokenVerifier = require('../middlewares/appTokenVerifier');
 var businessTokenVerifier = require('../middlewares/businessTokenVerifier');
 var roleVerifier = require('../middlewares/roleVerifier');
+var stat = require('../middlewares/statGenerator');
 
 // middleware specific to this router
 router.use((req, res, next) => {
@@ -24,7 +25,7 @@ router.post('/', businessTokenVerifier.verifyToken, roleVerifier(['admin', 'mana
 router.get('/:serverId', businessTokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), server.getServer);
 
 // POST /ping
-router.post('/ping', appTokenVerifier.verifyPingToken, server.pingServer);
+router.post('/ping', appTokenVerifier.verifyPingToken, stat.generateStat, server.pingServer);
 
 // POST /:serverId
 router.post('/:serverId', businessTokenVerifier.verifyToken, roleVerifier(['admin', 'manager']), server.resetServerToken);
