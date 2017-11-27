@@ -44,7 +44,11 @@
       "build",
       "src/test/*",
       "db/*",
-      "knexfile.js"
+      "knexfile.js",
+      "src/builders/stats_builder.js",
+      "src/routes/statistics.js",
+      "src/models/statistics.js",
+      "src/middlewares/statGenerator.js"
     ]
   },
   "keywords": [],
