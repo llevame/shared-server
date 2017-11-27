@@ -10,7 +10,9 @@ chai.use(chaiHttp);
 
 var tokenGenerator = require('../libs/service');
 var token = tokenGenerator.createAppToken({id: 1});
+var businessToken = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
 var suffix = '?token=' + token;
+var businessSuffix = '?token=' + businessToken;
 
 describe('trips tests', () => {
 
@@ -472,6 +474,36 @@ describe('trips tests', () => {
 					res.body.should.be.a('object');
 					res.body.should.have.property('code').eql(400);
 					res.body.should.have.property('message').eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('GET action', (done) => {
+			chai.request(server)
+				.get('/api/trips' + businessSuffix)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('trips');
+					res.body.trips[0].should.have.property('id');
+					res.body.trips[0].should.have.property('applicationOwner');
+					res.body.trips[0].should.have.property('driver');
+					res.body.trips[0].should.have.property('passenger');
+					res.body.trips[0].should.have.property('start');
+					res.body.trips[0].start.should.have.property('address');
+					res.body.trips[0].start.should.have.property('timestamp');
+					res.body.trips[0].should.have.property('end');
+					res.body.trips[0].end.should.have.property('address');
+					res.body.trips[0].end.should.have.property('timestamp');
+					res.body.trips[0].should.have.property('waitTime');
+					res.body.trips[0].should.have.property('travelTime');
+					res.body.trips[0].should.have.property('distance');
+					res.body.trips[0].should.have.property('route');
+					res.body.trips[0].should.have.property('cost');
+					res.body.trips[0].cost.should.have.property('currency');
+					res.body.trips[0].cost.should.have.property('value');
 					done();
 				});
 		});

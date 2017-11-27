@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class GetOneServer extends Component {
+class ServerStatistics extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			result: {},
+			result: [],
 			hide: true,
 		};
-		this.onGet = this.onGet.bind(this);
+		this.onEnterToken = this.onEnterToken.bind(this);
 	}
 
-	onGet(e) {
+	onEnterToken(e) {
 		e.preventDefault();
 		let token = sessionStorage.getItem('token');
+		let now = moment().unix();
+		let lastHour = moment().subtract(1, 'hour').unix();
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/servers/' + e.target.id.value + '?token=' + token, {
+			fetch('/api/stats?startTime=' + lastHour + '&endTime=' + now + '&token=' + token, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -37,7 +40,7 @@ class GetOneServer extends Component {
 				} else {
 					this.setState({
 						...this.state,
-						result: json.server,
+						result: json.serversStatistics,
 						hide: false
 					});
 				}
@@ -58,9 +61,8 @@ class GetOneServer extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onGet}>
-					<input type="text" placeholder="Server Id" name="id" />
-					<input type="submit" value="Get" />
+				<form className="Form" onSubmit={this.onEnterToken}>
+					<input type="submit" value="Get app-servers statistics" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -68,4 +70,4 @@ class GetOneServer extends Component {
 	}
 }
 
-export default GetOneServer;
+export default ServerStatistics;

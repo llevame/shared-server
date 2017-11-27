@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class GetOneServer extends Component {
+class ServerStatus extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			result: {},
+			result: [],
 			hide: true,
 		};
-		this.onGet = this.onGet.bind(this);
+		this.onEnterToken = this.onEnterToken.bind(this);
 	}
 
-	onGet(e) {
+	onEnterToken(e) {
 		e.preventDefault();
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/servers/' + e.target.id.value + '?token=' + token, {
+			fetch('/api/servers?token=' + token, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -35,9 +36,19 @@ class GetOneServer extends Component {
 					});
 					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
 				} else {
+					let now = moment().unix();
+					let lastMinute = moment().subtract(5, 'minute').unix();
+					json.servers = json.servers.map((s) => {
+						return {
+							id: s.id,
+							name: s.name,
+							status: (s.lastConnection >= lastMinute &&
+									s.lastConnection < now) ? "ON" : "DOWN"
+						};
+					});
 					this.setState({
 						...this.state,
-						result: json.server,
+						result: json.servers,
 						hide: false
 					});
 				}
@@ -58,9 +69,8 @@ class GetOneServer extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onGet}>
-					<input type="text" placeholder="Server Id" name="id" />
-					<input type="submit" value="Get" />
+				<form className="Form" onSubmit={this.onEnterToken}>
+					<input type="submit" value="Get app-servers status" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -68,4 +78,4 @@ class GetOneServer extends Component {
 	}
 }
 
-export default GetOneServer;
+export default ServerStatus;

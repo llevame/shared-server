@@ -8,12 +8,18 @@ import LogIn from './LogIn';
 import GetBusinessUsers from './business-users/GetAll';
 import GetOneBusinessUser from './business-users/GetOne';
 import AddBusinessUser from './business-users/AddOne';
+import UpdateBusinessUser from './business-users/UpdateOne';
+import DeleteBusinessUser from './business-users/DeleteOne';
 import GetMyInformation from './business-users/GetMe'
 import UpdateMyInformation from './business-users/UpdateMe'
 
 import GetServers from './servers/GetAll';
 import GetOneServer from './servers/GetOne';
 import AddServer from './servers/AddOne';
+import UpdateServer from './servers/UpdateOne';
+import DeleteServer from './servers/DeleteOne';
+import ServerStatus from './servers/GetStatus';
+import ServerStatistics from './servers/GetStatistics';
 
 import GetRules from './rules/GetAll';
 import GetOneRule from './rules/GetOne';
@@ -21,6 +27,10 @@ import AddRule from './rules/AddOne';
 import RunTestRules from './rules/RunTests'
 import RunOneRule from './rules/RunOne';
 import RunAllRules from './rules/RunAll';
+import DeleteRule from './rules/DeleteOne';
+import UpdateRule from './rules/UpdateOne';
+
+import GetTrips from './trips/GetAll';
 
 import logo from '../carretera.jpg';
 import '../css/App.css';
@@ -42,17 +52,26 @@ class App extends Component {
 						<Route path="/business" component={ GetBusinessUsers } />
 						<Route path="/business-add" component={ AddBusinessUser } />
 						<Route path="/business-get" component={ GetOneBusinessUser } />
+						<Route path="/business-update" component={ UpdateBusinessUser } />
+						<Route path="/business-del" component={ DeleteBusinessUser } />
 						<Route path="/business-me" component={ GetMyInformation } />
 						<Route path="/business-update-me" component={ UpdateMyInformation } />
 						<Route path="/servers" component={ GetServers } />
 						<Route path="/servers-add" component={ AddServer } />
 						<Route path="/servers-get" component={ GetOneServer } />
+						<Route path="/servers-update" component={ UpdateServer } />
+						<Route path="/servers-del" component={ DeleteServer } />
+						<Route path="/servers-status" component={ ServerStatus } />
+						<Route path="/servers-stats" component={ ServerStatistics } />
 						<Route path="/rules" component={ GetRules } />
 						<Route path="/rules-get" component={ GetOneRule } />
 						<Route path="/rules-add" component={ AddRule } />
 						<Route path="/rules-run-test" component={ RunTestRules } />
 						<Route path="/rules-run" component={ RunAllRules } />
 						<Route path="/rules-run-one" component={ RunOneRule } />
+						<Route path="/rules-del" component={ DeleteRule } />
+						<Route path="/rules-update" component={ UpdateRule } />
+						<Route path="/trips" component={ GetTrips } />
 					</Switch>
 				</div>
 			</div>

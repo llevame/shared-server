@@ -35,4 +35,8 @@ app.use(basePath + '/business-users', business_users);
 var rules = require('./rules');
 app.use(basePath + '/rules', rules);
 
+// /stats endpoint
+var stats = require('./statistics');
+app.use(basePath + '/stats', stats);
+
 module.exports = app;

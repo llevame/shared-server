@@ -44,9 +44,10 @@ function getAllByUser(userId, type) {
 			'cost');
 }
 
-function add(t, cst, curr) {
+function add(t, appOwner, cst, curr) {
 
 	let taux = {
+		applicationOwner: appOwner,
 		driver: t.trip.driver,
 		passenger: t.trip.passenger,
 		start: t.trip.start,

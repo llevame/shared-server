@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetOneBusinessUser extends Component {
@@ -45,6 +45,15 @@ class GetOneBusinessUser extends Component {
 		}
 	}
 
+	renderResult() {
+
+		if (!this.state.hide) {
+			return (
+				<TableResults result={this.state.result} style={{"justifyContent": "center"}}/>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -53,7 +62,7 @@ class GetOneBusinessUser extends Component {
 					<input type="text" placeholder="User Id" name="id" />
 					<input type="submit" value="Get" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

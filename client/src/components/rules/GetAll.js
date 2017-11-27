@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import CodeMirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetRules extends Component {
@@ -45,6 +48,38 @@ class GetRules extends Component {
 		}
 	}
 
+	renderResult() {
+
+		if (!this.state.hide) {
+
+			let rules = this.state.result.map((r) => {
+				return {
+					information: {
+						id: r.id,
+						_ref: r._ref,
+						language: r.language,
+						active: r.active,
+						lastCommit: r.lastCommit
+					},
+					blob: r.blob
+				};
+			});
+
+			return (
+				<div>
+					{rules.map((rule) => 
+						<div>
+							<h4>Information:</h4>
+							<TableResults result={rule.information} style={{"justifyContent": "left"}}/>
+							<h4>Rule:</h4>
+							<CodeMirror value={rule.blob} options={{...this.config, readOnly: true}}/>
+						</div>
+					)}
+				</div>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -52,7 +87,7 @@ class GetRules extends Component {
 				<form className="Form" onSubmit={this.onGetAll}>
 					<input type="submit" value="Get rules" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

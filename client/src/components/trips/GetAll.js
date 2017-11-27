@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class GetOneServer extends Component {
+class GetTrips extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			result: {},
+			result: [],
 			hide: true,
 		};
-		this.onGet = this.onGet.bind(this);
+		this.onEnterToken = this.onEnterToken.bind(this);
 	}
 
-	onGet(e) {
+	onEnterToken(e) {
 		e.preventDefault();
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/servers/' + e.target.id.value + '?token=' + token, {
+			fetch('/api/trips?token=' + token, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ class GetOneServer extends Component {
 				} else {
 					this.setState({
 						...this.state,
-						result: json.server,
+						result: json.trips,
 						hide: false
 					});
 				}
@@ -49,7 +49,7 @@ class GetOneServer extends Component {
 
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justifyContent": "center"}}/>
+				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
 			);
 		}
 	}
@@ -58,9 +58,8 @@ class GetOneServer extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onGet}>
-					<input type="text" placeholder="Server Id" name="id" />
-					<input type="submit" value="Get" />
+				<form className="Form" onSubmit={this.onEnterToken}>
+					<input type="submit" value="Get trips" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -68,4 +67,4 @@ class GetOneServer extends Component {
 	}
 }
 
-export default GetOneServer;
+export default GetTrips;

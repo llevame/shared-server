@@ -39,6 +39,18 @@
   border: 5px solid #333;
 }
 
+.TableResults {
+  padding: 20px;
+  background: linear-gradient(to bottom, #000000 0%, #003300 100%);
+  border: 5px solid #333;
+  display: flex;
+  overflow-x: auto;
+}
+
+.OutsideTable {
+  padding-top: 20px;
+}
+
 h1 {
   font-weight: normal;
   font-size: 42px;

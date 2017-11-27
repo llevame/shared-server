@@ -2,28 +2,33 @@ import React, { Component } from 'react';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class GetOneServer extends Component {
+class UpdateServer extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			result: {},
-			hide: true,
+			hide: true
 		};
-		this.onGet = this.onGet.bind(this);
+		this.onUpdateServer = this.onUpdateServer.bind(this);
 	}
 
-	onGet(e) {
+	onUpdateServer(e) {
 		e.preventDefault();
+		let credentials = {
+			_ref: e.target._ref.value,
+			name: e.target.name.value,
+		};
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
 			fetch('/api/servers/' + e.target.id.value + '?token=' + token, {
-				method: 'GET',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify(credentials)
 			})
 			.then((res) => res.json())
 			.then((json) => {
@@ -49,7 +54,7 @@ class GetOneServer extends Component {
 
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justifyContent": "center"}}/>
+				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
 			);
 		}
 	}
@@ -58,9 +63,14 @@ class GetOneServer extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onGet}>
+				<form className="Form" onSubmit={this.onUpdateServer}>
 					<input type="text" placeholder="Server Id" name="id" />
-					<input type="submit" value="Get" />
+					<br /><br />
+					<input type="text" placeholder="Revison Code" name="_ref" />
+					<br />
+					<input type="text" placeholder="Name" name="name" />
+					<br /><br />
+					<input type="submit" value="Update" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -68,4 +78,4 @@ class GetOneServer extends Component {
 	}
 }
 
-export default GetOneServer;
+export default UpdateServer;

@@ -137,7 +137,7 @@ describe('servers tests', () => {
 					res.body.servers[0].should.have.property('id').eql(1);
 					res.body.servers[0].should.have.property('_ref');
 					res.body.servers[0].should.have.property('createdBy').eql('admin1');
-					res.body.servers[0].should.have.property('createdTime').eql(1);
+					res.body.servers[0].should.have.property('createdTime');
 					res.body.servers[0].should.have.property('name').eql('app_server0');
 					res.body.servers[0].should.have.property('lastConnection');
 					done();
@@ -156,7 +156,7 @@ describe('servers tests', () => {
 					res.body.server.should.have.property('id').eql(1);
 					res.body.server.should.have.property('_ref');
 					res.body.server.should.have.property('createdBy').eql('admin1');
-					res.body.server.should.have.property('createdTime').eql(1);
+					res.body.server.should.have.property('createdTime');
 					res.body.server.should.have.property('name').eql('app_server0');
 					res.body.server.should.have.property('lastConnection');
 					done();
@@ -207,7 +207,7 @@ describe('servers tests', () => {
 					res.body.server.should.have.property('id').eql(1);
 					res.body.server.should.have.property('_ref');
 					res.body.server.should.have.property('createdBy').eql('admin1');
-					res.body.server.should.have.property('createdTime').eql(1);
+					res.body.server.should.have.property('createdTime');
 					res.body.server.should.have.property('name').eql('app_server0');
 					res.body.server.should.have.property('lastConnection');
 					chai.request(server)
@@ -225,7 +225,7 @@ describe('servers tests', () => {
 							r.body.server.should.have.property('id').eql(1);
 							r.body.server.should.have.property('_ref');
 							r.body.server.should.have.property('createdBy').eql('admin1');
-							r.body.server.should.have.property('createdTime').eql(1);
+							r.body.server.should.have.property('createdTime');
 							r.body.server.should.have.property('name').eql('app_server0_modificado');
 							r.body.server.should.have.property('lastConnection');
 							done();

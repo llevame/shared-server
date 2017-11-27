@@ -29,6 +29,12 @@ class Menu extends Component {
 								<Link to={'/business-add'}>Add one</Link>
 							</li>
 							<li>
+								<Link to={'/business-update'}>Update one</Link>
+							</li>
+							<li>
+								<Link to={'/business-del'}>Delete one</Link>
+							</li>
+							<li>
 								<Link to={'/business-me'}>Get my information</Link>
 							</li>
 							<li>
@@ -47,6 +53,18 @@ class Menu extends Component {
 							</li>
 							<li>
 								<Link to={'/servers-add'}>Add one</Link>
+							</li>
+							<li>
+								<Link to={'/servers-update'}>Update one</Link>
+							</li>
+							<li>
+								<Link to={'/servers-del'}>Delete one</Link>
+							</li>
+							<li>
+								<Link to={'/servers-status'}>Get status</Link>
+							</li>
+							<li>
+								<Link to={'/servers-stats'}>Get statistics</Link>
 							</li>
 						</ul>
 					</li>
@@ -70,6 +88,20 @@ class Menu extends Component {
 							</li>
 							<li>
 								<Link to={'/rules-run-one'}>Run one</Link>
+							</li>
+							<li>
+								<Link to={'/rules-del'}>Delete one</Link>
+							</li>
+							<li>
+								<Link to={'/rules-update'}>Update one</Link>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Trips
+						<ul>
+							<li>
+								<Link to={'/trips'}>Get all</Link>
 							</li>
 						</ul>
 					</li>
