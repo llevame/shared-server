@@ -7,8 +7,10 @@ class About extends Component {
 		return (
 			<div>
 				<Menu />
-				<h2>Llevame backoffice. Hosted in GitHub</h2>
-				<h3>https://github.com/llevame</h3>
+				<div style={{"textAlign": "center"}}>
+					<h2>Llevame backoffice. Hosted in GitHub</h2>
+					<h3>https://github.com/llevame</h3>
+				</div>
 			</div>
 		);
 	}

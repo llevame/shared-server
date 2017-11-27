@@ -4,7 +4,9 @@
   "description": "Shared Server para la aplicación Llevame",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node ./src/index.js",
+    "client": "node start-client.js",
     "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
     "clean": "rm -rf coverage/ log/ *.lcov",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
@@ -34,6 +36,7 @@
     "chai": "^4.1.1",
     "chai-http": "^3.0.0",
     "codecov": "^2.3.1",
+    "concurrently": "^3.5.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
     "nyc": "^11.1.0"
