@@ -10,7 +10,9 @@
     "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
     "clean": "rm -rf coverage/ log/ *.lcov",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "installDep": "npm install && npm install --prefix client"
+    "installDep": "npm install && npm install --prefix client",
+    "format": "node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find {src,client} -name '*.js'`",
+    "lint": "node_modules/.bin/eslint {src, client}"
   },
   "repository": {
     "type": "git",
@@ -38,9 +40,15 @@
     "chai-http": "^3.0.0",
     "codecov": "^2.3.1",
     "concurrently": "^3.5.1",
+    "eslint": "^4.12.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.5.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
-    "nyc": "^11.1.0"
+    "nyc": "^11.1.0",
+    "prettier": "^1.8.2"
   },
   "nyc": {
     "exclude": [
