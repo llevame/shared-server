@@ -17,12 +17,8 @@ function verifyToken(req, res, next) {
 	}
 
 	jwt.verify(req.query.token, process.BUSINESS_TOKEN_SECRET_KEY, (err, decoded) => {
-		
+
 		if (err) {
-			return res.status(401).json(error.invalidToken(err));
-		}
-		
-		if (decoded.exp < moment().unix()) {
 			return res.status(401).json(error.invalidToken(err));
 		}
 

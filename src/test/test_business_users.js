@@ -9,11 +9,32 @@ var knex = require('../../db/knex');
 chai.use(chaiHttp);
 
 var tokenGenerator = require('../libs/service');
+var jwt = require('jsonwebtoken');  
+var moment = require('moment');  
+var env = require('node-env-file');
+var proc = env(__dirname + '/../../process.env');
+
+// business-user with 'admin' role
 var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
 var suffix = '?token=' + token;
 
-var userRoleToken = tokenGenerator.createBusinessToken({id:1, roles: ["user"]});
+// business-user with 'user' role
+var userRoleToken = tokenGenerator.createBusinessToken({id: 1, roles: ["user"]});
 var userRoleSuffix = '?token=' + userRoleToken;
+
+// error token example
+var errorToken = 'error-token';
+var errorSufffix = '?token=' + errorToken;
+
+// expired token example
+var payload = {
+	id: 1,
+	roles: ["admin"],
+	iat: moment().unix(),
+	exp: moment().subtract(1, "day").unix()
+};
+var tokenExpired = jwt.sign(payload, proc.BUSINESS_TOKEN_SECRET_KEY);
+var expiredSuffix = '?token=' + tokenExpired;
 
 describe('business-users tests', () => {
 
@@ -30,6 +51,39 @@ describe('business-users tests', () => {
 		afterEach((done) => {
 			knex.migrate.rollback()
 			.then(() => done());
+		});
+
+		it('Action without the token in the query', (done) => {
+			chai.request(server)
+				.get('/api/business-users')
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('Acceso no autorizado');
+					done();
+				});
+		});
+
+		it('Action with invalid token', (done) => {
+			chai.request(server)
+				.get('/api/business-users' + errorSufffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});
+		});
+
+		it('Action with expired token', (done) => {
+			chai.request(server)
+				.get('/api/business-users' + expiredSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});
 		});
 
 		it('GET action', (done) => {
@@ -366,6 +420,7 @@ describe('business-users tests', () => {
 					done();
 				});
 		});
+
 	});
 
 	describe('/business-users/me', () => {
