@@ -10,7 +10,7 @@
     "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
     "clean": "rm -rf coverage/ log/ *.lcov",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "installDep": "npm install && cd client && npm install"
+    "installDep": "npm install && npm install --prefix client"
   },
   "repository": {
     "type": "git",
