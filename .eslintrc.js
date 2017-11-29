@@ -21,6 +21,9 @@ module.exports = {
     'prettier/prettier': ['error', {
       singleQuote: true,
       trailingComma: 'es5',
+      tabWidth: 4,
+      useTabs: true,
+      printWidth: 80
     }],
     'require-jsdoc': 'off',
   },
