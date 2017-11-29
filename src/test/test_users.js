@@ -533,6 +533,18 @@ describe('users tests', () => {
 					done();
 				});
 		});
+
+		it('GET action on no user', (done) => {
+			chai.request(server)
+				.get(url + '/10/trips' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message').eql('No existe el recurso solicitado');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}/cars', () => {
