@@ -9,11 +9,74 @@ var knex = require('../../db/knex');
 chai.use(chaiHttp);
 
 var url = '/api/users';
+
 var tokenGenerator = require('../libs/service');
+var jwt = require('jsonwebtoken');  
+var moment = require('moment');  
+var env = require('node-env-file');
+var proc = env(__dirname + '/../../process.env');
+
+// valid app token
 var token = tokenGenerator.createAppToken({id: 1});
 var suffix = '?token=' + token;
 
+// valid business-user token
+var businessToken = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
+var businessSuffix = '?token=' + businessToken;
+
+// expired app-server token
+var payload = {
+	id: 1,
+	iat: moment().unix(),
+	exp: moment().subtract(1, "day").unix()
+};
+
+var tokenExpired = jwt.sign(payload, proc.APP_TOKEN_SECRET_KEY);
+var expiredSuffix = '?token=' + tokenExpired;
+
+// invalid token
+var invalidSuffix = '?token=invalid-token';
+
 describe('users tests', () => {
+
+	describe('token verifications', () => {
+
+		it('no app token', (done) => {
+			chai.request(server)
+				.get(url)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});
+		});
+
+		it('app token expired', (done) => {
+			chai.request(server)
+				.get(url + expiredSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});
+		});
+
+		it('invalid token', (done) => {
+			chai.request(server)
+				.get(url + invalidSuffix)
+				.end((err, res) => {
+					res.should.have.status(401);
+					res.body.should.be.a('object');
+					res.body.should.have.property('code');
+					res.body.should.have.property('message');
+					done();
+				});
+		});
+	});
 
 	describe('/users', () => {
 
@@ -30,7 +93,38 @@ describe('users tests', () => {
 			.then(() => done());
 		});
 
-		it('GET action', (done) => {
+		it('GET action with business-user token', (done) => {
+			chai.request(server)
+				.get(url + businessSuffix)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					res.body.should.have.property('metadata');
+					res.body.metadata.should.have.property('count');
+					res.body.metadata.should.have.property('total');
+					res.body.metadata.should.have.property('version');
+					res.body.should.have.property('users');
+					res.body.users.should.be.a('array');
+					res.body.users.length.should.be.eql(res.body.metadata.count);
+					res.body.users[0].should.have.property('id').eql(1);
+					res.body.users[0].should.have.property('_ref');
+					res.body.users[0].should.have.property('applicationOwner');
+					res.body.users[0].should.have.property('type').eql('passenger');
+					res.body.users[0].should.have.property('username').eql('juan123');
+					res.body.users[0].should.have.property('name').eql('Juan');
+					res.body.users[0].should.have.property('surname').eql('Lopez');
+					res.body.users[0].should.have.property('country').eql('Argentina');
+					res.body.users[0].should.have.property('email').eql('juan@gmail.com');
+					res.body.users[0].should.have.property('birthdate').eql('13/1/1990');
+					res.body.users[0].should.have.property('images');
+					res.body.users[0].should.have.property('balance');
+					res.body.users[0].should.have.property('cars');
+					res.body.users[0].cars.should.be.a('array');
+					done();
+				});
+		});
+
+		it('GET action with app-server token', (done) => {
 			chai.request(server)
 				.get(url + suffix)
 				.end((err, res) => {

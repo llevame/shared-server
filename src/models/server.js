@@ -179,7 +179,7 @@ function pingServer(req, res) {
 
 	var id = req.user.id;
 	var now = moment().unix();
-
+	
 	serverQ.updatePing(id, {lastConnection: knex.fn.now()})
 		.then((updatedServer) => {
 			if (req.user.exp < now) {

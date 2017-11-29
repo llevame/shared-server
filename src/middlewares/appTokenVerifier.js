@@ -15,27 +15,27 @@ function verifier(req, res, next, ping) {
 	jwt.verify(req.query.token, process.APP_TOKEN_SECRET_KEY, (err, decoded) => {
 		
 		if (err) {
-			jwt.verify(req.query.token, process.BUSINESS_TOKEN_SECRET_KEY, (err, decoded) => {
-		
-				if (err) {
-					return res.status(401).json(error.invalidToken(err));
+			if (err.message === 'jwt expired') {
+				if (ping !== 'ping') {
+					res.status(401).json(error.invalidToken(err));
+				} else {
+					req.user = jwt.decode(req.query.token);
+					next();
 				}
-				
-				if (!(ping === 'ping') && (decoded.exp < moment().unix())) {
-					return res.status(401).json(error.invalidToken(err));
-				}
-
-				req.user = decoded;
-				next();
-			});	
+			} else {
+				jwt.verify(req.query.token, process.BUSINESS_TOKEN_SECRET_KEY, (e, dec) => {
+					if (e) {
+						res.status(401).json(error.invalidToken(e));
+					} else {
+						req.user = dec;
+						next();
+					}
+				});
+			}
+		} else {
+			req.user = decoded;
+			next();
 		}
-		
-		if (!(ping === 'ping') && (decoded.exp < moment().unix())) {
-			return res.status(401).json(error.invalidToken(err));
-		}
-
-		req.user = decoded;
-		next();
 	});
 }
 

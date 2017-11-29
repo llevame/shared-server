@@ -9,8 +9,25 @@ var knex = require('../../db/knex');
 chai.use(chaiHttp);
 
 var tokenGenerator = require('../libs/service');
+var jwt = require('jsonwebtoken');  
+var moment = require('moment');  
+var env = require('node-env-file');
+var proc = env(__dirname + '/../../process.env');
+
+// valid business-user token
 var token = tokenGenerator.createBusinessToken({id: 1, roles: ["admin"]});
 var suffix = '?token=' + token;
+
+// expired app-server token
+var payload = {
+	id: 1,
+	iat: moment().unix(),
+	exp: moment().subtract(1, "day").unix()
+};
+
+var tokenExpired = jwt.sign(payload, proc.APP_TOKEN_SECRET_KEY);
+var expiredSuffix = '?token=' + tokenExpired;
+
 
 describe('servers tests', () => {
 
@@ -315,7 +332,30 @@ describe('servers tests', () => {
 			.then(() => done());
 		});
 
-		it('POST action - resets the token', (done) => {
+		it('POST action - expired token and resets it', (done) => {
+			chai.request(server)
+				.post('/api/servers/ping' + expiredSuffix)
+				.end((e, r) => {
+					r.should.have.status(201);
+					r.body.should.be.a('object');
+					r.body.should.have.property('metadata');
+					r.body.metadata.should.have.property('version');
+					r.body.should.have.property('ping');
+					r.body.ping.should.have.property('server');
+					r.body.ping.server.should.have.property('id');
+					r.body.ping.server.should.have.property('_ref');
+					r.body.ping.server.should.have.property('createdBy');
+					r.body.ping.server.should.have.property('createdTime');
+					r.body.ping.server.should.have.property('name');
+					r.body.ping.server.should.have.property('lastConnection');
+					r.body.ping.should.have.property('token');
+					r.body.ping.token.should.have.property('expiresAt');
+					r.body.ping.token.should.have.property('token');
+					done();
+				});
+		});
+
+		it('POST action', (done) => {
 			let s = {
 				createdBy: "admin",
 				createdTime: 1,
