@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['react',['react',['../_app_8test_8js.html#aaed10feaf2dda4314d93c83408affea1',1,'react():&#160;App.test.js'],['../client_2src_2index_8js.html#aaed10feaf2dda4314d93c83408affea1',1,'react():&#160;index.js'],['../_app_8js.html#a8e6a862a904cf8b07c69fae7c44a1a04',1,'React():&#160;App.js']]],
-  ['registerserviceworker',['registerServiceWorker',['../client_2src_2index_8js.html#a46b9dc7ffff236b50db9fc07a37bd570',1,'index.js']]],
-  ['roleverifier',['roleVerifier',['../business__users_8js.html#ad2d281fe5aee03b77288660187657d2e',1,'roleVerifier():&#160;business_users.js'],['../routes_2rules_8js.html#ad2d281fe5aee03b77288660187657d2e',1,'roleVerifier():&#160;rules.js'],['../servers_8js.html#ad2d281fe5aee03b77288660187657d2e',1,'roleVerifier():&#160;servers.js']]],
-  ['router',['router',['../business__users_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;business_users.js'],['../default_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;default.js'],['../routes_2paymethods_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;paymethods.js'],['../routes_2rules_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;rules.js'],['../servers_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;servers.js'],['../routes_2token_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;token.js'],['../routes_2trips_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;trips.js'],['../users_8js.html#af100c40b3949fbe4f9f71d346fc5f852',1,'router():&#160;users.js']]],
-  ['routes',['routes',['../src_2index_8js.html#a4e4b4a1804c96cf15c794901f88aaef4',1,'index.js']]],
-  ['rules',['rules',['../src_2routes_2index_8js.html#ada87c2e257bc5ff6e77cdbc23ed986a3',1,'rules():&#160;index.js'],['../routes_2rules_8js.html#ada87c2e257bc5ff6e77cdbc23ed986a3',1,'rules():&#160;rules.js']]]
-];

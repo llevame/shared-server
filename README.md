@@ -15,7 +15,9 @@ Desarrollado con **NodeJs**, **ExpressJs** como back-end y **ReactJs** como fron
 - Dependencias:  
   - *[Node](https://nodejs.org/en/download/)* (también se instala el manejador de paquetes denominado **npm** - Node Package Manager)  
   - *[Docker](https://www.docker.com/community-edition#/download)*  
-  - *[PostgreSQL](https://www.postgresql.org/download)* (recomendable: instalar *PgAdminIII* - interfaz gráfica para gestionar las distintas base de datos y sus tablas)
+  - *[Docker Compose](https://docs.docker.com/compose/install/)*
+  - *[PostgreSQL](https://www.postgresql.org/download)* (recomendable: instalar *PgAdminIII* - interfaz gráfica para gestionar las distintas base de datos y sus tablas)  
+  - *[Doxygen](http://www.stack.nl/~dimitri/doxygen/manual/install.html)*
 
 Para ejecutar el servidor **ExpressJs** y el cliente de **ReactJs** de forma local se necesitan ejecutar los siguientes comandos:
 
@@ -63,4 +65,13 @@ Luego de descargarse la imagen, ejecutar:
 
 ```bash
 $ docker-compose up
+```
+
+
+### Documentación
+
+Para generar la documentación del código se utiliza *Doxygen*, con lo cual, luego de descargar e instarlo desde la [pagina oficial](http://www.stack.nl/~dimitri/doxygen/manual/install.html), se puede ejecutar lo siguiente:  
+
+```bash
+$ doxygen Doxyfile
 ```
