@@ -61,13 +61,26 @@ class ServerStatistics extends Component {
 		}
 	}
 
+	renderStatistics() {
+		return this.state.result.length > 0 ? (
+			<TableResults
+				result={this.state.result}
+				style={{ justifyContent: 'center' }}
+			/>
+		) : (
+			<h4 style={{ textAlign: 'center' }}>No recent statistics yet</h4>
+		);
+	}
+
 	renderResult() {
 		if (!this.state.hide) {
 			return (
-				<TableResults
-					result={this.state.result}
-					style={{ justifyContent: 'center' }}
-				/>
+				<div>
+					<h3 style={{ textAlign: 'center' }}>
+						Statistics in the last hour
+					</h3>
+					{this.renderStatistics()}
+				</div>
 			);
 		}
 	}

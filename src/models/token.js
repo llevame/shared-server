@@ -36,14 +36,12 @@ function getToken(req, res) {
 			.getAll()
 			.then(users => {
 				if (users.length == 0 || !isThereAnAdminUser(users)) {
-					res
-						.status(201)
-						.json(
-							tokenBuilder.createTokenResponse({
-								id: 0,
-								roles: ['admin'],
-							})
-						);
+					res.status(201).json(
+						tokenBuilder.createTokenResponse({
+							id: 0,
+							roles: ['admin'],
+						})
+					);
 				} else {
 					return res.status(401).json(error.unathoAccess());
 				}
