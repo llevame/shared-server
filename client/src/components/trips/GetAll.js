@@ -3,7 +3,6 @@ import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetTrips extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -25,31 +24,37 @@ class GetTrips extends Component {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.trips,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.trips,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 
 	renderResult() {
-
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'left' }}
+				/>
 			);
 		}
 	}

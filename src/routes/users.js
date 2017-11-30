@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("http");
+var log = require('log4js').getLogger('http');
 var user = require('../models/user');
 var user_trips = require('../models/user_trips');
 var user_transactions = require('../models/user_transactions');
@@ -23,39 +23,99 @@ router.get('/', tokenVerifier.verifyToken, stat.generateStat, user.getUsers);
 router.post('/', tokenVerifier.verifyToken, stat.generateStat, user.postUser);
 
 // POST /validate
-router.post('/validate', tokenVerifier.verifyToken, stat.generateStat, user.validateUser);
+router.post(
+	'/validate',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user.validateUser
+);
 
 // DELETE /{userId}
-router.delete('/:userId', tokenVerifier.verifyToken, stat.generateStat, user.deleteUser);
+router.delete(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user.deleteUser
+);
 
 // GET /{userId}
-router.get('/:userId', tokenVerifier.verifyToken, stat.generateStat, user.getUser);
+router.get(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user.getUser
+);
 
 // PUT /{userId}
-router.put('/:userId', tokenVerifier.verifyToken, stat.generateStat, user.updateUser);
+router.put(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user.updateUser
+);
 
 // GET /{userId}/trips
-router.get('/:userId/trips', tokenVerifier.verifyToken, stat.generateStat, user_trips.getTrips);
+router.get(
+	'/:userId/trips',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_trips.getTrips
+);
 
 // GET /{userId}/cars
-router.get('/:userId/cars', tokenVerifier.verifyToken, stat.generateStat, user_cars.getCars);
+router.get(
+	'/:userId/cars',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_cars.getCars
+);
 
 // POST /{userId}/cars
-router.post('/:userId/cars', tokenVerifier.verifyToken, stat.generateStat, user_cars.postCar);
+router.post(
+	'/:userId/cars',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_cars.postCar
+);
 
 // GET /{userId}/cars/{carId}
-router.get('/:userId/cars/:carId', tokenVerifier.verifyToken, stat.generateStat, user_cars.getCar);
+router.get(
+	'/:userId/cars/:carId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_cars.getCar
+);
 
 // PUT /{userId}/cars/{carId}
-router.put('/:userId/cars/:carId', tokenVerifier.verifyToken, stat.generateStat, user_cars.updateCar);
+router.put(
+	'/:userId/cars/:carId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_cars.updateCar
+);
 
 // DELETE /{userId}/cars/{carId}
-router.delete('/:userId/cars/:carId', tokenVerifier.verifyToken, stat.generateStat, user_cars.deleteCar);
+router.delete(
+	'/:userId/cars/:carId',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_cars.deleteCar
+);
 
 // GET /{userId}/transactions
-router.get('/:userId/transactions', tokenVerifier.verifyToken, stat.generateStat, user_transactions.getTransactions);
+router.get(
+	'/:userId/transactions',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_transactions.getTransactions
+);
 
 // POST /{userId}/transactions
-router.post('/:userId/transactions', tokenVerifier.verifyToken, stat.generateStat, user_transactions.postTransaction);
+router.post(
+	'/:userId/transactions',
+	tokenVerifier.verifyToken,
+	stat.generateStat,
+	user_transactions.postTransaction
+);
 
 module.exports = router;

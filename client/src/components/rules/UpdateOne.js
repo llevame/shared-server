@@ -6,18 +6,17 @@ import Serial from '../../utils/Serial';
 import Menu from '../Menu';
 
 class UpdateRule extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
 			selectValue: 'true',
-			rule: "",
+			rule: '',
 		};
 		this.config = {
 			mode: 'javascript',
 			lineNumbers: true,
 			tabSize: 2,
-			identWithTabs: true
+			identWithTabs: true,
 		};
 		this.setRule = this.setRule.bind(this);
 		this.onUpdateRule = this.onUpdateRule.bind(this);
@@ -34,7 +33,7 @@ class UpdateRule extends Component {
 	handleSelectChange(e) {
 		this.setState({
 			...this.state,
-			selectValue: e.target.value
+			selectValue: e.target.value,
 		});
 	}
 
@@ -44,7 +43,7 @@ class UpdateRule extends Component {
 			_ref: e.target._ref.value,
 			language: 'node-rules/javascript',
 			blob: this.state.rule,
-			active: (this.state.selectValue === 'true'),
+			active: this.state.selectValue === 'true',
 		};
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
@@ -55,47 +54,69 @@ class UpdateRule extends Component {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(credentials)
+				body: JSON.stringify(credentials),
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					alert(`Rule has been successfully updated`);
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						alert(`Rule has been successfully updated`);
+					}
+				});
 		}
 	}
 
 	render() {
-		let r = "Ej: add this rule\n" + Serial.serialize({
-			condition: function (R) {
-				R.when(this && (this.transactionTotal < 500));
-			},
-			consequence: function (R) {
-				this.result = false;
-				R.stop();
-			}
-		}, {space: 2});
+		let r =
+			'Ej: add this rule\n' +
+			Serial.serialize(
+				{
+					condition: function(R) {
+						R.when(this && this.transactionTotal < 500);
+					},
+					consequence: function(R) {
+						this.result = false;
+						R.stop();
+					},
+				},
+				{ space: 2 }
+			);
 		return (
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onUpdateRule}>
 					<input type="text" placeholder="Rule Id" name="id" />
-					<br /><br />
-					<input type="text" placeholder="Revision Code" name="_ref" />
-					<br /><br />
+					<br />
+					<br />
+					<input
+						type="text"
+						placeholder="Revision Code"
+						name="_ref"
+					/>
+					<br />
+					<br />
 					<label>
 						Select a status:
-						<select value={this.state.selectValue} onChange={this.handleSelectChange}>
+						<select
+							value={this.state.selectValue}
+							onChange={this.handleSelectChange}
+						>
 							<option value="true">Active</option>
 							<option value="false">Inactive</option>
 						</select>
 					</label>
 					<br />
 					<h4>Rule:</h4>
-					<CodeMirror value={r} options={this.config} onChange={this.setRule}/>
+					<CodeMirror
+						value={r}
+						options={this.config}
+						onChange={this.setRule}
+					/>
 					<input type="submit" value="Update" />
 				</form>
 			</div>

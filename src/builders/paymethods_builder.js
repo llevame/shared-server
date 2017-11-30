@@ -1,14 +1,12 @@
 var v = require('../../package.json').version;
 
 function createPaymethodResponse(items) {
-	
 	let a = [];
 
 	for (p in items) {
-
 		let paym = {
 			name: items[p].paymethod,
-			parameters: items[p].parameters
+			parameters: items[p].parameters,
 		};
 
 		a.push(paym);
@@ -18,10 +16,10 @@ function createPaymethodResponse(items) {
 		metadata: {
 			count: items.length,
 			total: items.length,
-			version: v
+			version: v,
 		},
-		paymethods: a
+		paymethods: a,
 	};
 }
 
-module.exports = {createPaymethodResponse};
+module.exports = { createPaymethodResponse };

@@ -1,73 +1,75 @@
 {
-  "name": "shared-server",
-  "version": "1.0.0",
-  "description": "Shared Server para la aplicación Llevame",
-  "main": "index.js",
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node ./src/index.js",
-    "client": "node start-client.js",
-    "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
-    "clean": "rm -rf coverage/ log/ *.lcov",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "installDep": "npm install && npm install --prefix client",
-    "format": "node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find {src,client} -name '*.js'`",
-    "lint": "node_modules/.bin/eslint {src, client}"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/llevame/shared-server.git"
-  },
-  "dependencies": {
-    "body-parser": "~1.10.1",
-    "cors": "^2.8.4",
-    "create-react-app": "^1.4.0",
-    "express": "^4.15.3",
-    "geolib": "^2.0.24",
-    "jsonwebtoken": "^8.1.0",
-    "knex": "^0.13.0",
-    "log4js": "^1.1.1",
-    "moment": "^2.19.0",
-    "node-env-file": "^0.1.8",
-    "node-rules": "^3.1.0",
-    "pg": "6.1.5",
-    "request-promise": "^4.2.2",
-    "serialize-javascript": "^1.4.0",
-    "uuid": "^3.1.0"
-  },
-  "devDependencies": {
-    "chai": "^4.1.1",
-    "chai-http": "^3.0.0",
-    "codecov": "^2.3.1",
-    "concurrently": "^3.5.1",
-    "eslint": "^4.12.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "eslint-plugin-react": "^7.5.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.5.0",
-    "nyc": "^11.1.0",
-    "prettier": "^1.8.2"
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.spec.js",
-      "build",
-      "src/test/*",
-      "db/*",
-      "knexfile.js",
-      "src/builders/stats_builder.js",
-      "src/routes/statistics.js",
-      "src/models/statistics.js",
-      "src/middlewares/statGenerator.js"
-    ]
-  },
-  "keywords": [],
-  "author": "llevame",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/llevame/shared-server/issues"
-  },
-  "homepage": "https://github.com/llevame/shared-server#readme"
+	"name": "shared-server",
+	"version": "1.0.0",
+	"description": "Shared Server para la aplicación Llevame",
+	"main": "index.js",
+	"scripts": {
+		"start": "concurrently \"npm run server\" \"npm run client\"",
+		"server": "node ./src/index.js",
+		"client": "node start-client.js",
+		"test": "nyc node_modules/mocha/bin/_mocha src/test/*",
+		"clean": "rm -rf coverage/ log/ *.lcov",
+		"coverage":
+			"nyc report --reporter=text-lcov > coverage.lcov && codecov",
+		"installDep": "npm install && npm install --prefix client",
+		"format":
+			"node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find src client -name '*.js'`",
+		"lint": "node_modules/.bin/eslint {src, client}"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/llevame/shared-server.git"
+	},
+	"dependencies": {
+		"body-parser": "~1.10.1",
+		"cors": "^2.8.4",
+		"create-react-app": "^1.4.0",
+		"express": "^4.15.3",
+		"geolib": "^2.0.24",
+		"jsonwebtoken": "^8.1.0",
+		"knex": "^0.13.0",
+		"log4js": "^1.1.1",
+		"moment": "^2.19.0",
+		"node-env-file": "^0.1.8",
+		"node-rules": "^3.1.0",
+		"pg": "6.1.5",
+		"request-promise": "^4.2.2",
+		"serialize-javascript": "^1.4.0",
+		"uuid": "^3.1.0"
+	},
+	"devDependencies": {
+		"chai": "^4.1.1",
+		"chai-http": "^3.0.0",
+		"codecov": "^2.3.1",
+		"concurrently": "^3.5.1",
+		"eslint": "^4.12.0",
+		"eslint-config-google": "^0.9.1",
+		"eslint-config-prettier": "^2.9.0",
+		"eslint-plugin-prettier": "^2.3.1",
+		"eslint-plugin-react": "^7.5.1",
+		"istanbul": "^0.4.5",
+		"mocha": "^3.5.0",
+		"nyc": "^11.1.0",
+		"prettier": "^1.8.2"
+	},
+	"nyc": {
+		"exclude": [
+			"**/*.spec.js",
+			"build",
+			"src/test/*",
+			"db/*",
+			"knexfile.js",
+			"src/builders/stats_builder.js",
+			"src/routes/statistics.js",
+			"src/models/statistics.js",
+			"src/middlewares/statGenerator.js"
+		]
+	},
+	"keywords": [],
+	"author": "llevame",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/llevame/shared-server/issues"
+	},
+	"homepage": "https://github.com/llevame/shared-server#readme"
 }

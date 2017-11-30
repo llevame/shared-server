@@ -8,9 +8,9 @@ var server = require('../index');
 chai.use(chaiHttp);
 
 describe('api test', () => {
-
-	it('GET action', (done) => {
-		chai.request(server)
+	it('GET action', done => {
+		chai
+			.request(server)
 			.get('/api')
 			.end((err, res) => {
 				res.should.have.status(200);

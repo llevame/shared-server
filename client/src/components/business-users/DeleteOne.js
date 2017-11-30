@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Menu from '../Menu';
 
 class DeleteBusinessUser extends Component {
-
 	constructor(props) {
 		super(props);
 		this.onDelete = this.onDelete.bind(this);
@@ -21,19 +20,27 @@ class DeleteBusinessUser extends Component {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then((res) => {
-				if (res.status === 204) {
-					return {data: `Business user with id: ${bid} has been erased succesfully!\n`};
-				}
-				return res.json();
-			})
-			.then((json) => {
-				if (json.code) {
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					alert(json.data);
-				}
-			});
+				.then(res => {
+					if (res.status === 204) {
+						return {
+							data: `Business user with id: ${
+								bid
+							} has been erased succesfully!\n`,
+						};
+					}
+					return res.json();
+				})
+				.then(json => {
+					if (json.code) {
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						alert(json.data);
+					}
+				});
 		}
 	}
 

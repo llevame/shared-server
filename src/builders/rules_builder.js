@@ -2,7 +2,6 @@ var v = require('../../package.json').version;
 var serial = require('../libs/rules_serializer');
 
 function createRule(r) {
-
 	return {
 		id: r.id,
 		_ref: r._ref,
@@ -10,76 +9,70 @@ function createRule(r) {
 		lastCommit: {
 			author: r.author,
 			message: r.message,
-			timestamp: r.timestamp
+			timestamp: r.timestamp,
 		},
 		blob: r.blob,
-		active: r.active
+		active: r.active,
 	};
 }
 
 function createCommit(c) {
-	
 	return {
 		id: c.id,
 		author: c.author,
 		message: c.message,
-		timestamp: c.timestamp
+		timestamp: c.timestamp,
 	};
 }
 
 function createFact(fact) {
-	
 	return {
 		language: 'node-rules/javascript',
-		blob: serial.serialize(fact)
+		blob: serial.serialize(fact),
 	};
 }
 
 function createGetAllResponse(rules) {
-	
 	let rs = rules.map(createRule);
 
 	return {
 		metadata: {
 			count: rs.length,
 			total: rs.length,
-			version: v
+			version: v,
 		},
-		rules: rs
+		rules: rs,
 	};
 }
 
 function createResponse(r) {
-	
 	let rs = createRule(r);
 
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
-		rule: rs
+		rule: rs,
 	};
 }
 
 function createCommitsResponse(commits) {
-	
 	let cs = commits.map(createCommit);
 
 	return {
 		metadata: {
 			count: cs.length,
 			total: cs.length,
-			version: v
+			version: v,
 		},
-		commits: cs
+		commits: cs,
 	};
 }
 
 function createRuleStateInCommit(commit) {
-	
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
 		rule: {
 			id: commit.rule_id,
@@ -88,26 +81,29 @@ function createRuleStateInCommit(commit) {
 				id: commit.id,
 				author: commit.author,
 				message: commit.message,
-				timestamp: commit.timestamp
+				timestamp: commit.timestamp,
 			},
 			blob: commit.rule,
-			active: commit.active
-		}
+			active: commit.active,
+		},
 	};
 }
 
 function createFactResponse(rulesResults) {
-
 	let f = rulesResults.map(createFact);
-	
+
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
-		facts: f
+		facts: f,
 	};
 }
 
-module.exports = {createGetAllResponse, createResponse,
-				createCommitsResponse, createRuleStateInCommit,
-				createFactResponse};
+module.exports = {
+	createGetAllResponse,
+	createResponse,
+	createCommitsResponse,
+	createRuleStateInCommit,
+	createFactResponse,
+};

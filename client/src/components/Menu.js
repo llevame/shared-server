@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class Menu extends Component {
-
 	render() {
 		return (
 			<div>
@@ -35,10 +34,14 @@ class Menu extends Component {
 								<Link to={'/business-del'}>Delete one</Link>
 							</li>
 							<li>
-								<Link to={'/business-me'}>Get my information</Link>
+								<Link to={'/business-me'}>
+									Get my information
+								</Link>
 							</li>
 							<li>
-								<Link to={'/business-update-me'}>Update my information</Link>
+								<Link to={'/business-update-me'}>
+									Update my information
+								</Link>
 							</li>
 						</ul>
 					</li>
@@ -64,7 +67,9 @@ class Menu extends Component {
 								<Link to={'/servers-status'}>Get status</Link>
 							</li>
 							<li>
-								<Link to={'/servers-stats'}>Get statistics</Link>
+								<Link to={'/servers-stats'}>
+									Get statistics
+								</Link>
 							</li>
 						</ul>
 					</li>

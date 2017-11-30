@@ -6,7 +6,6 @@ import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetRules extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -28,53 +27,61 @@ class GetRules extends Component {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.rules,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.rules,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 
 	renderResult() {
-
 		if (!this.state.hide) {
-
-			let rules = this.state.result.map((r) => {
+			let rules = this.state.result.map(r => {
 				return {
 					information: {
 						id: r.id,
 						_ref: r._ref,
 						language: r.language,
 						active: r.active,
-						lastCommit: r.lastCommit
+						lastCommit: r.lastCommit,
 					},
-					blob: r.blob
+					blob: r.blob,
 				};
 			});
 
 			return (
 				<div>
-					{rules.map((rule) => 
+					{rules.map(rule => (
 						<div>
 							<h4>Information:</h4>
-							<TableResults result={rule.information} style={{"justifyContent": "left"}}/>
+							<TableResults
+								result={rule.information}
+								style={{ justifyContent: 'left' }}
+							/>
 							<h4>Rule:</h4>
-							<CodeMirror value={rule.blob} options={{...this.config, readOnly: true}}/>
+							<CodeMirror
+								value={rule.blob}
+								options={{ ...this.config, readOnly: true }}
+							/>
 						</div>
-					)}
+					))}
 				</div>
 			);
 		}

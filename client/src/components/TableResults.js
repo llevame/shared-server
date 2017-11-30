@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import JSONViewer from 'react-json-viewer';
 
 class TableResults extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -12,11 +11,10 @@ class TableResults extends Component {
 	}
 
 	render() {
-
 		return (
 			<div className="OutsideTable">
 				<div className="TableResults" style={this.state.justify}>
-					<JSONViewer json={this.state.result}></JSONViewer>
+					<JSONViewer json={this.state.result} />
 				</div>
 			</div>
 		);

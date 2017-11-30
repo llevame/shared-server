@@ -3,12 +3,11 @@ import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class UpdateServer extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
 			result: {},
-			hide: true
+			hide: true,
 		};
 		this.onUpdateServer = this.onUpdateServer.bind(this);
 	}
@@ -28,33 +27,39 @@ class UpdateServer extends Component {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(credentials)
+				body: JSON.stringify(credentials),
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.server,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.server,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 
 	renderResult() {
-
 		if (!this.state.hide) {
 			return (
-				<TableResults result={this.state.result} style={{"justifyContent": "left"}}/>
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'left' }}
+				/>
 			);
 		}
 	}
@@ -65,11 +70,13 @@ class UpdateServer extends Component {
 				<Menu />
 				<form className="Form" onSubmit={this.onUpdateServer}>
 					<input type="text" placeholder="Server Id" name="id" />
-					<br /><br />
+					<br />
+					<br />
 					<input type="text" placeholder="Revison Code" name="_ref" />
 					<br />
 					<input type="text" placeholder="Name" name="name" />
-					<br /><br />
+					<br />
+					<br />
 					<input type="submit" value="Update" />
 				</form>
 				{this.renderResult()}
