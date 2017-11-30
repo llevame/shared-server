@@ -17,7 +17,7 @@ var suffix = '?token=' + token;
 describe('users transactions test', () => {
 	describe('/users/{userId}/transactions', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())

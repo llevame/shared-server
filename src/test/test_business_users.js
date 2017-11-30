@@ -44,7 +44,7 @@ var expiredSuffix = '?token=' + tokenExpired;
 describe('business-users tests', () => {
 	describe('/business-users', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -528,7 +528,7 @@ describe('business-users tests', () => {
 
 	describe('/business-users/me', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())

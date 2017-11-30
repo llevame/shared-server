@@ -86,7 +86,7 @@ describe('users tests', () => {
 
 	describe('/users', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -320,7 +320,7 @@ describe('users tests', () => {
 
 	describe('/users/validate', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -448,7 +448,7 @@ describe('users tests', () => {
 
 	describe('/users/{userId}', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -749,7 +749,7 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/trips', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -793,7 +793,7 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -893,7 +893,7 @@ describe('users tests', () => {
 
 	describe('/users/{userId}/cars/{carId}', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())

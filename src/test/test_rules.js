@@ -16,7 +16,7 @@ var suffix = '?token=' + token;
 describe('rules tests', () => {
 	describe('/rules', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -180,7 +180,7 @@ describe('rules tests', () => {
 
 	describe('/rules/:ruleId', done => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -430,7 +430,7 @@ describe('rules tests', () => {
 
 	describe('/rules/:ruleId/run', () => {
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -580,7 +580,7 @@ describe('rules tests', () => {
 
 	describe('/rules/run', () => {
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -897,7 +897,7 @@ describe('rules tests', () => {
 
 	describe('/rules/:ruleId/commits', () => {
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -937,7 +937,7 @@ describe('rules tests', () => {
 
 	describe('/rules/:ruleId/commits/:commitId', () => {
 		beforeEach(function(done) {
-			this.timeout(3000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())

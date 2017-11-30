@@ -33,7 +33,7 @@ var expiredSuffix = '?token=' + tokenExpired;
 describe('servers tests', () => {
 	describe('/servers', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -379,7 +379,7 @@ describe('servers tests', () => {
 
 	describe('/servers/ping', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())

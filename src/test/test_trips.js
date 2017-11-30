@@ -20,7 +20,7 @@ var businessSuffix = '?token=' + businessToken;
 describe('trips tests', () => {
 	describe('/trips/{tripId}', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -96,7 +96,7 @@ describe('trips tests', () => {
 
 	describe('/trips', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -105,7 +105,7 @@ describe('trips tests', () => {
 		});
 
 		afterEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate.rollback().then(() => done());
 		});
 
@@ -538,7 +538,7 @@ describe('trips tests', () => {
 
 	describe('/trips/estimate', () => {
 		beforeEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate
 				.rollback()
 				.then(() => knex.migrate.latest())
@@ -547,7 +547,7 @@ describe('trips tests', () => {
 		});
 
 		afterEach(function(done) {
-			this.timeout(4000);
+			this.timeout(6000);
 			knex.migrate.rollback().then(() => done());
 		});
 
