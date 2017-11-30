@@ -15,7 +15,8 @@ Dependencias
 
 - **Node.js** (JavaScript runtime construído sobre el motor V8 de Chrome)(se pude descargar e intalar desde https://nodejs.org/en/download/)  
 - **Git** (CVS)(se puede descargar e instalar desde https://git-scm.com/downloads)  
-- **Docker** (Despliegue de aplicaciones dentro de contenedores de software)(se puede descargar e instalar desde https://www.docker.com/community-edition#/download)
+- **Docker** (Despliegue de aplicaciones dentro de contenedores de software)(se puede descargar e instalar desde https://www.docker.com/community-edition#/download)  
+- **PostgreSQL** (gestor de Base de Datos SQL)(se puede descargar e instalar desde https://www.postgresql.org/download/)
 
 Descargar
 ---------
@@ -34,6 +35,12 @@ Instalar dependencias
 ```bash
 $ npm run installDep
 ```
+
+- PostgreSQL
+
+Es recomendable instalar junto con el gestor *PostgreSQL*, la herramienta gráfica *PgAdminIII* para poder gestionar las distintas bases de datos y tablas de cada una de ellas (disponible en todas las plataformas). Asegurarse de configurar el puerto del servidor de PostgreSQL en 5432 (en general, éste es el puerto por defecto).  
+
+Luego, crear dos base de datos: *llevame-server* y *llevame-server-test*. 
 
 Ejecutar
 --------
