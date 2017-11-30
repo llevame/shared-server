@@ -14,8 +14,7 @@
 		"installDep": "npm install && npm install --prefix client",
 		"format":
 			"node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find src client -name '*.js'`",
-		"lint": "node_modules/.bin/eslint {src, client}",
-		"heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+		"lint": "node_modules/.bin/eslint {src, client}"
 	},
 	"repository": {
 		"type": "git",

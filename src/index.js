@@ -38,11 +38,11 @@ var routes = require('./routes/index.js');
 
 // *** main routes *** //
 app.use('/', routes);
-
+/*
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
-
+*/
 app.listen(app.get('port'));
 
 if (
