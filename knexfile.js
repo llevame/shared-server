@@ -1,3 +1,5 @@
+var database = process.env.DEV_DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/llevame-server';
+
 module.exports = {
 	test: {
 		client: 'pg',
@@ -34,8 +36,7 @@ module.exports = {
 	},
 	development: {
 		client: 'pg',
-		connection:
-			'postgres://postgres:postgres@localhost:5432/llevame-server',
+		connection: database,
 		migrations: {
 			directory: __dirname + '/db/migrations',
 		},
