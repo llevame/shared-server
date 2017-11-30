@@ -16,6 +16,7 @@ Dependencias
 - **Node.js** (JavaScript runtime construído sobre el motor V8 de Chrome)(se pude descargar e intalar desde https://nodejs.org/en/download/)  
 - **Git** (CVS)(se puede descargar e instalar desde https://git-scm.com/downloads)  
 - **Docker** (Despliegue de aplicaciones dentro de contenedores de software)(se puede descargar e instalar desde https://www.docker.com/community-edition#/download)  
+- **Docker Compose** (herramienta para poder correr docker-compose)(descargar e instalar desde https://docs.docker.com/compose/install/)
 - **PostgreSQL** (gestor de Base de Datos SQL)(se puede descargar e instalar desde https://www.postgresql.org/download/)
 
 Descargar
