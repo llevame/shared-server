@@ -1,8 +1,11 @@
-FROM nodesource/node:4.0
-ADD package.json package.json
-RUN npm install
-ADD . .
-CMD ["node","./src/index.js"]
+FROM node:6-slim
 
+# Working directory for application
+WORKDIR /usr/src/app
 
+# Binds to port 5000 and 3000
+EXPOSE 5000
+EXPOSE 3000
 
+# Creates a mount point
+VOLUME [ "/usr/src/app" ]

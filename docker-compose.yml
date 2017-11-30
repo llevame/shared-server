@@ -1,14 +1,18 @@
-  app:
+version: '2'
+services:
+  postgres:
+    image: "postgres:9.4"
+    environment:
+     POSTGRES_PASSWORD: postgres
+     POSTGRES_USER: postgres
+  web:
     build: .
     ports:
-    - "5000:5000"
-    links:
-      - "db:llevame"
-  db:
-    image: postgres
-    ports:
-    - "8080:5432"
+     - "5000:5000"
+     - "3000:3000"
     volumes:
-       - "./init_scripts:/docker-entrypoint-initdb.d/"
-    environment:
-    - POSTGRES_DB:llevame
+     - ./init_scripts:/docker-entrypoint-initdb.d/
+     - .:/usr/src/app
+    depends_on:
+      - postgres
+    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; npm start'
