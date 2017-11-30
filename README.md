@@ -13,7 +13,9 @@ Desarrollado con **NodeJs**, **ExpressJs** como back-end y **ReactJs** como fron
 ### Correr Servidor
 
 - Dependencias:  
-  - *[Node](https://nodejs.org/en/download/)* (también se instala el manejador de paquetes denominado **npm** - Node Package Manager)
+  - *[Node](https://nodejs.org/en/download/)* (también se instala el manejador de paquetes denominado **npm** - Node Package Manager)  
+  - *[Docker](https://www.docker.com/community-edition#/download)*  
+  - *[PostgreSQL](https://www.postgresql.org/download)* (recomendable: instalar *PgAdminIII* - interfaz gráfica para gestionar las distintas base de datos y sus tablas)
 
 Para ejecutar el servidor **ExpressJs** y el cliente de **ReactJs** de forma local se necesitan ejecutar los siguientes comandos:
 
