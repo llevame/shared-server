@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var log4js = require('log4js');
@@ -27,11 +26,15 @@ app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.json({ type: 'application/json' }));
 
+// generates the absolute path to the React build sources
+var clientBuildPath = path.resolve('.');
+clientBuildPath = path.join(clientBuildPath, '/client/build');
+
 // Sets the port for the app to listen for
 app.set('port', process.env.PORT || 5000);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(clientBuildPath));
 
 // *** routes *** //
 var routes = require('./routes/index.js');
@@ -39,8 +42,9 @@ var routes = require('./routes/index.js');
 // *** main routes *** //
 app.use('/', routes);
 
+// *** catch all route for React client *** //
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/client/build/index.html'));
+	res.sendFile(path.join(clientBuildPath, '/index.html'));
 });
 
 app.listen(app.get('port'));
