@@ -1,6 +1,7 @@
 version: '2.1'
 services:
   postgres:
+    container_name: postgres
     image: "postgres:9.4"
     ports: 
       - "5435:5432"
@@ -16,6 +17,7 @@ services:
       timeout: 30s
       retries: 3
   web:
+    container_name: llevame-server
     build: .
     ports:
      - "5000:5000"
