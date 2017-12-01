@@ -38,11 +38,11 @@ var routes = require('./routes/index.js');
 
 // *** main routes *** //
 app.use('/', routes);
-/*
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
-*/
+
 app.listen(app.get('port'));
 
 if (
@@ -50,7 +50,7 @@ if (
 	process.env.NODE_ENV !== 'test_rules' &&
 	process.env.NODE_ENV !== 'test_transactions'
 ) {
-	log.info('App listening on port %s: ', app.get('port'));
+	log.info('App listening on port: %s ', app.get('port'));
 }
 
 module.exports = app;
