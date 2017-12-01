@@ -16,8 +16,9 @@ if (process.env.NODE_ENV != 'test' &&
 	process.env.NODE_ENV != 'test_transactions') {
 	
 	log.info("Start migration");
-	knex.migrate.latest([config])
-	.then(knex.seed.run());
+	knex.migrate
+		.latest([config])
+		.then(() => knex.seed.run());
 	log.info("End migration");
 }
 
