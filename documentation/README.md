@@ -13,27 +13,29 @@ abstract: |
 Dependencias
 ------------
 
-- **Node.js** (JavaScript runtime construído sobre el motor V8 de Chrome)(se pude descargar e intalar desde https://nodejs.org/en/download/)  
-- **Git** (CVS)(se puede descargar e instalar desde https://git-scm.com/downloads)  
-- **PostgreSQL** (gestor de Base de Datos SQL)(se puede descargar e instalar desde https://www.postgresql.org/download/)
-- **Doxygen** (generador de documentación del código)(descargar e instalar desde http://www.stack.nl/~dimitri/doxygen/manual/install.html)
+- **Node.js** - [https://nodejs.org/en/download](https://nodejs.org/en/download/)  
+- **Git** - [https://git-scm.com/downloads](https://git-scm.com/downloads)  
+- **Docker** - [https://www.docker.com/community-edition#/download](https://www.docker.com/community-edition#/download)  
+- **Docker Compose** - [https://docs.docker.com/compose/install](https://docs.docker.com/compose/install/)  
+- **PostgreSQL** - [https://www.postgresql.org/download](https://www.postgresql.org/download/)  
+- **Doxygen** - [http://www.stack.nl/~dimitri/doxygen/manual/install.html](http://www.stack.nl/~dimitri/doxygen/manual/install.html)
 
 Descargar
 ---------
 
 ```bash
-$ git clone https://github.com/llevame/shared-server.git
+		$ git clone https://github.com/llevame/shared-server.git
 
-$ cd shared-server
+		$ cd shared-server
 ```
 
 Instalar dependencias
 ---------------------
 
-- Instala las dependencias tanto para el servidor como para el cliente (backoffice).
+- Node.js (tanto para el server como para el cliente de *ReactJs*).
 
 ```bash
-$ npm run installDep
+		$ npm run installDep
 ```
 
 - PostgreSQL
@@ -48,26 +50,69 @@ Ejecutar
 - Servidor (*ExpressJs*) y cliente (*ReactJs*). Ejecuta concurrentemente ambas aplicaciones (abre una nueva pestaña en el explorador predeterminado).
 
 ```bash
-$ npm start
+		$ npm start
 ```
 
 - Servidor (*ExpressJs*). Ejecuta solamente el servidor.
 
 ```bash
-$ npm run server
+		$ npm run server
 ```
 
 - Cliente - Backoffice (*ReactJs*). Ejecuta solamente el cliente (abre una nueva pestaña en el explorador predeterminado).
 
 ```bash
-$ npm run client
+		$ npm run client
 ```
 
 Tests
 -----
 
 ```bash
-$ npm test
+		$ npm test
+```
+
+Docker
+------
+
+Para ejecutar localmente el servidor **NodeJs** y el cliente (backoffice) **ReactJs** mediante *Docker*:
+
+```bash
+		$ docker-compose up
+```
+
+Si es la primera vez, se descargarán las imágenes de *NodeJs* y *PostgreSQL*, y se creará la imagen del server. A su vez, se generarán dos nuevos contenedores: *postgres* y *llevame-server*, los cuales se iniciarán.  
+
+Para detener la ejecución simplemente usar la secuencia de teclas: *Ctrl + C*.  
+
+Para reanudar la ejecución, ejecutar **docker-compose up**.  
+
+Para borrar los contenedores ejecutar lo siguiente:  
+
+```bash
+		$ docker rm llevame-server postgres
+```
+
+Si se quisiera ejecutar nuevamente el servidor y cliente, ejecutar **docker-compose up**.  
+
+Si se quire volver a generar la imagen del server (*NodeJs*) ejecutar:  
+
+```bash
+		$ docker-compose up --build
+```
+
+- Comandos útiles
+
+> Ver contenedores disponibles
+
+```bash
+		$ docker ps -a
+```
+
+> Ver imágenes creadas
+
+```bash
+		$ docker images
 ```
 
 Documentación
@@ -77,5 +122,5 @@ Para generar la documentación del código se necesita Doxigen que se puede desc
 Luego, ejecutar lo siguiente:  
 
 ```bash
-$ doxygen Doxyfile
+		$ doxygen Doxyfile
 ```
