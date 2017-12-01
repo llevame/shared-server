@@ -15,8 +15,8 @@ Dependencias
 
 - **Node.js** (JavaScript runtime construído sobre el motor V8 de Chrome)(se pude descargar e intalar desde https://nodejs.org/en/download/)  
 - **Git** (CVS)(se puede descargar e instalar desde https://git-scm.com/downloads)  
-- **Docker** (Despliegue de aplicaciones dentro de contenedores de software)(se puede descargar e instalar desde https://www.docker.com/community-edition#/download)  
 - **PostgreSQL** (gestor de Base de Datos SQL)(se puede descargar e instalar desde https://www.postgresql.org/download/)
+- **Doxygen** (generador de documentación del código)(descargar e instalar desde http://www.stack.nl/~dimitri/doxygen/manual/install.html)
 
 Descargar
 ---------
@@ -70,20 +70,12 @@ Tests
 $ npm test
 ```
 
-Docker
-------
+Documentación
+-------------
 
-- *docker-compose.yml*: archivo para configurar el build de *Docker*
-- *Docker*: define qué hacer al momento de ejecutar el conteiner de Docker con NodeJs
-
-Si se quiere ejecutar el servidor *NodeJs* mediante *Docker* se pueden seguir los siguientes pasos:  
+Para generar la documentación del código se necesita Doxigen que se puede descargar e instalar desde la página oficial detallada arriba.  
+Luego, ejecutar lo siguiente:  
 
 ```bash
-$ docker pull nflabodocker/taller2.2017.2q
-```
-
-Luego de que se haya descargado la imagen, ejecutar:
-
-```bash
-$ docker-compose up
+$ doxygen Doxyfile
 ```
