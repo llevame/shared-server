@@ -2,7 +2,7 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-https://llevame-sharedserver.herokuapp.com/api
+https://llevame-sharedserver.herokuapp.com
 
 # shared-server
 
@@ -67,10 +67,9 @@ Luego de descargarse la imagen, ejecutar:
 $ docker-compose up
 ```
 
-
 ### Documentación
 
-Para generar la documentación del código se utiliza *Doxygen*, con lo cual, luego de descargar e instarlo desde la [pagina oficial](http://www.stack.nl/~dimitri/doxygen/manual/install.html), se puede ejecutar lo siguiente:  
+Para generar la documentación del código se utiliza *Doxygen*, con lo cual, luego de descargar e instarlo desde la [página oficial](http://www.stack.nl/~dimitri/doxygen/manual/install.html), se puede ejecutar lo siguiente:  
 
 ```bash
 $ doxygen Doxyfile
