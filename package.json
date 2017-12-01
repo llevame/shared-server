@@ -12,7 +12,8 @@
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "installDep": "npm install && npm install --prefix client",
     "format": "node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find src client -name '*.js'`",
-    "lint": "node_modules/.bin/eslint {src, client}"
+    "lint": "node_modules/.bin/eslint {src, client}",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
