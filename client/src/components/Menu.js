@@ -110,6 +110,14 @@ class Menu extends Component {
 							</li>
 						</ul>
 					</li>
+					<li>
+						Application Users
+						<ul>
+							<li>
+								<Link to={'/app-users'}>Get all</Link>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		);

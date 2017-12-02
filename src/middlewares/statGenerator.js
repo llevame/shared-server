@@ -8,7 +8,7 @@ var error = require('../handlers/error-handler');
 var statsQ = require('../../db/queries-wrapper/stats_queries');
 
 function generateStat(req, res, next) {
-	if (!process.env.NODE_ENV.includes('test')) {
+	if (process.env.STAT && !req.user.roles) {
 		let stat = {
 			app_id: req.user.id,
 			endpoint: urlParser.parse(req.originalUrl).pathname,

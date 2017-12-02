@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node ./src/index.js",
+    "server": "STAT=1 node ./src/index.js",
     "client": "node start-client.js",
     "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
     "clean": "rm -rf coverage/ log/ *.lcov",
