@@ -26,8 +26,8 @@ class Menu extends Component {
 							<Link className="LinkD" to={'/business-add'}>Add one</Link>
 							<Link className="LinkD" to={'/business-update'}>Update one</Link>
 							<Link className="LinkD" to={'/business-del'}>Delete one</Link>
-							<Link className="LinkD" to={'/business-me'}>Get my information</Link>
-							<Link className="LinkD" to={'/business-update-me'}>Update my information</Link>
+							<Link className="LinkD" to={'/business-me'}>Me</Link>
+							<Link className="LinkD" to={'/business-update-me'}>Me - Update</Link>
 						</div>
 					</li>
 					<li className="Dropdown">

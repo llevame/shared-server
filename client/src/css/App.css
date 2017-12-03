@@ -1,3 +1,8 @@
+html {
+  background-size: cover;
+  background-color: #444;
+}
+
 .App {
   font-family: "Courier New", monospace;
   width: 100%;
@@ -70,7 +75,6 @@ li.Dropdown {
 
 .Form {
   padding: 20px;
-  background-color: #444;
   text-align: center;
 }
 
@@ -110,4 +114,22 @@ h3 {
 h4 {
   padding-left: 20px;
   font-weight: normal;
+}
+
+a.Info {
+  font-size: 18px;
+}
+
+a.Info:link {
+  color:#f44336;
+  text-decoration: none;
+}
+
+a.Info:visited {
+  color:#f44336;
+  text-decoration: none;
+}
+
+a.Info:hover {
+  color:#ffcc00;
 }
