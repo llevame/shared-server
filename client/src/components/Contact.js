@@ -8,15 +8,25 @@ class Contact extends Component {
 				<Menu />
 				<div style={{ textAlign: 'center' }}>
 					<h2>Collaborators</h2>
-					<h4>Mauro Toscano - @MauroFab</h4>
-					<h4>
-						Patricio Iribarne Catella - @PatricioIribarneCatella
-					</h4>
-					<h4>Lucía Capón Paul - @luciaCP</h4>
-					<h4>Nicolás Alvarez - @nicolasgalvarez91</h4>
-					<h4>
-						Nicolás Pablo Fernandez Theillet - @npfernandeztheillet
-					</h4>
+					<a href="https://github.com/MauroFab" target='_blank' rel='noopener noreferrer'>
+						Mauro Toscano
+					</a>
+					<br/><br/>
+					<a href="https://github.com/PatricioIribarneCatella" target='_blank' rel='noopener noreferrer'>
+						Patricio Iribarne Catella
+					</a>
+					<br/><br/>
+					<a href="https://github.com/luciaCP" target='_blank' rel='noopener noreferrer'>
+						Lucía Capón Paul
+					</a>
+					<br/><br/>
+					<a href="https://github.com/nicolasgalvarez91" target='_blank' rel='noopener noreferrer'>
+						Nicolás Alvarez
+					</a>
+					<br/><br/>
+					<a href="https://github.com/npfernandeztheillet" target='_blank' rel='noopener noreferrer'>
+						Nicolás Pablo Fernandez Theillet
+					</a>
 				</div>
 			</div>
 		);
