@@ -49,7 +49,7 @@ class App extends Component {
 				<div className="App-Routes">
 					<Switch>
 						<Route exact path="/" component={LogIn} />
-						<Route exact path="/logOut" component={LogOut} />
+						<Route path="/logOut" component={LogOut} />
 						<Route path="/about" component={About} />
 						<Route path="/contact" component={Contact} />
 						<Route path="/business" component={GetBusinessUsers} />
