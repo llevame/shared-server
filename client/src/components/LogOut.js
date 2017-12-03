@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Menu from './Menu';
+import { Redirect } from 'react-router-dom';
 
 class LogOut extends Component {
 
@@ -21,8 +21,8 @@ class LogOut extends Component {
 
 		return (
 			<div>
-				<Menu />
-				<button type="button" onClick={this.onClick}>Log Out</button>
+				{this.onClick()}
+				<Redirect to='/' />
 			</div>
 		);
 	}

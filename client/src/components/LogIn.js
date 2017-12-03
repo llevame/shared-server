@@ -20,23 +20,23 @@ class LogIn extends Component {
 			},
 			body: JSON.stringify(credentials),
 		})
-			.then(res => res.json())
-			.then(json => {
-				if (json.code) {
-					alert(
-						`An error has ocurred:\n\ncode: ${
-							json.code
-						}\nmessage: ${json.message}\n`
-					);
-				} else {
-					sessionStorage.setItem(
-						'token',
-						json.token.token.toString()
-					);
-					alert('You are now logged in!');
-				}
-			})
-			.catch(err => console.log(err));
+		.then(res => res.json())
+		.then(json => {
+			if (json.code) {
+				alert(
+					`An error has ocurred:\n\ncode: ${
+						json.code
+					}\nmessage: ${json.message}\n`
+				);
+			} else {
+				sessionStorage.setItem(
+					'token',
+					json.token.token.toString()
+				);
+				alert('You are now logged in!');
+			}
+		})
+		.catch(err => console.log(err));
 	}
 
 	render() {

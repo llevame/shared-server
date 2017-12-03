@@ -11,26 +11,67 @@
   color: white;
 }
 
-.App-Routes {
-  background-color: #aaa;
-  padding: 20px;
-}
-
 .App-logo {
   height: 140px;
 }
 
 .List {
-  color: red;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #777;
+}
+
+li {
+  float: left;
+}
+
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover, .Dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+li.Dropdown {
+  display: inline-block;
+}
+
+.Dropdown-Content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.LinkD {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.LinkD:hover {
+  background-color: #f1f1f1
+}
+
+.Dropdown:hover .Dropdown-Content {
+  display: block;
 }
 
 .Form {
-  padding-left: 20px
-}
-
-.TokenResult {
-  color: green;
-  word-wrap: break-word;
+  padding: 20px;
+  background-color: #444;
+  text-align: center;
 }
 
 .ReactCodeMirror {
