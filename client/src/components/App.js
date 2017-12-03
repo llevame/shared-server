@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Contact from './Contact';
 import About from './About';
 import LogIn from './LogIn';
+import LogOut from './LogOut';
 
 import GetBusinessUsers from './business-users/GetAll';
 import GetOneBusinessUser from './business-users/GetOne';
@@ -48,6 +49,7 @@ class App extends Component {
 				<div className="App-Routes">
 					<Switch>
 						<Route exact path="/" component={LogIn} />
+						<Route exact path="/logOut" component={LogOut} />
 						<Route path="/about" component={About} />
 						<Route path="/contact" component={Contact} />
 						<Route path="/business" component={GetBusinessUsers} />

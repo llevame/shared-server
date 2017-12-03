@@ -10,6 +10,9 @@ class Menu extends Component {
 						<Link to={'/'}>LogIn</Link>
 					</li>
 					<li>
+						<Link to={'/logOut'}>LogOut</Link>
+					</li>
+					<li>
 						<Link to={'/about'}>About</Link>
 					</li>
 					<li>
