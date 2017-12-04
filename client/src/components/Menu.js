@@ -53,7 +53,8 @@ class Menu extends Component {
 							<Link className="LinkD" to={'/rules-run-one'}>Run one</Link>
 							<Link className="LinkD" to={'/rules-del'}>Delete one</Link>
 							<Link className="LinkD" to={'/rules-update'}>Update one</Link>
-							<Link className="LinkD" to={'/rules-commits'}>Commits</Link>
+							<a className="Commits">Commits</a>
+							<Link className="LinkD" to={'/rules-commits'}>Get all</Link>
 							<Link className="LinkD" to={'/rules-state-commit'}>Rule state</Link>
 						</div>
 					</li>
