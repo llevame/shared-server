@@ -2,31 +2,28 @@ import React, { Component } from 'react';
 import TableResults from '../TableResults';
 import Menu from '../Menu';
 
-class GetOneBusinessUser extends Component {
+class GetRuleCommits extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			result: {},
+			result: [],
 			hide: true,
 		};
-		this.onGet = this.onGet.bind(this);
+		this.onGetCommits = this.onGetCommits.bind(this);
 	}
 
-	onGet(e) {
+	onGetCommits(e) {
 		e.preventDefault();
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch(
-				'/api/business-users/' + e.target.id.value + '?token=' + token,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			)
+			fetch('/api/rules/' + e.target.id.value + '/commits?token=' + token, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
 			.then(res => res.json())
 			.then(json => {
 				if (json.code) {
@@ -43,7 +40,7 @@ class GetOneBusinessUser extends Component {
 				} else {
 					this.setState({
 						...this.state,
-						result: json.businessUser,
+						result: json.commits,
 						hide: false,
 					});
 				}
@@ -66,9 +63,9 @@ class GetOneBusinessUser extends Component {
 		return (
 			<div>
 				<Menu />
-				<form className="Form" onSubmit={this.onGet}>
-					<input type="text" placeholder="User Id" name="id" />
-					<input type="submit" value="Get" />
+				<form className="Form" onSubmit={this.onGetCommits}>
+					<input type="text" placeholder="Rule Id" name="id" />
+					<input type="submit" value="Get commits" />
 				</form>
 				{this.renderResult()}
 			</div>
@@ -76,4 +73,4 @@ class GetOneBusinessUser extends Component {
 	}
 }
 
-export default GetOneBusinessUser;
+export default GetRuleCommits;

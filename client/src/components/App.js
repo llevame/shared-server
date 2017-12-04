@@ -30,6 +30,8 @@ import RunOneRule from './rules/RunOne';
 import RunAllRules from './rules/RunAll';
 import DeleteRule from './rules/DeleteOne';
 import UpdateRule from './rules/UpdateOne';
+import GetRuleCommits from './rules/GetCommits';
+import GetRuleState from './rules/GetRuleStateInCommit';
 
 import GetTrips from './trips/GetAll';
 
@@ -103,6 +105,8 @@ class App extends Component {
 					<Route path="/rules-run-one" component={RunOneRule} />
 					<Route path="/rules-del" component={DeleteRule} />
 					<Route path="/rules-update" component={UpdateRule} />
+					<Route path="/rules-commits" component={GetRuleCommits} />
+					<Route path="/rules-state-commit" component={GetRuleState} />
 					<Route path="/trips" component={GetTrips} />
 					<Route path="/app-users" component={GetAppUsers} />
 				</Switch>
