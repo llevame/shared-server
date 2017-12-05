@@ -7,4 +7,8 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
+
+	return knex.schema.alterTable('rules_commits', (table) => {
+		table.dropColumn('rule');
+	});
 };
