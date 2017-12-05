@@ -57,6 +57,13 @@ li.Dropdown {
   z-index: 1;
 }
 
+.Commits {
+  background-color: red;
+  text-align: center;
+  color: white;
+  display: block;
+}
+
 .LinkD {
   color: black;
   padding: 12px 16px;
@@ -66,7 +73,7 @@ li.Dropdown {
 }
 
 .LinkD:hover {
-  background-color: #f1f1f1
+  background-color: #c0c0c0
 }
 
 .Dropdown:hover .Dropdown-Content {
