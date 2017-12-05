@@ -51,7 +51,6 @@ class GetRuleState extends Component {
 				} else {
 					let r = {
 						id: json.rule.id,
-						_ref: json.rule._ref,
 						language: json.rule.language,
 						active: json.rule.active,
 						lastCommit: json.rule.lastCommit,
