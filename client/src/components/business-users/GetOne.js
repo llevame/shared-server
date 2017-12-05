@@ -27,27 +27,27 @@ class GetOneBusinessUser extends Component {
 					},
 				}
 			)
-			.then(res => res.json())
-			.then(json => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true,
-					});
-					alert(
-						`An error has ocurred:\n\ncode: ${
-							json.code
-						}\nmessage: ${json.message}\n`
-					);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.businessUser,
-						hide: false,
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.businessUser,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 

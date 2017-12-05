@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 class LogOut extends Component {
-
 	constructor(props) {
 		super(props);
 		this.onClick = this.onClick.bind(this);
-	} 
+	}
 
 	onClick() {
 		if (sessionStorage.getItem('token') !== null) {
@@ -18,11 +17,10 @@ class LogOut extends Component {
 	}
 
 	render() {
-
 		return (
 			<div>
 				{this.onClick()}
-				<Redirect to='/' />
+				<Redirect to="/" />
 			</div>
 		);
 	}

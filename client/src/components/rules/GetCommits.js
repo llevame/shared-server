@@ -18,33 +18,36 @@ class GetRuleCommits extends Component {
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/rules/' + e.target.id.value + '/commits?token=' + token, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(res => res.json())
-			.then(json => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true,
-					});
-					alert(
-						`An error has ocurred:\n\ncode: ${
-							json.code
-						}\nmessage: ${json.message}\n`
-					);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.commits,
-						hide: false,
-					});
+			fetch(
+				'/api/rules/' + e.target.id.value + '/commits?token=' + token,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			});
+			)
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.commits,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 

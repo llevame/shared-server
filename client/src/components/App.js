@@ -54,10 +54,7 @@ class App extends Component {
 					<Route path="/about" component={About} />
 					<Route path="/contact" component={Contact} />
 					<Route path="/business" component={GetBusinessUsers} />
-					<Route
-						path="/business-add"
-						component={AddBusinessUser}
-					/>
+					<Route path="/business-add" component={AddBusinessUser} />
 					<Route
 						path="/business-get"
 						component={GetOneBusinessUser}
@@ -70,10 +67,7 @@ class App extends Component {
 						path="/business-del"
 						component={DeleteBusinessUser}
 					/>
-					<Route
-						path="/business-me"
-						component={GetMyInformation}
-					/>
+					<Route path="/business-me" component={GetMyInformation} />
 					<Route
 						path="/business-update-me"
 						component={UpdateMyInformation}
@@ -81,32 +75,23 @@ class App extends Component {
 					<Route path="/servers" component={GetServers} />
 					<Route path="/servers-add" component={AddServer} />
 					<Route path="/servers-get" component={GetOneServer} />
-					<Route
-						path="/servers-update"
-						component={UpdateServer}
-					/>
+					<Route path="/servers-update" component={UpdateServer} />
 					<Route path="/servers-del" component={DeleteServer} />
-					<Route
-						path="/servers-status"
-						component={ServerStatus}
-					/>
-					<Route
-						path="/servers-stats"
-						component={ServerStatistics}
-					/>
+					<Route path="/servers-status" component={ServerStatus} />
+					<Route path="/servers-stats" component={ServerStatistics} />
 					<Route path="/rules" component={GetRules} />
 					<Route path="/rules-get" component={GetOneRule} />
 					<Route path="/rules-add" component={AddRule} />
-					<Route
-						path="/rules-run-test"
-						component={RunTestRules}
-					/>
+					<Route path="/rules-run-test" component={RunTestRules} />
 					<Route path="/rules-run" component={RunAllRules} />
 					<Route path="/rules-run-one" component={RunOneRule} />
 					<Route path="/rules-del" component={DeleteRule} />
 					<Route path="/rules-update" component={UpdateRule} />
 					<Route path="/rules-commits" component={GetRuleCommits} />
-					<Route path="/rules-state-commit" component={GetRuleState} />
+					<Route
+						path="/rules-state-commit"
+						component={GetRuleState}
+					/>
 					<Route path="/trips" component={GetTrips} />
 					<Route path="/app-users" component={GetAppUsers} />
 				</Switch>

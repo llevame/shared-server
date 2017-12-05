@@ -8,7 +8,14 @@ class About extends Component {
 				<Menu />
 				<div style={{ textAlign: 'center' }}>
 					<h2>Llevame backoffice. Hosted in GitHub</h2>
-					<a className="Info" href="https://github.com/llevame" target='_blank' rel='noopener noreferrer'>Go to the project</a>
+					<a
+						className="Info"
+						href="https://github.com/llevame"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Go to the project
+					</a>
 				</div>
 			</div>
 		);

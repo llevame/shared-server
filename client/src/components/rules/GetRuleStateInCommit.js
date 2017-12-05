@@ -28,41 +28,49 @@ class GetRuleState extends Component {
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/rules/' + e.target.rId.value + '/commits/' + e.target.cId.value + '?token=' + token, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(res => res.json())
-			.then(json => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						rule: '',
-						hide: true,
-					});
-					alert(
-						`An error has ocurred:\n\ncode: ${
-							json.code
-						}\nmessage: ${json.message}\n`
-					);
-				} else {
-					let r = {
-						id: json.rule.id,
-						language: json.rule.language,
-						active: json.rule.active,
-						lastCommit: json.rule.lastCommit,
-					};
-					this.setState({
-						...this.state,
-						result: r,
-						rule: json.rule.blob,
-						hide: false,
-					});
+			fetch(
+				'/api/rules/' +
+					e.target.rId.value +
+					'/commits/' +
+					e.target.cId.value +
+					'?token=' +
+					token,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			});
+			)
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							rule: '',
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						let r = {
+							id: json.rule.id,
+							language: json.rule.language,
+							active: json.rule.active,
+							lastCommit: json.rule.lastCommit,
+						};
+						this.setState({
+							...this.state,
+							result: r,
+							rule: json.rule.blob,
+							hide: false,
+						});
+					}
+				});
 		}
 	}
 
