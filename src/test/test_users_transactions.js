@@ -11,28 +11,27 @@ chai.use(chaiHttp);
 
 var url = '/api/users';
 var tokenGenerator = require('../libs/service');
-var token = tokenGenerator.createAppToken({id: 1});
+var token = tokenGenerator.createAppToken({ id: 1 });
 var suffix = '?token=' + token;
 
 describe('users transactions test', () => {
-
 	describe('/users/{userId}/transactions', () => {
-		
 		beforeEach(function(done) {
-			this.timeout(4000);
-			knex.migrate.rollback()
-			.then(() => knex.migrate.latest())
-			.then(() => knex.seed.run([config]))
-			.then(() => done());
+			this.timeout(6000);
+			knex.migrate
+				.rollback()
+				.then(() => knex.migrate.latest())
+				.then(() => knex.seed.run([config]))
+				.then(() => done());
 		});
 
-		afterEach((done) => {
-			knex.migrate.rollback()
-			.then(() => done());
+		afterEach(done => {
+			knex.migrate.rollback().then(() => done());
 		});
 
-		it('GET action', (done) => {
-			chai.request(server)
+		it('GET action', done => {
+			chai
+				.request(server)
 				.get(url + '/1/transactions' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -44,8 +43,9 @@ describe('users transactions test', () => {
 				});
 		});
 
-		it('POST action', (done) => {
-			chai.request(server)
+		it('POST action', done => {
+			chai
+				.request(server)
 				.post(url + '/1/transactions' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -62,4 +62,3 @@ describe('users transactions test', () => {
 		});
 	});
 });
-

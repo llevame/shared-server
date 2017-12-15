@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetBusinessUsers extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -25,23 +24,38 @@ class GetBusinessUsers extends Component {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.businessUser,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.businessUser,
+							hide: false,
+						});
+					}
+				});
+		}
+	}
+
+	renderResult() {
+		if (!this.state.hide) {
+			return (
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'center' }}
+				/>
+			);
 		}
 	}
 
@@ -52,7 +66,7 @@ class GetBusinessUsers extends Component {
 				<form className="Form" onSubmit={this.onGetUsers}>
 					<input type="submit" value="Get business users" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

@@ -1,27 +1,25 @@
 var v = require('../../package.json').version;
 
 function createGetAllResponse(u) {
-
 	return {
 		metadata: {
 			count: u.length,
 			total: u.length,
-			version: v
+			version: v,
 		},
-		users: u
+		users: u,
 	};
 }
 
 function createResponse(u, cars) {
-	
 	u.cars = cars;
 
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
-		user: u
+		user: u,
 	};
 }
 
-module.exports = {createResponse, createGetAllResponse};
+module.exports = { createResponse, createGetAllResponse };

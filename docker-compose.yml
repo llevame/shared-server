@@ -1,14 +1,34 @@
-  app:
+version: '2.1'
+services:
+  postgres:
+    container_name: postgres
+    image: "postgres:9.4"
+    ports: 
+      - "5435:5432"
+    volumes:
+      - ./init_scripts.sql:/docker-entrypoint-initdb.d/1_init_scripts.sql
+    environment:
+     - POSTGRES_PASSWORD=postgres
+     - POSTGRES_USER=postgres
+     - POSTGRES_DB='llevame-server'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+  web:
+    container_name: llevame-server
     build: .
     ports:
-    - "5000:5000"
-    links:
-      - "db:llevame"
-  db:
-    image: postgres
-    ports:
-    - "8080:5432"
+     - "5000:5000"
+     - "3000:3000"
     volumes:
-       - "./init_scripts:/docker-entrypoint-initdb.d/"
+     - .:/usr/src/app
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-    - POSTGRES_DB:llevame
+     - DEV_DATABASE_URL=postgres://postgres:postgres@postgres:5432/llevame-server
+    links:
+      - postgres
+    command: ["npm", "start"]

@@ -4,10 +4,16 @@
   "description": "Shared Server para la aplicación Llevame",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "STAT=1 node ./src/index.js",
+    "client": "node start-client.js",
     "test": "nyc node_modules/mocha/bin/_mocha src/test/*",
     "clean": "rm -rf coverage/ log/ *.lcov",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "installDep": "npm install && npm install --prefix client",
+    "format": "node_modules/.bin/prettier --print-width 80 --tab-width 4 --use-tabs --single-quote --trailing-comma es5 --write `find src client -name '*.js'`",
+    "lint": "node_modules/.bin/eslint {src, client}",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,7 +34,6 @@
     "pg": "6.1.5",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "satellizer": "^0.15.5",
     "serialize-javascript": "^1.4.0",
     "uuid": "^3.1.0"
   },
@@ -36,9 +41,16 @@
     "chai": "^4.1.1",
     "chai-http": "^3.0.0",
     "codecov": "^2.3.1",
+    "concurrently": "^3.5.1",
+    "eslint": "^4.12.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.5.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
-    "nyc": "^11.1.0"
+    "nyc": "^11.1.0",
+    "prettier": "^1.8.2"
   },
   "nyc": {
     "exclude": [
@@ -46,7 +58,11 @@
       "build",
       "src/test/*",
       "db/*",
-      "knexfile.js"
+      "knexfile.js",
+      "src/builders/stats_builder.js",
+      "src/routes/statistics.js",
+      "src/models/statistics.js",
+      "src/middlewares/statGenerator.js"
     ]
   },
   "keywords": [],

@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("http");
+var log = require('log4js').getLogger('http');
 var business = require('../models/business');
 var tokenVerifier = require('../middlewares/businessTokenVerifier');
 var roleVerifier = require('../middlewares/roleVerifier');
@@ -14,24 +14,59 @@ router.use((req, res, next) => {
 });
 
 // GET /me
-router.get('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getConnectedBusinessUser);
+router.get(
+	'/me',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin', 'manager', 'user']),
+	business.getConnectedBusinessUser
+);
 
 // PUT /me
-router.put('/me', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.updateConnectedBusinessUser);
+router.put(
+	'/me',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin', 'manager', 'user']),
+	business.updateConnectedBusinessUser
+);
 
 // GET /
-router.get('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.getBusinessUsers);
+router.get(
+	'/',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin']),
+	business.getBusinessUsers
+);
 
 // POST /
-router.post('/', tokenVerifier.verifyToken, roleVerifier(['admin']), business.postBusinessUser);
+router.post(
+	'/',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin']),
+	business.postBusinessUser
+);
 
 // GET /:userId
-router.get('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin', 'manager', 'user']), business.getBusinessUser);
+router.get(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin', 'manager', 'user']),
+	business.getBusinessUser
+);
 
 // PUT /:userId
-router.put('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.updateBusinessUser);
+router.put(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin']),
+	business.updateBusinessUser
+);
 
 // DELETE /:userId
-router.delete('/:userId', tokenVerifier.verifyToken, roleVerifier(['admin']), business.deleteBusinessUser);
+router.delete(
+	'/:userId',
+	tokenVerifier.verifyToken,
+	roleVerifier(['admin']),
+	business.deleteBusinessUser
+);
 
 module.exports = router;

@@ -1,45 +1,46 @@
 var v = require('../../package.json').version;
 
 function createGetAllResponse(t) {
-
 	return {
 		metadata: {
 			count: t.length,
 			total: t.length,
-			version: v
+			version: v,
 		},
-		trips: t
+		trips: t,
 	};
 }
 
 function createResponse(t, currency, costValue) {
-
 	t.cost = {
 		currency: currency,
-		value: costValue
+		value: costValue,
 	};
 
 	t.totalTime = t.waitTime + t.travelTime;
 
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
-		trip: t
+		trip: t,
 	};
 }
 
 function createEstimateResponse(currency, costValue) {
-	
 	return {
 		metadata: {
-			version: v
+			version: v,
 		},
 		cost: {
 			currency: currency,
-			value: costValue
-		}
+			value: costValue,
+		},
 	};
 }
 
-module.exports = {createResponse, createGetAllResponse, createEstimateResponse};
+module.exports = {
+	createResponse,
+	createGetAllResponse,
+	createEstimateResponse,
+};

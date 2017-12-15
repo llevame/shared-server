@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetOneBusinessUser extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -19,29 +18,47 @@ class GetOneBusinessUser extends Component {
 		if (token == null) {
 			alert('You must be logged in');
 		} else {
-			fetch('/api/business-users/' + e.target.id.value + '?token=' + token, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.businessUser,
-						hide: false
-					});
+			fetch(
+				'/api/business-users/' + e.target.id.value + '?token=' + token,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			});
+			)
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.businessUser,
+							hide: false,
+						});
+					}
+				});
+		}
+	}
+
+	renderResult() {
+		if (!this.state.hide) {
+			return (
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'center' }}
+				/>
+			);
 		}
 	}
 
@@ -53,7 +70,7 @@ class GetOneBusinessUser extends Component {
 					<input type="text" placeholder="User Id" name="id" />
 					<input type="submit" value="Get" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

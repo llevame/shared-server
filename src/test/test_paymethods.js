@@ -8,16 +8,15 @@ var server = require('../index');
 chai.use(chaiHttp);
 
 var tokenGenerator = require('../libs/service');
-var token = tokenGenerator.createAppToken({id: 1});
+var token = tokenGenerator.createAppToken({ id: 1 });
 var suffix = '?token=' + token;
 
 describe('paymethods tests', () => {
-
 	describe('/paymethods', () => {
-	
 		it('GET action', function(done) {
 			this.timeout(6000);
-			chai.request(server)
+			chai
+				.request(server)
 				.get('/api/paymethods' + suffix)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -28,7 +27,9 @@ describe('paymethods tests', () => {
 					res.body.metadata.should.have.property('version');
 					res.body.should.have.property('paymethods');
 					res.body.paymethods.should.be.a('array');
-					res.body.paymethods.length.should.be.eql(res.body.metadata.count);
+					res.body.paymethods.length.should.be.eql(
+						res.body.metadata.count
+					);
 					res.body.paymethods[0].should.have.property('name');
 					res.body.paymethods[0].should.have.property('parameters');
 					done();
@@ -36,5 +37,3 @@ describe('paymethods tests', () => {
 		});
 	});
 });
-
-

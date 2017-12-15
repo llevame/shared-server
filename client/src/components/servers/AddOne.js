@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
 import moment from 'moment';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class AddServer extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectValue: 'admin',
 			result: {},
-			hide: true
+			hide: true,
 		};
 		this.onAddServer = this.onAddServer.bind(this);
 	}
@@ -20,7 +18,7 @@ class AddServer extends Component {
 		let credentials = {
 			name: e.target.name.value,
 			createdBy: e.target.createdBy.value,
-			createdTime: moment().unix()
+			createdTime: moment().unix(),
 		};
 		let token = sessionStorage.getItem('token');
 		if (token == null) {
@@ -31,25 +29,40 @@ class AddServer extends Component {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(credentials)
+				body: JSON.stringify(credentials),
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.server,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.server,
+							hide: false,
+						});
+					}
+				});
+		}
+	}
+
+	renderResult() {
+		if (!this.state.hide) {
+			return (
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'left' }}
+				/>
+			);
 		}
 	}
 
@@ -64,7 +77,7 @@ class AddServer extends Component {
 					<br />
 					<input type="submit" value="Add" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

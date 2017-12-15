@@ -7,6 +7,7 @@ exports.seed = function(knex, Promise) {
 		.then(() => {
 			return knex('app_users').insert({
 				_ref: uuid(),
+				applicationOwner: '1',
 				type: 'passenger',
 				username: 'juan123',
 				name: 'Juan',
@@ -24,6 +25,7 @@ exports.seed = function(knex, Promise) {
 		}).then(() => {
 			return knex('app_users').insert({
 				_ref: uuid(),
+				applicationOwner: '1',
 				type: 'passenger',
 				username: 'edu123',
 				name: 'Eduardo',
@@ -37,6 +39,7 @@ exports.seed = function(knex, Promise) {
 		}).then(() => {
 			return knex('app_users').insert({
 				_ref: uuid(),
+				applicationOwner: '1',
 				type: 'driver',
 				username: 'ale123',
 				name: 'Alejandro',
@@ -54,6 +57,7 @@ exports.seed = function(knex, Promise) {
 		}).then(() => {
 			return knex('app_users').insert({
 				_ref: uuid(),
+				applicationOwner: '1',
 				type: 'driver',
 				username: 'fede123',
 				name: 'Federico',
@@ -71,6 +75,7 @@ exports.seed = function(knex, Promise) {
 		}).then(() => {
 			return knex('app_users').insert({
 				_ref: uuid(),
+				applicationOwner: '1',
 				type: 'passenger',
 				username: 'antonio123',
 				name: 'Antonio',

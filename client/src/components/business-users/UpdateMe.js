@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class UpdateMyInformation extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
 			result: {},
-			hide: true
+			hide: true,
 		};
 		this.onUpdateUser = this.onUpdateUser.bind(this);
 	}
@@ -31,25 +30,40 @@ class UpdateMyInformation extends Component {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(credentials)
+				body: JSON.stringify(credentials),
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.businessUser,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						this.setState({
+							...this.state,
+							result: json.businessUser,
+							hide: false,
+						});
+					}
+				});
+		}
+	}
+
+	renderResult() {
+		if (!this.state.hide) {
+			return (
+				<TableResults
+					result={this.state.result}
+					style={{ justifyContent: 'center' }}
+				/>
+			);
 		}
 	}
 
@@ -58,11 +72,19 @@ class UpdateMyInformation extends Component {
 			<div>
 				<Menu />
 				<form className="Form" onSubmit={this.onUpdateUser}>
-					<input type="text" placeholder="Revision Code" name="_ref" />
+					<input
+						type="text"
+						placeholder="Revision Code"
+						name="_ref"
+					/>
 					<br />
 					<input type="text" placeholder="Username" name="username" />
 					<br />
-					<input type="password" placeholder="Password" name="password" />
+					<input
+						type="password"
+						placeholder="Password"
+						name="password"
+					/>
 					<br />
 					<input type="text" placeholder="Name" name="name" />
 					<br />
@@ -70,7 +92,7 @@ class UpdateMyInformation extends Component {
 					<br />
 					<input type="submit" value="Update" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}

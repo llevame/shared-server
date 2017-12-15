@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var log = require('log4js').getLogger("http");
+var log = require('log4js').getLogger('http');
 let token = require('../models/token');
 
 // middleware specific to this router

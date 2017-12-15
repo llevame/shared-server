@@ -13,7 +13,7 @@ exports.up = function(knex, Promise) {
 		table.string('birthdate').notNullable();
 		table.specificType('images', 'text[]');
 		table.specificType('balance', 'json[]');
-		table.string('password').notNullable();
+		table.string('password');
 		table.specificType('fb', 'json');
 	});
 };

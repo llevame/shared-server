@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import JSONTree from 'react-json-tree';
+import CodeMirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import TableResults from '../TableResults';
 import Menu from '../Menu';
 
 class GetOneRule extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
 			result: {},
+			rule: '',
 			hide: true,
+		};
+		this.config = {
+			mode: 'javascript',
+			lineNumbers: true,
+			tabSize: 2,
+			identWithTabs: true,
 		};
 		this.onGet = this.onGet.bind(this);
 	}
@@ -25,23 +34,55 @@ class GetOneRule extends Component {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code) {
-					this.setState({
-						...this.state,
-						result: {},
-						hide: true
-					});
-					alert(`An error has ocurred:\n\ncode: ${json.code}\nmessage: ${json.message}\n`);
-				} else {
-					this.setState({
-						...this.state,
-						result: json.rule,
-						hide: false
-					});
-				}
-			});
+				.then(res => res.json())
+				.then(json => {
+					if (json.code) {
+						this.setState({
+							...this.state,
+							result: {},
+							rule: '',
+							hide: true,
+						});
+						alert(
+							`An error has ocurred:\n\ncode: ${
+								json.code
+							}\nmessage: ${json.message}\n`
+						);
+					} else {
+						let r = {
+							id: json.rule.id,
+							_ref: json.rule._ref,
+							language: json.rule.language,
+							active: json.rule.active,
+							lastCommit: json.rule.lastCommit,
+						};
+						this.setState({
+							...this.state,
+							result: r,
+							rule: json.rule.blob,
+							hide: false,
+						});
+					}
+				});
+		}
+	}
+
+	renderResult() {
+		if (!this.state.hide) {
+			return (
+				<div>
+					<h4>Information:</h4>
+					<TableResults
+						result={this.state.result}
+						style={{ justifyContent: 'left' }}
+					/>
+					<h4>Rule:</h4>
+					<CodeMirror
+						value={this.state.rule}
+						options={{ ...this.config, readOnly: true }}
+					/>
+				</div>
+			);
 		}
 	}
 
@@ -53,7 +94,7 @@ class GetOneRule extends Component {
 					<input type="text" placeholder="Rule Id" name="id" />
 					<input type="submit" value="Get" />
 				</form>
-				<JSONTree hideRoot={this.state.hide} data={this.state.result} />
+				{this.renderResult()}
 			</div>
 		);
 	}
