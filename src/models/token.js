@@ -11,6 +11,7 @@ function isThereAnAdminUser(users) {
 	}
 
 	for (u in users) {
+		/* istanbul ignore next */
 		if (
 			users[u].roles.some(role => {
 				return role == 'admin';
