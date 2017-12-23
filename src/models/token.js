@@ -47,7 +47,9 @@ function getToken(req, res) {
 				}
 			})
 			.catch(err => {
+				/* istanbul ignore next */
 				log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+				/* istanbul ignore next */
 				res.status(500).json(error.unexpected(err));
 			});
 	} else {
@@ -65,7 +67,9 @@ function getToken(req, res) {
 				res.status(201).json(tokenBuilder.createTokenResponse(bu));
 			})
 			.catch(err => {
+				/* istanbul ignore next */
 				log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+				/* istanbul ignore next */
 				res.status(500).json(error.unexpected(err));
 			});
 	}
