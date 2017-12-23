@@ -192,10 +192,6 @@ function updateUser(req, res) {
 		return res.status(400).json(error.missingParameters());
 	}
 
-	if (req.body.hasOwnProperty('id')) {
-		return res.status(500).json(error.idFieldModification());
-	}
-
 	userQ
 		.get(req.params.userId)
 		.then(u => {

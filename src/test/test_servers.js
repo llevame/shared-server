@@ -350,6 +350,20 @@ describe('servers tests', () => {
 				});
 		});
 
+		it('PUT action on no resource', done => {
+			chai
+				.request(server)
+				.put('/api/servers/6' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
 		it('POST action reseting a server´s token', done => {
 			chai
 				.request(server)
@@ -372,6 +386,20 @@ describe('servers tests', () => {
 					res.body.server.should.have.property('token');
 					res.body.server.token.should.have.property('expiresAt');
 					res.body.server.token.should.have.property('token');
+					done();
+				});
+		});
+
+		it('POST action reseting a token on no resource', done => {
+			chai
+				.request(server)
+				.post('/api/servers/6' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('No existe el recurso solicitado');
 					done();
 				});
 		});

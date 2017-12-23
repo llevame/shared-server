@@ -34,9 +34,11 @@ function getPaymethods(req, res) {
 						.json(builder.createPaymethodResponse(b.items));
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})

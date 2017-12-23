@@ -32,6 +32,7 @@ function postTransaction(req, res) {
 	transactionQ
 		.getAllOfUser(req.params.userId)
 		.then(transactions => {
+			/* istanbul ignore next */
 			let trans = transactions.sort((a, b) => {
 				return b.id - a.id;
 			})[0];

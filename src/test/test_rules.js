@@ -806,7 +806,7 @@ describe('rules tests', () => {
 		it('POST action with no rules and facts', done => {
 			chai
 				.request(server)
-				.post('/api/rules/run' + suffix)
+				.post('/api/rules/test')
 				.end((err, res) => {
 					res.should.have.status(400);
 					res.body.should.be.a('object');
@@ -821,7 +821,7 @@ describe('rules tests', () => {
 		it('POST action with empty body', done => {
 			chai
 				.request(server)
-				.post('/api/rules/run' + suffix)
+				.post('/api/rules/test')
 				.send({})
 				.end((err, res) => {
 					res.should.have.status(400);
@@ -837,7 +837,7 @@ describe('rules tests', () => {
 		it('POST action with empty facts array', done => {
 			chai
 				.request(server)
-				.post('/api/rules/run' + suffix)
+				.post('/api/rules/test')
 				.send({
 					rules: [
 						{
@@ -862,7 +862,7 @@ describe('rules tests', () => {
 		it('POST action with empty rules array', done => {
 			chai
 				.request(server)
-				.post('/api/rules/run' + suffix)
+				.post('/api/rules/test')
 				.send({
 					rules: [],
 					facts: [
