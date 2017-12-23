@@ -640,5 +640,85 @@ describe('business-users tests', () => {
 						});
 				});
 		});
+
+		it('PUT action with no parameter username', done => {
+			chai
+				.request(server)
+				.put('/api/business-users/me?token=' + token)
+				.send({
+					_ref: '343242323432432423',
+					password: '23133',
+					name: 'fddaf',
+					surname: 'ada'
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter password', done => {
+			chai
+				.request(server)
+				.put('/api/business-users/me?token=' + token)
+				.send({
+					_ref: '343242323432432423',
+					username: 'admin',
+					name: 'fddaf',
+					surname: 'ada',
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter name', done => {
+			chai
+				.request(server)
+				.put('/api/business-users/me?token=' + token)
+				.send({
+					_ref: '343242323432432423',
+					username: 'admin',
+					password: '4567',
+					surname: 'ada',
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('PUT action with no parameter surname', done => {
+			chai
+				.request(server)
+				.put('/api/business-users/me?token=' + token)
+				.send({
+					_ref: '343242323432432423',
+					username: 'admin',
+					password: '2345',
+					name: 'fddaf'
+				})
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
 	});
 });

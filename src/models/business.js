@@ -156,6 +156,7 @@ function getConnectedBusinessUser(req, res) {
 // updates information about the connected business-user.
 // the user is logged in via the /token endpoint
 function updateConnectedBusinessUser(req, res) {
+	
 	if (!checkParametersUpdateMe(req.body)) {
 		return res.status(400).json(error.missingParameters());
 	}
