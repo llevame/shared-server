@@ -31,15 +31,14 @@ function getInformation(req, res, id) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
 
 function updateInformation(req, res, id) {
-	if (req.body.hasOwnProperty('id')) {
-		return res.status(500).json(error.idFieldModification());
-	}
 
 	businessUserQ
 		.get(id)
@@ -59,14 +58,18 @@ function updateInformation(req, res, id) {
 					res.status(200).json(r);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -80,7 +83,9 @@ function getBusinessUsers(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -106,7 +111,9 @@ function postBusinessUser(req, res) {
 			res.status(201).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -135,14 +142,18 @@ function deleteBusinessUser(req, res) {
 					res.sendStatus(204);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -156,7 +167,7 @@ function getConnectedBusinessUser(req, res) {
 // updates information about the connected business-user.
 // the user is logged in via the /token endpoint
 function updateConnectedBusinessUser(req, res) {
-	
+
 	if (!checkParametersUpdateMe(req.body)) {
 		return res.status(400).json(error.missingParameters());
 	}

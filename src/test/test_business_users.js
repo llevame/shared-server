@@ -164,6 +164,20 @@ describe('business-users tests', () => {
 				});
 		});
 
+		it('GET action on no resource', done => {
+			chai
+				.request(server)
+				.get('/api/business-users/6' + suffix)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('No existe el recurso solicitado');
+					done();
+				});
+		});
+
 		it('POST action with good parameters', done => {
 			let bu = {
 				username: 'admin0',
