@@ -41,7 +41,9 @@ function getPaymethods(req, res) {
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -81,12 +83,16 @@ function generatePayment(data) {
 					return b.transaction_id;
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error('Error: ' + err.message);
+					/* istanbul ignore next */
 					return error.unexpected(err);
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message);
+			/* istanbul ignore next */
 			return error.unexpected(err);
 		});
 }
