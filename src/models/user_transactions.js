@@ -20,7 +20,9 @@ function getTransactions(req, res) {
 			res.status(200).json(ts);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -30,6 +32,7 @@ function postTransaction(req, res) {
 	transactionQ
 		.getAllOfUser(req.params.userId)
 		.then(transactions => {
+			/* istanbul ignore next */
 			let trans = transactions.sort((a, b) => {
 				return b.id - a.id;
 			})[0];
@@ -65,14 +68,18 @@ function postTransaction(req, res) {
 					res.status(200).json(r);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }

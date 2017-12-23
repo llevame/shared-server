@@ -444,6 +444,61 @@ describe('users tests', () => {
 					done();
 				});
 		});
+
+		it('POST action with no username parameter', done => {
+			let credentials = {
+				facebookAuthToken: 'fbtoken'
+			};
+			chai
+				.request(server)
+				.post(url + '/validate' + suffix)
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action with no fbtoken or password parameter', done => {
+			let credentials = {
+				username: 'juan123'
+			};
+			chai
+				.request(server)
+				.post(url + '/validate' + suffix)
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('Parámetros faltantes');
+					done();
+				});
+		});
+
+		it('POST action on no resource', done => {
+			let credentials = {
+				username: 'driver123',
+				facebookAuthToken: 'fbtoken'
+			};
+			chai
+				.request(server)
+				.post(url + '/validate' + suffix)
+				.send(credentials)
+				.end((err, res) => {
+					res.should.have.status(404);
+					res.body.should.have.property('code');
+					res.body.should.have
+						.property('message')
+						.eql('No existe el recurso solicitado');
+					done();
+				});
+		});
 	});
 
 	describe('/users/{userId}', () => {

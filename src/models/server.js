@@ -25,7 +25,9 @@ function getServers(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -51,14 +53,18 @@ function postServer(req, res) {
 					res.status(201).json(r);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -75,7 +81,9 @@ function getServer(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -109,24 +117,30 @@ function resetServerToken(req, res) {
 							res.status(201).json(r);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -155,14 +169,18 @@ function updateServer(req, res) {
 					res.status(200).json(r);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -182,14 +200,18 @@ function deleteServer(req, res) {
 					res.sendStatus(204);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -220,19 +242,23 @@ function pingServer(req, res) {
 								res.status(201).json(r);
 							})
 							.catch(err => {
+								/* istanbul ignore next */
 								log.error(
 									'Error: ' +
 										err.message +
 										' on: ' +
 										req.originalUrl
 								);
+								/* istanbul ignore next */
 								res.status(500).json(error.unexpected(err));
 							});
 					})
 					.catch(err => {
+						/* istanbul ignore next */
 						log.error(
 							'Error: ' + err.message + ' on: ' + req.originalUrl
 						);
+						/* istanbul ignore next */
 						res.status(500).json(error.unexpected(err));
 					});
 			} else {
@@ -245,7 +271,9 @@ function pingServer(req, res) {
 			}
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }

@@ -196,12 +196,14 @@ function postTrip(req, res) {
 														);
 												})
 												.catch(err => {
+													/* istanbul ignore next */
 													log.error(
 														'Error: ' +
 															err.message +
 															' on: ' +
 															req.originalUrl
 													);
+													/* istanbul ignore next */
 													res
 														.status(500)
 														.json(
@@ -212,46 +214,56 @@ function postTrip(req, res) {
 												});
 										})
 										.catch(err => {
+											/* istanbul ignore next */
 											log.error(
 												'Error: ' +
 													err.message +
 													' on: ' +
 													req.originalUrl
 											);
+											/* istanbul ignore next */
 											res
 												.status(500)
 												.json(error.unexpected(err));
 										});
 								})
 								.catch(err => {
+									/* istanbul ignore next */
 									log.error(
 										'Error: ' +
 											err.message +
 											' on: ' +
 											req.originalUrl
 									);
+									/* istanbul ignore next */
 									res.status(500).json(error.unexpected(err));
 								});
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -345,24 +357,30 @@ function estimateTrip(req, res) {
 								);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -378,7 +396,9 @@ function getTrip(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -391,7 +411,9 @@ function getTrips(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }

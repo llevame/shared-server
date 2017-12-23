@@ -12,6 +12,7 @@ var log = log4js.getLogger('consola');
 try {
 	require('fs').mkdirSync('./log');
 } catch (e) {
+	/* istanbul ignore next */
 	if (e.code != 'EEXIST') {
 		console.error('No se puede crear el directorio para logs: ', e);
 		process.exit(1);
@@ -43,12 +44,14 @@ var routes = require('./routes/index.js');
 app.use('/', routes);
 
 // *** catch all route for React client *** //
+/* istanbul ignore next */
 app.get('*', (req, res) => {
 	res.sendFile(path.join(clientBuildPath, '/index.html'));
 });
 
 app.listen(app.get('port'));
 
+/* istanbul ignore next */
 if (
 	process.env.NODE_ENV !== 'test' &&
 	process.env.NODE_ENV !== 'test_rules' &&
