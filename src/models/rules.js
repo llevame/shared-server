@@ -46,7 +46,9 @@ function runTripRules(req, res, rules, fact) {
 		rules = rules.map(rule => serial.deserialize(rule.blob));
 		return Rules.execute(rules, fact);
 	} catch (e) {
+		/* istanbul ignore next */
 		log.error('Error: ' + e.toString() + ' on: ' + req.originalUrl);
+		/* istanbul ignore next */
 		res.status(500).json({
 			code: 500,
 			message: e.toString(),
@@ -72,11 +74,15 @@ function runRulesWithFacts(req, res, rules, facts) {
 				res.status(200).json(builder.createFactResponse(results));
 			})
 			.catch(err => {
+				/* istanbul ignore next */
 				log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+				/* istanbul ignore next */
 				res.status(500).json(error.unexpected(err));
 			});
 	} catch (e) {
+		/* istanbul ignore next */
 		log.error('Error: ' + e.toString() + ' on: ' + req.originalUrl);
+		/* istanbul ignore next */
 		return res.status(500).json({
 			code: 500,
 			message: e.toString(),
@@ -112,7 +118,9 @@ function run(req, res) {
 			runRulesWithFacts(req, res, rules, facts);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -137,7 +145,9 @@ function runRule(req, res) {
 			runRulesWithFacts(req, res, rules, facts);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -180,24 +190,30 @@ function postRule(req, res) {
 							res.status(201).json(ru);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -248,34 +264,42 @@ function updateRule(req, res) {
 									res.status(201).json(ru);
 								})
 								.catch(err => {
+									/* istanbul ignore next */
 									log.error(
 										'Error: ' +
 											err.message +
 											' on: ' +
 											req.originalUrl
 									);
+									/* istanbul ignore next */
 									res.status(500).json(error.unexpected(err));
 								});
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -288,7 +312,9 @@ function getRules(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -305,7 +331,9 @@ function getRule(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -324,14 +352,18 @@ function deleteRule(req, res) {
 					res.sendStatus(204);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -344,7 +376,9 @@ function getRuleCommits(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -369,7 +403,9 @@ function getRuleStateInCommit(req, res) {
 			res.status(200).json(r);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
