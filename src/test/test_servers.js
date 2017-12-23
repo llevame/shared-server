@@ -354,6 +354,10 @@ describe('servers tests', () => {
 			chai
 				.request(server)
 				.put('/api/servers/6' + suffix)
+				.send({
+					_ref: 'd4g45h55h45g34',
+					name: 'app_server0_modificado',
+				})
 				.end((err, res) => {
 					res.should.have.status(404);
 					res.body.should.have.property('code');
