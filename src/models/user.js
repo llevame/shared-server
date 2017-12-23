@@ -69,14 +69,18 @@ function getUsers(req, res) {
 					res.status(200).json(usrs);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -97,14 +101,18 @@ function getUser(req, res) {
 					res.status(200).json(usr);
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -125,7 +133,9 @@ function postUser(req, res) {
 			res.status(201).json(usr);
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -148,24 +158,30 @@ function deleteUser(req, res) {
 							res.sendStatus(204);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -204,24 +220,30 @@ function updateUser(req, res) {
 							res.status(200).json(usr);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
@@ -253,24 +275,30 @@ function validateUser(req, res) {
 							res.status(200).json(r);
 						})
 						.catch(err => {
+							/* istanbul ignore next */
 							log.error(
 								'Error: ' +
 									err.message +
 									' on: ' +
 									req.originalUrl
 							);
+							/* istanbul ignore next */
 							res.status(500).json(error.unexpected(err));
 						});
 				})
 				.catch(err => {
+					/* istanbul ignore next */
 					log.error(
 						'Error: ' + err.message + ' on: ' + req.originalUrl
 					);
+					/* istanbul ignore next */
 					res.status(500).json(error.unexpected(err));
 				});
 		})
 		.catch(err => {
+			/* istanbul ignore next */
 			log.error('Error: ' + err.message + ' on: ' + req.originalUrl);
+			/* istanbul ignore next */
 			res.status(500).json(error.unexpected(err));
 		});
 }
