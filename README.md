@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/llevame/shared-server.svg?branch=master)](https://travis-ci.org/llevame/shared-server) [![codecov](https://codecov.io/gh/llevame/shared-server/branch/master/graph/badge.svg)](https://codecov.io/gh/llevame/shared-server) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![Docker](https://img.shields.io/badge/docker-using-blue.svg)](https://www.docker.com/)
 
-[![JWT](http://jwt.io/assets/badge.svg)](https://jwt.io/)
+[![JWT](http://jwt.io/img/badge.svg)](https://jwt.io/)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
